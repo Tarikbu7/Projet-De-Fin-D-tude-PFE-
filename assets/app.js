@@ -1,66 +1,66 @@
 const translations = {
   en: {
-    pageTitle: "On-Site Computer Repair",
-    metaDescription: "On-site computer repair for hardware, software, upgrades, virus removal, and appointment-based support.",
+    pageTitle: "Slahpc Computer Repair & PC Parts",
+    metaDescription: "Professional on-site computer repair, diagnostics, upgrades, virus removal, custom PC builds, and parts ordering.",
     brandAria: "On-Site Computer Repair home",
-    brandSmall: "Mobile service",
+    brandSmall: "Mobile repair service",
     navServices: "Services",
     navProcess: "Process",
-    navAppointment: "Shop",
+    navAppointment: "Parts & Builds",
     navContact: "Contact",
     themeDark: "Switch to dark mode",
     themeLight: "Switch to light mode",
     heroImageAria: "Computer repair desk with laptop, tools, and diagnostic equipment",
-    heroEyebrow: "Hardware and software support at your place",
-    heroTitle: "On-Site Computer Repair",
-    heroCopy: "I repair laptops, desktops, slow systems, broken parts, Wi-Fi issues, virus problems, upgrades, backups, and setup work. Book an appointment and I can come to you.",
+    heroEyebrow: "Professional computer repair at your location",
+    heroTitle: "Computer Repair That Comes To You",
+    heroCopy: "Slahpc provides reliable laptop and desktop repair, diagnostics, upgrades, virus removal, data backup, Wi-Fi support, and custom PC setup with clear pricing and appointment-based service.",
     primaryActions: "Primary actions",
-    bookAppointment: "Shop parts",
+    bookAppointment: "View Parts",
     callNow: "Call now",
     repairNeeds: "Common repair needs",
     stripSsd: "SSD upgrades",
     stripVirus: "Virus removal",
     stripNetwork: "Network setup",
     stripBackup: "Data backup",
-    servicesEyebrow: "What I fix",
-    servicesTitle: "Repair service for everyday computer problems",
-    servicesCopy: "Choose the service that matches your issue. If you are not sure, start with diagnostics and I will identify the problem first.",
+    servicesEyebrow: "Services",
+    servicesTitle: "Professional repairs for hardware, software, and setup issues",
+    servicesCopy: "Choose the service that matches your problem. If the cause is unclear, start with a diagnostic visit and receive a clear repair recommendation.",
     hardwareTitle: "Hardware Repair",
-    hardwareCopy: "Broken screens, batteries, drives, RAM, overheating, noisy fans, power issues, and component replacement.",
+    hardwareCopy: "Screen replacement, batteries, storage drives, RAM, overheating, fan noise, power faults, and component replacement.",
     softwareTitle: "Software Repair",
-    softwareCopy: "Slow startup, system errors, app problems, Windows setup, driver issues, updates, and performance cleanup.",
+    softwareCopy: "Slow startup, system errors, application issues, Windows installation, driver problems, updates, and performance optimization.",
     virusTitle: "Virus Removal",
-    virusCopy: "Malware scans, browser cleanup, unwanted pop-ups, account safety checks, and security software setup.",
+    virusCopy: "Malware scans, browser cleanup, pop-up removal, account security checks, and antivirus configuration.",
     setupTitle: "Home Tech Setup",
-    setupCopy: "Wi-Fi troubleshooting, printer setup, new computer setup, email configuration, backup plans, and file transfer.",
+    setupCopy: "Wi-Fi troubleshooting, printer setup, new computer configuration, email setup, backup planning, and file transfer.",
     processEyebrow: "How it works",
-    processTitle: "Simple appointment, clear repair path",
-    stepOneTitle: "Tell me the issue",
-    stepOneCopy: "Describe what is happening, the computer type, and where you need help.",
-    stepTwoTitle: "Pick a time",
-    stepTwoCopy: "Select the best appointment window for at-home, office, or remote support.",
-    stepThreeTitle: "Repair or quote",
-    stepThreeCopy: "I diagnose the problem, explain the options, and fix it if parts are not required.",
+    processTitle: "A clear process from diagnosis to repair",
+    stepOneTitle: "Describe the issue",
+    stepOneCopy: "Share the symptoms, device type, and location so the service can be prepared before the visit.",
+    stepTwoTitle: "Choose an appointment",
+    stepTwoCopy: "Select a convenient time for home, office, or remote support.",
+    stepThreeTitle: "Receive service or a quote",
+    stepThreeCopy: "The device is diagnosed, the options are explained, and repair begins when the solution is approved.",
     appointmentEyebrow: "Book support",
     appointmentTitle: "Request an appointment",
     appointmentCopy: "Use this form to collect appointment details now. Later, the same fields can be sent to PHP and saved into SQL.",
-    shopEyebrow: "PC parts shop",
+    shopEyebrow: "PC parts and builds",
     shopTitle: "Buy parts or request a custom PC build",
-    shopCopy: "Customers can order CPUs, RAM, motherboards, SSDs, GPUs, power supplies, or ask for a complete PC build from their dashboard.",
+    shopCopy: "Customers can order essential PC parts or request a complete custom build directly from their dashboard.",
     productCpu: "CPU",
-    productCpuCopy: "Processors for gaming, school, work, and upgrade builds.",
+    productCpuCopy: "Processors selected for gaming, study, work, and upgrade builds.",
     productRam: "RAM",
-    productRamCopy: "Memory upgrades for faster multitasking and smoother systems.",
+    productRamCopy: "Memory upgrades for faster multitasking and smoother system performance.",
     productMobo: "Motherboard",
-    productMoboCopy: "Boards matched to your CPU, case, storage, and future upgrades.",
+    productMoboCopy: "Motherboards matched to the CPU, case, storage, and future upgrade needs.",
     productSsd: "SSD",
-    productSsdCopy: "Fast storage for Windows, games, and important files.",
+    productSsdCopy: "Fast storage for Windows, applications, games, and important files.",
     productGpu: "GPU",
-    productGpuCopy: "Graphics cards selected by budget and performance target.",
-    productPsu: "Power supply",
-    productPsuCopy: "Reliable power supplies for repairs, upgrades, and new builds.",
-    createAccount: "Create account",
-    loginDashboard: "Login dashboard",
+    productGpuCopy: "Graphics cards selected by budget, workload, and performance target.",
+    productPsu: "Power Supply",
+    productPsuCopy: "Reliable power supplies for repairs, upgrades, and complete PC builds.",
+    createAccount: "Create Account",
+    loginDashboard: "Login Dashboard",
     estimateLabel: "Estimated starting visit",
     estimateNote: "Final price depends on parts, travel, and repair complexity.",
     labelName: "Full name",
@@ -87,11 +87,21 @@ const translations = {
     sendRequest: "Send request",
     formRequired: "Please fill out the required appointment details.",
     formReady: ({ name, service, date, time }) => `Thanks, ${name}. Your ${service} appointment request for ${date} in the ${time} is ready to send.`,
-    contactEyebrow: "Need help now?",
-    contactTitle: "Call, text, or send a message for computer repair.",
-    callService: "Call service",
-    email: "Email",
-    footerText: "Computer Repair. On-site hardware and software support.",
+    contactEyebrow: "Need support?",
+    contactTitle: "Contact Slahpc for repair advice, appointments, or PC part requests.",
+    chatLaunchTitle: "AI Chatbot",
+    chatLaunchCopy: "Ask about repairs, PC parts, custom builds, or account help.",
+    chatOpenAria: "Open AI chatbot",
+    chatCloseAria: "Close AI chatbot",
+    chatSuggestionsAria: "Suggested chatbot questions",
+    chatStatus: "Online assistant",
+    chatTitle: "Slahpc AI Chatbot",
+    chatWelcome: "Hi, I am the Slahpc assistant. Ask me about repairs, parts, custom PC builds, appointments, or account access.",
+    chatPlaceholder: "Ask a question...",
+    chatSendAria: "Send message",
+    chatThinking: "Thinking...",
+    chatError: "The AI chatbot is not connected yet. Please check the OpenAI API key setup.",
+    footerText: "Slahpc. Professional computer repair, parts, and technical support.",
     backTop: "Back to top",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -305,6 +315,14 @@ const estimate = document.querySelector("[data-estimate]");
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const languageSelect = document.querySelector("[data-language-select]");
 const metaDescription = document.querySelector('meta[name="description"]');
+const chatToggles = document.querySelectorAll("[data-chat-toggle]");
+const chatPanel = document.querySelector("[data-chat-panel]");
+const chatClose = document.querySelector("[data-chat-close]");
+const chatForm = document.querySelector("[data-chat-form]");
+const chatInput = document.querySelector("[data-chat-input]");
+const chatMessages = document.querySelector("[data-chat-messages]");
+const chatSuggestions = document.querySelectorAll("[data-chat-suggestion]");
+const chatHistory = [];
 
 const getLanguage = () => document.documentElement.dataset.language || "en";
 const t = (key) => translations[getLanguage()]?.[key] ?? translations.en[key] ?? key;
@@ -455,3 +473,93 @@ if (form && statusText) {
     estimate.textContent = "$55";
   });
 }
+
+const openChat = () => {
+  if (!chatPanel) {
+    return;
+  }
+
+  chatPanel.classList.add("is-open");
+  chatInput?.focus();
+};
+
+const closeChat = () => {
+  chatPanel?.classList.remove("is-open");
+};
+
+const addChatMessage = (type, text) => {
+  if (!chatMessages) {
+    return null;
+  }
+
+  const message = document.createElement("div");
+  message.className = `chat-message ${type}`;
+  message.textContent = text;
+  chatMessages.appendChild(message);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return message;
+};
+
+const sendChatMessage = async (message) => {
+  const trimmed = message.trim();
+  if (!trimmed) {
+    return;
+  }
+
+  openChat();
+  addChatMessage("user", trimmed);
+  chatHistory.push({ role: "user", content: trimmed });
+
+  const thinkingMessage = addChatMessage("bot", t("chatThinking"));
+
+  try {
+    const response = await fetch("chat.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: trimmed,
+        history: chatHistory.slice(-8, -1),
+      }),
+    });
+
+    const data = await response.json();
+    const reply = data.reply || data.error || t("chatError");
+
+    if (thinkingMessage) {
+      thinkingMessage.textContent = reply;
+    } else {
+      addChatMessage("bot", reply);
+    }
+
+    if (data.reply) {
+      chatHistory.push({ role: "assistant", content: reply });
+    }
+  } catch (error) {
+    const message = t("chatError");
+    if (thinkingMessage) {
+      thinkingMessage.textContent = message;
+    } else {
+      addChatMessage("bot", message);
+    }
+  }
+};
+
+chatToggles.forEach((button) => {
+  button.addEventListener("click", openChat);
+});
+
+chatClose?.addEventListener("click", closeChat);
+
+chatSuggestions.forEach((button) => {
+  button.addEventListener("click", () => sendChatMessage(button.dataset.chatSuggestion || ""));
+});
+
+chatForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sendChatMessage(chatInput?.value || "");
+  if (chatInput) {
+    chatInput.value = "";
+  }
+});

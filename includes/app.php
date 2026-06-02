@@ -160,9 +160,11 @@ function status_label(string $status): string {
 function render_header(string $title, ?array $user = null): void {
     $dir = is_rtl() ? 'rtl' : 'ltr';
     $lang = lang();
-    $adminLink = $user && $user['role'] === 'admin' ? '<a href="admin.php">' . e(t('admin')) . '</a>' : '';
-    $dashboardLink = $user ? '<a href="dashboard.php">' . e(t('dashboard')) . '</a>' : '';
-    $authLink = $user ? '<a href="logout.php">' . e(t('logout')) . '</a>' : '<a href="login.php">' . e(t('login')) . '</a>';
+    $dashboardHref = $user && $user['role'] === 'admin' ? 'admin.php' : 'dashboard.php';
+    $dashboardText = t('dashboard');
+    $dashboardLink = $user ? '<a class="nav-button primary" href="' . e($dashboardHref) . '">' . e($dashboardText) . '</a>' : '';
+    $registerLink = $user ? '' : '<a class="nav-button primary" href="register.php">Create Account</a>';
+    $authLink = $user ? '<a class="nav-button light" href="logout.php">' . e(t('logout')) . '</a>' : '<a class="nav-button light" href="login.php">Login Dashboard</a>';
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="$lang" dir="$dir">
@@ -172,7 +174,7 @@ function render_header(string $title, ?array $user = null): void {
   <title>{$title} - Slahpc</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="app-body">
@@ -184,7 +186,7 @@ function render_header(string $title, ?array $user = null): void {
     <nav class="site-nav dashboard-nav">
       <a href="index.php">{$GLOBALS['i18n'][$lang]['home']}</a>
       $dashboardLink
-      $adminLink
+      $registerLink
       $authLink
       <form class="language-form" method="get">
         <select name="lang" onchange="this.form.submit()">

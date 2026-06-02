@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="On-site computer repair for hardware, software, upgrades, virus removal, and appointment-based support.">
-  <title>On-Site Computer Repair</title>
+  <meta name="description" content="Professional on-site computer repair, diagnostics, upgrades, virus removal, custom PC builds, and parts ordering.">
+  <title>Slahpc Computer Repair & PC Parts</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="preconnect" href="https://unpkg.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     (() => {
       const savedTheme = localStorage.getItem("repair-theme");
@@ -31,7 +31,7 @@
       <span class="brand-mark">CR</span>
       <span>
         <strong>Slahpc</strong>
-        <small data-i18n="brandSmall">Mobile service</small>
+        <small data-i18n="brandSmall">Mobile repair service</small>
       </span>
     </a>
 
@@ -39,8 +39,14 @@
       <nav class="site-nav" id="site-nav" data-nav>
         <a href="#services" data-i18n="navServices">Services</a>
         <a href="#process" data-i18n="navProcess">Process</a>
-        <a href="#appointment" data-i18n="navAppointment">Shop</a>
+        <a href="#appointment" data-i18n="navAppointment">Parts & Builds</a>
         <a href="#contact" data-i18n="navContact">Contact</a>
+        <!-- AUTH_ACTIONS_START -->
+        <span class="nav-auth" data-auth-actions>
+          <a class="nav-button primary" href="register.php"><i data-lucide="user-plus" aria-hidden="true"></i><span data-i18n="createAccount">Create Account</span></a>
+          <a class="nav-button light" href="login.php"><i data-lucide="log-in" aria-hidden="true"></i><span data-i18n="loginDashboard">Login Dashboard</span></a>
+        </span>
+        <!-- AUTH_ACTIONS_END -->
       </nav>
 
       <label class="language-control" aria-label="Choose language">
@@ -70,16 +76,16 @@
       <div class="hero-overlay"></div>
 
       <div class="hero-content">
-        <p class="eyebrow" data-i18n="heroEyebrow">Hardware and software support at your place</p>
-        <h1 id="hero-title" data-i18n="heroTitle">On-Site Computer Repair</h1>
+        <p class="eyebrow" data-i18n="heroEyebrow">Professional computer repair at your location</p>
+        <h1 id="hero-title" data-i18n="heroTitle">Computer Repair That Comes To You</h1>
         <p class="hero-copy" data-i18n="heroCopy">
-          I repair laptops, desktops, slow systems, broken parts, Wi-Fi issues, virus problems, upgrades, backups, and setup work. Book an appointment and I can come to you.
+          Slahpc provides reliable laptop and desktop repair, diagnostics, upgrades, virus removal, data backup, Wi-Fi support, and custom PC setup with clear pricing and appointment-based service.
         </p>
 
         <div class="hero-actions" aria-label="Primary actions" data-i18n-aria="primaryActions">
           <a class="button primary" href="#appointment">
             <i data-lucide="calendar-check" aria-hidden="true"></i>
-            <span data-i18n="bookAppointment">Book appointment</span>
+            <span data-i18n="bookAppointment">View Parts</span>
           </a>
           <a class="button ghost" href="tel:+10000000000">
             <i data-lucide="phone" aria-hidden="true"></i>
@@ -110,31 +116,31 @@
 
     <section class="section services" id="services" aria-labelledby="services-title">
       <div class="section-heading">
-        <p class="eyebrow" data-i18n="servicesEyebrow">What I fix</p>
-        <h2 id="services-title" data-i18n="servicesTitle">Repair service for everyday computer problems</h2>
-        <p data-i18n="servicesCopy">Choose the service that matches your issue. If you are not sure, start with diagnostics and I will identify the problem first.</p>
+        <p class="eyebrow" data-i18n="servicesEyebrow">Services</p>
+        <h2 id="services-title" data-i18n="servicesTitle">Professional repairs for hardware, software, and setup issues</h2>
+        <p data-i18n="servicesCopy">Choose the service that matches your problem. If the cause is unclear, start with a diagnostic visit and receive a clear repair recommendation.</p>
       </div>
 
       <div class="service-grid">
         <article class="service-card">
           <i data-lucide="cpu" aria-hidden="true"></i>
           <h3 data-i18n="hardwareTitle">Hardware Repair</h3>
-          <p data-i18n="hardwareCopy">Broken screens, batteries, drives, RAM, overheating, noisy fans, power issues, and component replacement.</p>
+          <p data-i18n="hardwareCopy">Screen replacement, batteries, storage drives, RAM, overheating, fan noise, power faults, and component replacement.</p>
         </article>
         <article class="service-card">
           <i data-lucide="monitor-cog" aria-hidden="true"></i>
           <h3 data-i18n="softwareTitle">Software Repair</h3>
-          <p data-i18n="softwareCopy">Slow startup, system errors, app problems, Windows setup, driver issues, updates, and performance cleanup.</p>
+          <p data-i18n="softwareCopy">Slow startup, system errors, application issues, Windows installation, driver problems, updates, and performance optimization.</p>
         </article>
         <article class="service-card">
           <i data-lucide="bug-off" aria-hidden="true"></i>
           <h3 data-i18n="virusTitle">Virus Removal</h3>
-          <p data-i18n="virusCopy">Malware scans, browser cleanup, unwanted pop-ups, account safety checks, and security software setup.</p>
+          <p data-i18n="virusCopy">Malware scans, browser cleanup, pop-up removal, account security checks, and antivirus configuration.</p>
         </article>
         <article class="service-card">
           <i data-lucide="router" aria-hidden="true"></i>
           <h3 data-i18n="setupTitle">Home Tech Setup</h3>
-          <p data-i18n="setupCopy">Wi-Fi troubleshooting, printer setup, new computer setup, email configuration, backup plans, and file transfer.</p>
+          <p data-i18n="setupCopy">Wi-Fi troubleshooting, printer setup, new computer configuration, email setup, backup planning, and file transfer.</p>
         </article>
       </div>
     </section>
@@ -142,29 +148,29 @@
     <section class="section process-band" id="process" aria-labelledby="process-title">
       <div class="section-heading compact">
         <p class="eyebrow" data-i18n="processEyebrow">How it works</p>
-        <h2 id="process-title" data-i18n="processTitle">Simple appointment, clear repair path</h2>
+        <h2 id="process-title" data-i18n="processTitle">A clear process from diagnosis to repair</h2>
       </div>
 
       <ol class="process-list">
         <li>
           <span>1</span>
           <div>
-            <h3 data-i18n="stepOneTitle">Tell me the issue</h3>
-            <p data-i18n="stepOneCopy">Describe what is happening, the computer type, and where you need help.</p>
+            <h3 data-i18n="stepOneTitle">Describe the issue</h3>
+            <p data-i18n="stepOneCopy">Share the symptoms, device type, and location so the service can be prepared before the visit.</p>
           </div>
         </li>
         <li>
           <span>2</span>
           <div>
-            <h3 data-i18n="stepTwoTitle">Pick a time</h3>
-            <p data-i18n="stepTwoCopy">Select the best appointment window for at-home, office, or remote support.</p>
+            <h3 data-i18n="stepTwoTitle">Choose an appointment</h3>
+            <p data-i18n="stepTwoCopy">Select a convenient time for home, office, or remote support.</p>
           </div>
         </li>
         <li>
           <span>3</span>
           <div>
-            <h3 data-i18n="stepThreeTitle">Repair or quote</h3>
-            <p data-i18n="stepThreeCopy">I diagnose the problem, explain the options, and fix it if parts are not required.</p>
+            <h3 data-i18n="stepThreeTitle">Receive service or a quote</h3>
+            <p data-i18n="stepThreeCopy">The device is diagnosed, the options are explained, and repair begins when the solution is approved.</p>
           </div>
         </li>
       </ol>
@@ -172,46 +178,76 @@
 
     <section class="section appointment" id="appointment" aria-labelledby="appointment-title">
       <div class="appointment-copy">
-        <p class="eyebrow" data-i18n="shopEyebrow">PC parts shop</p>
+        <p class="eyebrow" data-i18n="shopEyebrow">PC parts and builds</p>
         <h2 id="appointment-title" data-i18n="shopTitle">Buy parts or request a custom PC build</h2>
-        <p data-i18n="shopCopy">Customers can order CPUs, RAM, motherboards, SSDs, GPUs, power supplies, or ask for a complete PC build from their dashboard.</p>
+        <p data-i18n="shopCopy">Customers can order essential PC parts or request a complete custom build directly from their dashboard.</p>
       </div>
 
       <div class="shop-grid">
-        <article class="service-card"><i data-lucide="cpu" aria-hidden="true"></i><h3 data-i18n="productCpu">CPU</h3><p data-i18n="productCpuCopy">Processors for gaming, school, work, and upgrade builds.</p></article>
-        <article class="service-card"><i data-lucide="memory-stick" aria-hidden="true"></i><h3 data-i18n="productRam">RAM</h3><p data-i18n="productRamCopy">Memory upgrades for faster multitasking and smoother systems.</p></article>
-        <article class="service-card"><i data-lucide="circuit-board" aria-hidden="true"></i><h3 data-i18n="productMobo">Motherboard</h3><p data-i18n="productMoboCopy">Boards matched to your CPU, case, storage, and future upgrades.</p></article>
-        <article class="service-card"><i data-lucide="hard-drive" aria-hidden="true"></i><h3 data-i18n="productSsd">SSD</h3><p data-i18n="productSsdCopy">Fast storage for Windows, games, and important files.</p></article>
-        <article class="service-card"><i data-lucide="gpu" aria-hidden="true"></i><h3 data-i18n="productGpu">GPU</h3><p data-i18n="productGpuCopy">Graphics cards selected by budget and performance target.</p></article>
-        <article class="service-card"><i data-lucide="plug-zap" aria-hidden="true"></i><h3 data-i18n="productPsu">Power supply</h3><p data-i18n="productPsuCopy">Reliable power supplies for repairs, upgrades, and new builds.</p></article>
-      </div>
-
-      <div class="dashboard-actions shop-actions">
-        <a class="button primary" href="register.php"><i data-lucide="user-plus" aria-hidden="true"></i><span data-i18n="createAccount">Create account</span></a>
-        <a class="button light" href="login.php"><i data-lucide="log-in" aria-hidden="true"></i><span data-i18n="loginDashboard">Login dashboard</span></a>
+        <article class="service-card"><i data-lucide="cpu" aria-hidden="true"></i><h3 data-i18n="productCpu">CPU</h3><p data-i18n="productCpuCopy">Processors selected for gaming, study, work, and upgrade builds.</p></article>
+        <article class="service-card"><i data-lucide="memory-stick" aria-hidden="true"></i><h3 data-i18n="productRam">RAM</h3><p data-i18n="productRamCopy">Memory upgrades for faster multitasking and smoother system performance.</p></article>
+        <article class="service-card"><i data-lucide="circuit-board" aria-hidden="true"></i><h3 data-i18n="productMobo">Motherboard</h3><p data-i18n="productMoboCopy">Motherboards matched to the CPU, case, storage, and future upgrade needs.</p></article>
+        <article class="service-card"><i data-lucide="hard-drive" aria-hidden="true"></i><h3 data-i18n="productSsd">SSD</h3><p data-i18n="productSsdCopy">Fast storage for Windows, applications, games, and important files.</p></article>
+        <article class="service-card"><i data-lucide="gpu" aria-hidden="true"></i><h3 data-i18n="productGpu">GPU</h3><p data-i18n="productGpuCopy">Graphics cards selected by budget, workload, and performance target.</p></article>
+        <article class="service-card"><i data-lucide="plug-zap" aria-hidden="true"></i><h3 data-i18n="productPsu">Power Supply</h3><p data-i18n="productPsuCopy">Reliable power supplies for repairs, upgrades, and complete PC builds.</p></article>
       </div>
     </section>
 
     <section class="section contact-band" id="contact" aria-labelledby="contact-title">
       <div>
-        <p class="eyebrow" data-i18n="contactEyebrow">Need help now?</p>
-        <h2 id="contact-title" data-i18n="contactTitle">Call, text, or send a message for computer repair.</h2>
+        <p class="eyebrow" data-i18n="contactEyebrow">Need support?</p>
+        <h2 id="contact-title" data-i18n="contactTitle">Contact Slahpc for repair advice, appointments, or PC part requests.</h2>
       </div>
       <div class="contact-actions">
-        <a class="button primary" href="tel:+10000000000">
-          <i data-lucide="phone-call" aria-hidden="true"></i>
-          <span data-i18n="callService">Call service</span>
-        </a>
-        <a class="button light" href="mailto:repair@example.com">
-          <i data-lucide="mail" aria-hidden="true"></i>
-          <span data-i18n="email">Email</span>
-        </a>
+        <button class="chat-launch-card" type="button" data-chat-toggle>
+          <span class="chat-launch-icon"><i data-lucide="bot" aria-hidden="true"></i></span>
+          <span>
+            <strong data-i18n="chatLaunchTitle">AI Chatbot</strong>
+            <small data-i18n="chatLaunchCopy">Ask about repairs, PC parts, custom builds, or account help.</small>
+          </span>
+          <i data-lucide="message-circle" aria-hidden="true"></i>
+        </button>
       </div>
     </section>
   </main>
 
+  <section class="chat-widget" aria-label="AI chatbot" data-chat-widget>
+    <button class="chat-float" type="button" data-chat-toggle aria-label="Open AI chatbot" data-i18n-aria="chatOpenAria">
+      <i data-lucide="bot" aria-hidden="true"></i>
+    </button>
+
+    <div class="chat-panel" data-chat-panel aria-live="polite">
+      <header class="chat-header">
+        <div>
+          <span class="chat-status" data-i18n="chatStatus">Online assistant</span>
+          <h2 data-i18n="chatTitle">Slahpc AI Chatbot</h2>
+        </div>
+        <button class="chat-close" type="button" data-chat-close aria-label="Close AI chatbot" data-i18n-aria="chatCloseAria">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="chat-messages" data-chat-messages>
+        <div class="chat-message bot" data-i18n="chatWelcome">Hi, I am the Slahpc assistant. Ask me about repairs, parts, custom PC builds, appointments, or account access.</div>
+      </div>
+
+      <div class="chat-suggestions" aria-label="Suggested questions" data-i18n-aria="chatSuggestionsAria">
+        <button type="button" data-chat-suggestion="My laptop is slow">Slow laptop</button>
+        <button type="button" data-chat-suggestion="I need PC parts">PC parts</button>
+        <button type="button" data-chat-suggestion="How do I book a repair?">Book repair</button>
+      </div>
+
+      <form class="chat-form" data-chat-form>
+        <input type="text" data-chat-input placeholder="Ask a question..." data-i18n-placeholder="chatPlaceholder" autocomplete="off">
+        <button type="submit" aria-label="Send message" data-i18n-aria="chatSendAria">
+          <i data-lucide="send" aria-hidden="true"></i>
+        </button>
+      </form>
+    </div>
+  </section>
+
   <footer class="site-footer">
-    <p>&copy; <span data-year></span> <span data-i18n="footerText">Computer Repair. On-site hardware and software support.</span></p>
+    <p>&copy; <span data-year></span> <span data-i18n="footerText">Slahpc. Professional computer repair, parts, and technical support.</span></p>
     <a href="#home" data-i18n="backTop">Back to top</a>
   </footer>
 </body>
