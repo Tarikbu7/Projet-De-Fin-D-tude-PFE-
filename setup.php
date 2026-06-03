@@ -86,6 +86,16 @@ try {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB",
+        "CREATE TABLE IF NOT EXISTS repair_requests (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            first_name VARCHAR(120) NOT NULL,
+            family_name VARCHAR(120) NOT NULL,
+            phone VARCHAR(60) NOT NULL,
+            email VARCHAR(190) NOT NULL,
+            problem TEXT NOT NULL,
+            status ENUM('Pending','Confirmed','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB",
         "CREATE TABLE IF NOT EXISTS invoices (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,

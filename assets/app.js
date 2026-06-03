@@ -89,6 +89,14 @@ const translations = {
     formReady: ({ name, service, date, time }) => `Thanks, ${name}. Your ${service} appointment request for ${date} in the ${time} is ready to send.`,
     contactEyebrow: "Need support?",
     contactTitle: "Contact Slahpc for repair advice, appointments, or PC part requests.",
+    repairFirstName: "First name",
+    repairFamilyName: "Last name",
+    repairPhone: "Phone number",
+    repairEmail: "Email address",
+    repairProblem: "Describe the computer issue",
+    repairSubmit: "Send repair request",
+    repairSent: "Your repair request has been sent. We will respond by email or phone.",
+    repairError: "Please check the form and try again.",
     chatLaunchTitle: "AI Chatbot",
     chatLaunchCopy: "Ask about repairs, PC parts, custom builds, or account help.",
     chatOpenAria: "Open AI chatbot",
@@ -197,6 +205,14 @@ const translations = {
     formReady: ({ name, service, date, time }) => `Merci, ${name}. Votre demande de rendez-vous pour ${service} le ${date} (${time}) est prête à être envoyée.`,
     contactEyebrow: "Besoin d'aide maintenant ?",
     contactTitle: "Appelez, envoyez un SMS ou un message pour une réparation informatique.",
+    repairFirstName: "Prénom",
+    repairFamilyName: "Nom",
+    repairPhone: "Numéro de téléphone",
+    repairEmail: "Adresse e-mail",
+    repairProblem: "Décrivez le problème de l'ordinateur",
+    repairSubmit: "Envoyer la demande",
+    repairSent: "Votre demande de réparation a été envoyée. Nous répondrons par e-mail ou téléphone.",
+    repairError: "Veuillez vérifier le formulaire et réessayer.",
     callService: "Appeler",
     email: "E-mail",
     footerText: "Réparation informatique. Support matériel et logiciel sur place.",
@@ -295,6 +311,14 @@ const translations = {
     formReady: ({ name, service, date, time }) => `شكرا ${name}. طلب موعد ${service} بتاريخ ${date} في فترة ${time} جاهز للإرسال.`,
     contactEyebrow: "تحتاج مساعدة الآن؟",
     contactTitle: "اتصل أو أرسل رسالة لخدمة إصلاح الكمبيوتر.",
+    repairFirstName: "الاسم الشخصي",
+    repairFamilyName: "الاسم العائلي",
+    repairPhone: "رقم الهاتف",
+    repairEmail: "البريد الإلكتروني",
+    repairProblem: "اشرح مشكلة الكمبيوتر",
+    repairSubmit: "إرسال طلب الإصلاح",
+    repairSent: "تم إرسال طلب الإصلاح. سنرد عليك عبر البريد أو الهاتف.",
+    repairError: "يرجى التحقق من النموذج والمحاولة مرة أخرى.",
     callService: "اتصل بالخدمة",
     email: "البريد الإلكتروني",
     footerText: "إصلاح الكمبيوتر. دعم الأجهزة والبرامج في موقعك.",
@@ -322,6 +346,7 @@ const chatForm = document.querySelector("[data-chat-form]");
 const chatInput = document.querySelector("[data-chat-input]");
 const chatMessages = document.querySelector("[data-chat-messages]");
 const chatSuggestions = document.querySelectorAll("[data-chat-suggestion]");
+const repairStatus = document.querySelector("[data-repair-status]");
 const chatHistory = [];
 
 const getLanguage = () => document.documentElement.dataset.language || "en";
@@ -403,6 +428,16 @@ if (year) {
 }
 
 applyLanguage(getLanguage());
+
+if (repairStatus) {
+  const repairResult = new URLSearchParams(window.location.search).get("repair");
+  if (repairResult === "sent") {
+    repairStatus.textContent = t("repairSent");
+  } else if (repairResult === "error") {
+    repairStatus.textContent = t("repairError");
+    repairStatus.classList.add("error");
+  }
+}
 
 if (languageSelect) {
   languageSelect.addEventListener("change", () => {

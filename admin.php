@@ -2,12 +2,22 @@
 require_once __DIR__ . '/includes/app.php';
 $user = require_admin();
 $pdo = db();
+$pdo->exec("CREATE TABLE IF NOT EXISTS repair_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(120) NOT NULL,
+    family_name VARCHAR(120) NOT NULL,
+    phone VARCHAR(60) NOT NULL,
+    email VARCHAR(190) NOT NULL,
+    problem TEXT NOT NULL,
+    status ENUM('Pending','Confirmed','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     if ($action === 'status') {
         $table = $_POST['table'];
-        if (in_array($table, ['appointments', 'orders', 'pc_build_requests', 'messages', 'invoices'], true)) {
+        if (in_array($table, ['appointments', 'orders', 'pc_build_requests', 'messages', 'repair_requests', 'invoices'], true)) {
             $stmt = $pdo->prepare("UPDATE {$table} SET status = ? WHERE id = ?");
             $stmt->execute([$_POST['status'], (int)$_POST['id']]);
         }
@@ -33,12 +43,14 @@ $stats = [
     'appointments' => $pdo->query('SELECT COUNT(*) FROM appointments')->fetchColumn(),
     'orders' => $pdo->query('SELECT COUNT(*) FROM orders')->fetchColumn(),
     'messages' => $pdo->query('SELECT COUNT(*) FROM messages')->fetchColumn(),
+    'repair_requests' => $pdo->query('SELECT COUNT(*) FROM repair_requests')->fetchColumn(),
 ];
 $customers = $pdo->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_at DESC")->fetchAll();
 $appointments = $pdo->query('SELECT a.*, u.name, u.email FROM appointments a JOIN users u ON u.id = a.user_id ORDER BY a.created_at DESC')->fetchAll();
 $orders = $pdo->query('SELECT o.*, u.name, u.email FROM orders o JOIN users u ON u.id = o.user_id ORDER BY o.created_at DESC')->fetchAll();
 $builds = $pdo->query('SELECT b.*, u.name, u.email FROM pc_build_requests b JOIN users u ON u.id = b.user_id ORDER BY b.created_at DESC')->fetchAll();
 $messages = $pdo->query('SELECT m.*, u.name, u.email FROM messages m JOIN users u ON u.id = m.user_id ORDER BY m.created_at DESC')->fetchAll();
+$repairRequests = $pdo->query('SELECT * FROM repair_requests ORDER BY created_at DESC')->fetchAll();
 $services = $pdo->query('SELECT * FROM services ORDER BY id')->fetchAll();
 $products = $pdo->query('SELECT * FROM products ORDER BY category, name')->fetchAll();
 $invoices = $pdo->query('SELECT i.*, u.name, u.email FROM invoices i JOIN users u ON u.id = i.user_id ORDER BY i.created_at DESC')->fetchAll();
@@ -72,6 +84,13 @@ $flash = flash();
   <h2><?= e(t('appointments')) ?></h2>
   <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('services')) ?></th><th><?= e(t('date')) ?></th><th><?= e(t('status')) ?></th></tr></thead><tbody>
   <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><br><small><?= e($row['email']) ?></small></td><td><?= e($row['service_type']) ?><br><small><?= e($row['problem_details']) ?></small></td><td><?= e($row['preferred_date']) ?> <?= e($row['preferred_time']) ?></td><td><?php status_form('appointments', $row); ?></td></tr><?php endforeach; table_empty(count($appointments), 5); ?>
+  </tbody></table>
+</section>
+
+<section class="dashboard-card">
+  <h2>Repair requests</h2>
+  <table><thead><tr><th>#</th><th>Customer</th><th>Contact</th><th>Problem</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
+  <?php foreach ($repairRequests as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['first_name'] . ' ' . $row['family_name']) ?><br><small><?= e($row['created_at']) ?></small></td><td><?= e($row['phone']) ?><br><small><?= e($row['email']) ?></small></td><td><?= e($row['problem']) ?></td><td><?php status_form('repair_requests', $row); ?></td></tr><?php endforeach; table_empty(count($repairRequests), 5); ?>
   </tbody></table>
 </section>
 

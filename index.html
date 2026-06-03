@@ -199,14 +199,37 @@
         <h2 id="contact-title" data-i18n="contactTitle">Contact Slahpc for repair advice, appointments, or PC part requests.</h2>
       </div>
       <div class="contact-actions">
-        <button class="chat-launch-card" type="button" data-chat-toggle>
-          <span class="chat-launch-icon"><i data-lucide="bot" aria-hidden="true"></i></span>
-          <span>
-            <strong data-i18n="chatLaunchTitle">AI Chatbot</strong>
-            <small data-i18n="chatLaunchCopy">Ask about repairs, PC parts, custom builds, or account help.</small>
-          </span>
-          <i data-lucide="message-circle" aria-hidden="true"></i>
-        </button>
+        <form class="repair-request-form" action="repair-request.php" method="post">
+          <div class="form-grid">
+            <label>
+              <span data-i18n="repairFirstName">First name</span>
+              <input type="text" name="first_name" autocomplete="given-name" required>
+            </label>
+            <label>
+              <span data-i18n="repairFamilyName">Last name</span>
+              <input type="text" name="family_name" autocomplete="family-name" required>
+            </label>
+          </div>
+          <div class="form-grid">
+            <label>
+              <span data-i18n="repairPhone">Phone number</span>
+              <input type="tel" name="phone" autocomplete="tel" required>
+            </label>
+            <label>
+              <span data-i18n="repairEmail">Email address</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+          </div>
+          <label>
+            <span data-i18n="repairProblem">Describe the computer issue</span>
+            <textarea name="problem" required></textarea>
+          </label>
+          <button class="button primary full" type="submit">
+            <i data-lucide="send" aria-hidden="true"></i>
+            <span data-i18n="repairSubmit">Send repair request</span>
+          </button>
+          <p class="form-status" data-repair-status></p>
+        </form>
       </div>
     </section>
   </main>

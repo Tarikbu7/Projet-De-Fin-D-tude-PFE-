@@ -33,7 +33,8 @@ $i18n = [
         'no_rows' => 'No records yet.', 'setup_needed' => 'Database setup is needed.',
         'open_site' => 'Open site', 'quantity' => 'Quantity', 'price' => 'Price', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Purpose', 'subject' => 'Subject', 'message' => 'Message',
-        'admin_note' => 'Admin note', 'create_invoice' => 'Create invoice', 'amount' => 'Amount'
+        'admin_note' => 'Admin note', 'create_invoice' => 'Create invoice', 'amount' => 'Amount',
+        'repair_requests' => 'Repair requests'
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord', 'admin' => 'Admin', 'user' => 'Utilisateur', 'logout' => 'Déconnexion',
@@ -51,7 +52,8 @@ $i18n = [
         'no_rows' => 'Aucun enregistrement.', 'setup_needed' => 'La base de données doit être installée.',
         'open_site' => 'Ouvrir le site', 'quantity' => 'Quantité', 'price' => 'Prix', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Utilisation', 'subject' => 'Sujet', 'message' => 'Message',
-        'admin_note' => 'Note admin', 'create_invoice' => 'Créer une facture', 'amount' => 'Montant'
+        'admin_note' => 'Note admin', 'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
+        'repair_requests' => 'Demandes de réparation'
     ],
     'ar' => [
         'dashboard' => 'لوحة التحكم', 'admin' => 'المدير', 'user' => 'المستخدم', 'logout' => 'تسجيل الخروج',
@@ -69,7 +71,8 @@ $i18n = [
         'no_rows' => 'لا توجد سجلات بعد.', 'setup_needed' => 'يجب إعداد قاعدة البيانات.',
         'open_site' => 'فتح الموقع', 'quantity' => 'الكمية', 'price' => 'السعر', 'total' => 'المجموع',
         'budget' => 'الميزانية', 'purpose' => 'الاستخدام', 'subject' => 'الموضوع', 'message' => 'الرسالة',
-        'admin_note' => 'ملاحظة المدير', 'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ'
+        'admin_note' => 'ملاحظة المدير', 'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
+        'repair_requests' => 'طلبات الإصلاح'
     ],
 ];
 

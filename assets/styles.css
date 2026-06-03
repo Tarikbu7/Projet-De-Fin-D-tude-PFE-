@@ -789,6 +789,23 @@ textarea {
   max-width: 760px;
 }
 
+.repair-request-form {
+  width: min(620px, 100%);
+  padding: 1.4rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.repair-request-form label {
+  margin-bottom: 1rem;
+}
+
+.repair-request-form textarea {
+  min-height: 130px;
+}
+
 .chat-launch-card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
