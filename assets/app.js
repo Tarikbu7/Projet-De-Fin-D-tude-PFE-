@@ -99,7 +99,7 @@ const translations = {
     themeDark: "Passer en mode sombre",
     themeLight: "Passer en mode clair",
     heroImageAria: "Bureau de réparation avec ordinateur portable, outils et équipement de diagnostic",
-    heroEyebrow: "Support matériel et logiciel chez vous",
+    heroEyebrow: "",
     heroTitle: "Réparation informatique sur place",
     heroCopy: "Je répare les ordinateurs portables, PC fixes, systèmes lents, pièces cassées, problèmes Wi-Fi, virus, mises à niveau, sauvegardes et installations. Prenez rendez-vous et je peux venir chez vous.",
     primaryActions: "Actions principales",
@@ -309,7 +309,7 @@ const setMenuButtonLabel = () => {
     return;
   }
 
-  const isOpen = nav.classList.contains("is-open");
+  const isOpen = nav.classList.contains("open");
   const label = isOpen ? t("closeMenu") : t("openMenu");
   navToggle.setAttribute("aria-label", label);
   navToggle.querySelector(".sr-only").textContent = label;
@@ -392,18 +392,28 @@ if (themeToggle) {
 
 if (navToggle && nav) {
   navToggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("is-open");
+    const isOpen = nav.classList.toggle("open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
     setMenuButtonLabel();
   });
 
   nav.addEventListener("click", (event) => {
     if (event.target.closest("a")) {
-      nav.classList.remove("is-open");
+      nav.classList.remove("open");
       navToggle.setAttribute("aria-expanded", "false");
       setMenuButtonLabel();
     }
   });
+}
+
+// Scroll shadow enhancement for navbar
+const siteHeader = document.querySelector("[data-header]");
+if (siteHeader) {
+  const onScroll = () => {
+    siteHeader.classList.toggle("scrolled", window.scrollY > 20);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 }
 
 if (serviceSelect && estimate) {
@@ -443,4 +453,3 @@ if (form && statusText) {
     estimate.textContent = "$55";
   });
 }
-

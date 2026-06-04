@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="preconnect" href="https://unpkg.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     (() => {
       const savedTheme = localStorage.getItem("repair-theme");
@@ -56,11 +56,6 @@
         </select>
       </label>
 
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode">
-        <i data-lucide="moon" aria-hidden="true"></i>
-        <span class="sr-only" data-theme-label>Switch to dark mode</span>
-      </button>
-
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <i data-lucide="menu" aria-hidden="true"></i>
         <span class="sr-only">Open menu</span>
@@ -84,10 +79,6 @@
           <a class="button primary" href="#contact">
             <i data-lucide="calendar-check" aria-hidden="true"></i>
             <span data-i18n="bookAppointment">Request Repair</span>
-          </a>
-          <a class="button ghost" href="tel:+212617248216">
-            <i data-lucide="phone" aria-hidden="true"></i>
-            <span data-i18n="callNow">Call now</span>
           </a>
           <a class="button whatsapp" href="https://wa.me/212617248216?text=Hello%20Slahpc%2C%20I%20need%20help%20with%20my%20computer." target="_blank" rel="noopener" aria-label="Message Slahpc on WhatsApp" data-i18n-aria="whatsappAria">
             <i data-lucide="message-circle" aria-hidden="true"></i>

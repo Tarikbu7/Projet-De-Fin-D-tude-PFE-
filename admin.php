@@ -47,6 +47,7 @@ $stats = [
     'repair_requests' => $pdo->query('SELECT COUNT(*) FROM repair_requests')->fetchColumn(),
     'appointments' => $pdo->query('SELECT COUNT(*) FROM appointments')->fetchColumn(),
     'customers' => $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'user'")->fetchColumn(),
+    'completed' => (int)$pdo->query("SELECT COUNT(*) FROM repair_requests WHERE status = 'Completed'")->fetchColumn() + (int)$pdo->query("SELECT COUNT(*) FROM appointments WHERE status = 'Completed'")->fetchColumn(),
 ];
 $repairRequests = $pdo->query('SELECT * FROM repair_requests ORDER BY created_at DESC')->fetchAll();
 $appointments = $pdo->query('SELECT a.*, u.name, u.email, u.phone FROM appointments a JOIN users u ON u.id = a.user_id ORDER BY a.created_at DESC')->fetchAll();
@@ -64,37 +65,77 @@ function status_form(string $table, array $row): void {
 render_header(t('admin_dashboard'), $user);
 $flash = flash();
 ?>
-<section class="dashboard-hero">
-  <div>
-    <p class="eyebrow"><?= e(t('admin_dashboard')) ?></p>
-    <h1><?= e(t('welcome')) ?>, Admin</h1>
-    <p class="hero-copy">Simple repair dashboard: view client repair requests, contact the customer, and update repair status after you decide the schedule.</p>
+<div class="admin-layout">
+  <aside class="admin-sidebar" aria-label="Admin dashboard sections">
+    <div class="admin-sidebar-title">
+      <span class="brand-mark">CR</span>
+      <div>
+        <strong>Slahpc</strong>
+        <small>Repair Desk</small>
+      </div>
+    </div>
+    <nav class="admin-side-nav">
+      <a href="#overview"><span>Overview</span><strong><?= (int)array_sum(array_map('intval', $stats)) ?></strong></a>
+      <a href="#repair-requests"><span><?= e(t('repair_requests')) ?></span><strong><?= (int)$stats['repair_requests'] ?></strong></a>
+      <a href="#appointments"><span><?= e(t('appointments')) ?></span><strong><?= (int)$stats['appointments'] ?></strong></a>
+      <a href="#customers"><span><?= e(t('customers')) ?></span><strong><?= (int)$stats['customers'] ?></strong></a>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="index.php"><?= e(t('open_site')) ?></a>
+      <a href="logout.php"><?= e(t('logout')) ?></a>
+    </div>
+  </aside>
+
+  <div class="admin-content">
+    <section class="admin-topbar admin-section" id="overview">
+      <div>
+        <small><?= e(date('M d, Y')) ?></small>
+        <h1><?= e(t('welcome')) ?>, Admin</h1>
+      </div>
+      <label class="admin-search">
+        <span class="sr-only">Search</span>
+        <input type="search" placeholder="Search requests">
+      </label>
+      <div class="admin-user-chip">
+        <span>A</span>
+        <strong>Admin</strong>
+      </div>
+    </section>
+    <?php if ($flash): ?><p class="notice success"><?= e($flash) ?></p><?php endif; ?>
+
+    <section class="admin-summary-grid">
+      <article class="admin-summary-card cyan"><span><?= e(t('repair_requests')) ?></span><strong><?= (int)$stats['repair_requests'] ?></strong><small>New website requests</small></article>
+      <article class="admin-summary-card blue"><span><?= e(t('appointments')) ?></span><strong><?= (int)$stats['appointments'] ?></strong><small>Client dashboard requests</small></article>
+      <article class="admin-summary-card violet"><span><?= e(t('customers')) ?></span><strong><?= (int)$stats['customers'] ?></strong><small>Registered clients</small></article>
+      <article class="admin-summary-card pink"><span>Completed</span><strong><?= (int)$stats['completed'] ?></strong><small>Finished repair jobs</small></article>
+    </section>
+
+    <section class="dashboard-card admin-section" id="repair-requests">
+      <h2><?= e(t('repair_requests')) ?></h2>
+      <div class="table-scroll">
+        <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('details')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
+        <?php foreach ($repairRequests as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['first_name'] . ' ' . $row['family_name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['created_at']) ?></small></td><td><?= e($row['phone']) ?></td><td><?= e($row['problem']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><?php status_form('repair_requests', $row); ?></td></tr><?php endforeach; table_empty(count($repairRequests), 6); ?>
+        </tbody></table>
+      </div>
+    </section>
+
+    <section class="dashboard-card admin-section" id="appointments">
+      <h2><?= e(t('appointments')) ?></h2>
+      <div class="table-scroll">
+        <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('services')) ?></th><th><?= e(t('address')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
+        <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['phone']) ?></small></td><td><?= e($row['service_type']) ?><br><small><?= e($row['problem_details']) ?></small></td><td><?= e($row['address']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><?php status_form('appointments', $row); ?></td></tr><?php endforeach; table_empty(count($appointments), 6); ?>
+        </tbody></table>
+      </div>
+    </section>
+
+    <section class="dashboard-card admin-section" id="customers">
+      <h2><?= e(t('customers')) ?></h2>
+      <div class="table-scroll">
+        <table><thead><tr><th><?= e(t('name')) ?></th><th><?= e(t('email')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('address')) ?></th></tr></thead><tbody>
+        <?php foreach ($customers as $row): ?><tr><td><?= e($row['name']) ?></td><td><?= e($row['email']) ?></td><td><?= e($row['phone']) ?></td><td><?= e($row['address']) ?></td></tr><?php endforeach; table_empty(count($customers), 4); ?>
+        </tbody></table>
+      </div>
+    </section>
   </div>
-</section>
-<?php if ($flash): ?><p class="notice success"><?= e($flash) ?></p><?php endif; ?>
-
-<section class="stats-grid">
-  <?php foreach ($stats as $label => $value): ?><article class="stat-card"><span><?= e(t($label)) ?></span><strong><?= (int)$value ?></strong></article><?php endforeach; ?>
-</section>
-
-<section class="dashboard-card">
-  <h2><?= e(t('repair_requests')) ?></h2>
-  <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('details')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-  <?php foreach ($repairRequests as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['first_name'] . ' ' . $row['family_name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['created_at']) ?></small></td><td><?= e($row['phone']) ?></td><td><?= e($row['problem']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><?php status_form('repair_requests', $row); ?></td></tr><?php endforeach; table_empty(count($repairRequests), 6); ?>
-  </tbody></table>
-</section>
-
-<section class="dashboard-card">
-  <h2><?= e(t('appointments')) ?></h2>
-  <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('services')) ?></th><th><?= e(t('address')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-  <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['phone']) ?></small></td><td><?= e($row['service_type']) ?><br><small><?= e($row['problem_details']) ?></small></td><td><?= e($row['address']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><?php status_form('appointments', $row); ?></td></tr><?php endforeach; table_empty(count($appointments), 6); ?>
-  </tbody></table>
-</section>
-
-<section class="dashboard-card">
-  <h2><?= e(t('customers')) ?></h2>
-  <table><thead><tr><th><?= e(t('name')) ?></th><th><?= e(t('email')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('address')) ?></th></tr></thead><tbody>
-  <?php foreach ($customers as $row): ?><tr><td><?= e($row['name']) ?></td><td><?= e($row['email']) ?></td><td><?= e($row['phone']) ?></td><td><?= e($row['address']) ?></td></tr><?php endforeach; table_empty(count($customers), 4); ?>
-  </tbody></table>
-</section>
+</div>
 <?php render_footer(); ?>
