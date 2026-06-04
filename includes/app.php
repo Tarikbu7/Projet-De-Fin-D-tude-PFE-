@@ -20,6 +20,7 @@ $i18n = [
     'en' => [
         'dashboard' => 'Dashboard', 'admin' => 'Admin', 'user' => 'User', 'logout' => 'Logout',
         'login' => 'Login', 'register' => 'Register', 'email' => 'Email', 'password' => 'Password',
+        'sign_in' => 'Sign in', 'no_account' => 'Do not have an account?', 'create_account' => 'Create account',
         'name' => 'Name', 'phone' => 'Phone', 'address' => 'Address', 'save' => 'Save',
         'appointments' => 'Appointments', 'products' => 'Products', 'orders' => 'Orders',
         'messages' => 'Messages', 'services' => 'Service prices', 'invoices' => 'Invoices',
@@ -166,8 +167,7 @@ function render_header(string $title, ?array $user = null): void {
     $dashboardHref = $user && $user['role'] === 'admin' ? 'admin.php' : 'dashboard.php';
     $dashboardText = t('dashboard');
     $dashboardLink = $user ? '<a class="nav-button primary" href="' . e($dashboardHref) . '">' . e($dashboardText) . '</a>' : '';
-    $registerLink = $user ? '' : '<a class="nav-button primary" href="register.php">Create Account</a>';
-    $authLink = $user ? '<a class="nav-button light" href="logout.php">' . e(t('logout')) . '</a>' : '<a class="nav-button light" href="login.php">Login Dashboard</a>';
+    $authLink = $user ? '<a class="nav-button light" href="logout.php">' . e(t('logout')) . '</a>' : '<a class="nav-button primary" href="login.php">' . e(t('sign_in')) . '</a>';
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="$lang" dir="$dir">
@@ -189,7 +189,6 @@ function render_header(string $title, ?array $user = null): void {
     <nav class="site-nav dashboard-nav">
       <a href="index.php">{$GLOBALS['i18n'][$lang]['home']}</a>
       $dashboardLink
-      $registerLink
       $authLink
       <form class="language-form" method="get">
         <select name="lang" onchange="this.form.submit()">

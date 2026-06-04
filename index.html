@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Professional on-site computer repair, diagnostics, upgrades, virus removal, custom PC builds, and parts ordering.">
-  <title>Slahpc Computer Repair & PC Parts</title>
+  <meta name="description" content="Professional on-site computer repair, diagnostics, upgrades, virus removal, data backup, and Wi-Fi support.">
+  <title>Slahpc Computer Repair</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://images.unsplash.com">
@@ -39,12 +39,10 @@
       <nav class="site-nav" id="site-nav" data-nav>
         <a href="#services" data-i18n="navServices">Services</a>
         <a href="#process" data-i18n="navProcess">Process</a>
-        <a href="#appointment" data-i18n="navAppointment">Parts & Builds</a>
         <a href="#contact" data-i18n="navContact">Contact</a>
         <!-- AUTH_ACTIONS_START -->
         <span class="nav-auth" data-auth-actions>
-          <a class="nav-button primary" href="register.php"><i data-lucide="user-plus" aria-hidden="true"></i><span data-i18n="createAccount">Create Account</span></a>
-          <a class="nav-button light" href="login.php"><i data-lucide="log-in" aria-hidden="true"></i><span data-i18n="loginDashboard">Login Dashboard</span></a>
+          <a class="nav-button primary" href="login.php"><i data-lucide="log-in" aria-hidden="true"></i><span data-i18n="loginDashboard">Sign in</span></a>
         </span>
         <!-- AUTH_ACTIONS_END -->
       </nav>
@@ -83,13 +81,17 @@
         </p>
 
         <div class="hero-actions" aria-label="Primary actions" data-i18n-aria="primaryActions">
-          <a class="button primary" href="#appointment">
+          <a class="button primary" href="#contact">
             <i data-lucide="calendar-check" aria-hidden="true"></i>
-            <span data-i18n="bookAppointment">View Parts</span>
+            <span data-i18n="bookAppointment">Request Repair</span>
           </a>
-          <a class="button ghost" href="tel:+10000000000">
+          <a class="button ghost" href="tel:+212617248216">
             <i data-lucide="phone" aria-hidden="true"></i>
             <span data-i18n="callNow">Call now</span>
+          </a>
+          <a class="button whatsapp" href="https://wa.me/212617248216?text=Hello%20Slahpc%2C%20I%20need%20help%20with%20my%20computer." target="_blank" rel="noopener" aria-label="Message Slahpc on WhatsApp" data-i18n-aria="whatsappAria">
+            <i data-lucide="message-circle" aria-hidden="true"></i>
+            <span data-i18n="whatsappNow">WhatsApp</span>
           </a>
         </div>
       </div>
@@ -176,27 +178,10 @@
       </ol>
     </section>
 
-    <section class="section appointment" id="appointment" aria-labelledby="appointment-title">
-      <div class="appointment-copy">
-        <p class="eyebrow" data-i18n="shopEyebrow">PC parts and builds</p>
-        <h2 id="appointment-title" data-i18n="shopTitle">Buy parts or request a custom PC build</h2>
-        <p data-i18n="shopCopy">Customers can order essential PC parts or request a complete custom build directly from their dashboard.</p>
-      </div>
-
-      <div class="shop-grid">
-        <article class="service-card"><i data-lucide="cpu" aria-hidden="true"></i><h3 data-i18n="productCpu">CPU</h3><p data-i18n="productCpuCopy">Processors selected for gaming, study, work, and upgrade builds.</p></article>
-        <article class="service-card"><i data-lucide="memory-stick" aria-hidden="true"></i><h3 data-i18n="productRam">RAM</h3><p data-i18n="productRamCopy">Memory upgrades for faster multitasking and smoother system performance.</p></article>
-        <article class="service-card"><i data-lucide="circuit-board" aria-hidden="true"></i><h3 data-i18n="productMobo">Motherboard</h3><p data-i18n="productMoboCopy">Motherboards matched to the CPU, case, storage, and future upgrade needs.</p></article>
-        <article class="service-card"><i data-lucide="hard-drive" aria-hidden="true"></i><h3 data-i18n="productSsd">SSD</h3><p data-i18n="productSsdCopy">Fast storage for Windows, applications, games, and important files.</p></article>
-        <article class="service-card"><i data-lucide="gpu" aria-hidden="true"></i><h3 data-i18n="productGpu">GPU</h3><p data-i18n="productGpuCopy">Graphics cards selected by budget, workload, and performance target.</p></article>
-        <article class="service-card"><i data-lucide="plug-zap" aria-hidden="true"></i><h3 data-i18n="productPsu">Power Supply</h3><p data-i18n="productPsuCopy">Reliable power supplies for repairs, upgrades, and complete PC builds.</p></article>
-      </div>
-    </section>
-
     <section class="section contact-band" id="contact" aria-labelledby="contact-title">
       <div>
         <p class="eyebrow" data-i18n="contactEyebrow">Need support?</p>
-        <h2 id="contact-title" data-i18n="contactTitle">Contact Slahpc for repair advice, appointments, or PC part requests.</h2>
+        <h2 id="contact-title" data-i18n="contactTitle">Contact Slahpc for repair advice or appointment requests.</h2>
       </div>
       <div class="contact-actions">
         <form class="repair-request-form" action="repair-request.php" method="post">
@@ -234,43 +219,12 @@
     </section>
   </main>
 
-  <section class="chat-widget" aria-label="AI chatbot" data-chat-widget>
-    <button class="chat-float" type="button" data-chat-toggle aria-label="Open AI chatbot" data-i18n-aria="chatOpenAria">
-      <i data-lucide="bot" aria-hidden="true"></i>
-    </button>
-
-    <div class="chat-panel" data-chat-panel aria-live="polite">
-      <header class="chat-header">
-        <div>
-          <span class="chat-status" data-i18n="chatStatus">Online assistant</span>
-          <h2 data-i18n="chatTitle">Slahpc AI Chatbot</h2>
-        </div>
-        <button class="chat-close" type="button" data-chat-close aria-label="Close AI chatbot" data-i18n-aria="chatCloseAria">
-          <i data-lucide="x" aria-hidden="true"></i>
-        </button>
-      </header>
-
-      <div class="chat-messages" data-chat-messages>
-        <div class="chat-message bot" data-i18n="chatWelcome">Hi, I am the Slahpc assistant. Ask me about repairs, parts, custom PC builds, appointments, or account access.</div>
-      </div>
-
-      <div class="chat-suggestions" aria-label="Suggested questions" data-i18n-aria="chatSuggestionsAria">
-        <button type="button" data-chat-suggestion="My laptop is slow">Slow laptop</button>
-        <button type="button" data-chat-suggestion="I need PC parts">PC parts</button>
-        <button type="button" data-chat-suggestion="How do I book a repair?">Book repair</button>
-      </div>
-
-      <form class="chat-form" data-chat-form>
-        <input type="text" data-chat-input placeholder="Ask a question..." data-i18n-placeholder="chatPlaceholder" autocomplete="off">
-        <button type="submit" aria-label="Send message" data-i18n-aria="chatSendAria">
-          <i data-lucide="send" aria-hidden="true"></i>
-        </button>
-      </form>
-    </div>
-  </section>
+  <a class="whatsapp-float" href="https://wa.me/212617248216?text=Hello%20Slahpc%2C%20I%20need%20help%20with%20my%20computer." target="_blank" rel="noopener" aria-label="Message Slahpc on WhatsApp" data-i18n-aria="whatsappAria">
+    <i data-lucide="message-circle" aria-hidden="true"></i>
+  </a>
 
   <footer class="site-footer">
-    <p>&copy; <span data-year></span> <span data-i18n="footerText">Slahpc. Professional computer repair, parts, and technical support.</span></p>
+    <p>&copy; <span data-year></span> <span data-i18n="footerText">Slahpc. Professional computer repair and technical support.</span></p>
     <a href="#home" data-i18n="backTop">Back to top</a>
   </footer>
 </body>

@@ -1,22 +1,23 @@
 const translations = {
   en: {
-    pageTitle: "Slahpc Computer Repair & PC Parts",
-    metaDescription: "Professional on-site computer repair, diagnostics, upgrades, virus removal, custom PC builds, and parts ordering.",
+    pageTitle: "Slahpc Computer Repair",
+    metaDescription: "Professional on-site computer repair, diagnostics, upgrades, virus removal, data backup, and Wi-Fi support.",
     brandAria: "On-Site Computer Repair home",
     brandSmall: "Mobile repair service",
     navServices: "Services",
     navProcess: "Process",
-    navAppointment: "Parts & Builds",
     navContact: "Contact",
     themeDark: "Switch to dark mode",
     themeLight: "Switch to light mode",
     heroImageAria: "Computer repair desk with laptop, tools, and diagnostic equipment",
     heroEyebrow: "Professional computer repair at your location",
     heroTitle: "Computer Repair That Comes To You",
-    heroCopy: "Slahpc provides reliable laptop and desktop repair, diagnostics, upgrades, virus removal, data backup, Wi-Fi support, and custom PC setup with clear pricing and appointment-based service.",
+    heroCopy: "Slahpc provides reliable laptop and desktop repair, diagnostics, upgrades, virus removal, data backup, and Wi-Fi support with clear appointment-based service.",
     primaryActions: "Primary actions",
-    bookAppointment: "View Parts",
+    bookAppointment: "Request Repair",
     callNow: "Call now",
+    whatsappNow: "WhatsApp",
+    whatsappAria: "Message Slahpc on WhatsApp",
     repairNeeds: "Common repair needs",
     stripSsd: "SSD upgrades",
     stripVirus: "Virus removal",
@@ -44,25 +45,9 @@ const translations = {
     appointmentEyebrow: "Book support",
     appointmentTitle: "Request an appointment",
     appointmentCopy: "Use this form to collect appointment details now. Later, the same fields can be sent to PHP and saved into SQL.",
-    shopEyebrow: "PC parts and builds",
-    shopTitle: "Buy parts or request a custom PC build",
-    shopCopy: "Customers can order essential PC parts or request a complete custom build directly from their dashboard.",
-    productCpu: "CPU",
-    productCpuCopy: "Processors selected for gaming, study, work, and upgrade builds.",
-    productRam: "RAM",
-    productRamCopy: "Memory upgrades for faster multitasking and smoother system performance.",
-    productMobo: "Motherboard",
-    productMoboCopy: "Motherboards matched to the CPU, case, storage, and future upgrade needs.",
-    productSsd: "SSD",
-    productSsdCopy: "Fast storage for Windows, applications, games, and important files.",
-    productGpu: "GPU",
-    productGpuCopy: "Graphics cards selected by budget, workload, and performance target.",
-    productPsu: "Power Supply",
-    productPsuCopy: "Reliable power supplies for repairs, upgrades, and complete PC builds.",
-    createAccount: "Create Account",
-    loginDashboard: "Login Dashboard",
+    loginDashboard: "Sign in",
     estimateLabel: "Estimated starting visit",
-    estimateNote: "Final price depends on parts, travel, and repair complexity.",
+    estimateNote: "Final price depends on travel and repair complexity.",
     labelName: "Full name",
     placeholderName: "Your name",
     labelPhone: "Phone number",
@@ -88,7 +73,7 @@ const translations = {
     formRequired: "Please fill out the required appointment details.",
     formReady: ({ name, service, date, time }) => `Thanks, ${name}. Your ${service} appointment request for ${date} in the ${time} is ready to send.`,
     contactEyebrow: "Need support?",
-    contactTitle: "Contact Slahpc for repair advice, appointments, or PC part requests.",
+    contactTitle: "Contact Slahpc for repair advice or appointment requests.",
     repairFirstName: "First name",
     repairFamilyName: "Last name",
     repairPhone: "Phone number",
@@ -97,19 +82,7 @@ const translations = {
     repairSubmit: "Send repair request",
     repairSent: "Your repair request has been sent. We will respond by email or phone.",
     repairError: "Please check the form and try again.",
-    chatLaunchTitle: "AI Chatbot",
-    chatLaunchCopy: "Ask about repairs, PC parts, custom builds, or account help.",
-    chatOpenAria: "Open AI chatbot",
-    chatCloseAria: "Close AI chatbot",
-    chatSuggestionsAria: "Suggested chatbot questions",
-    chatStatus: "Online assistant",
-    chatTitle: "Slahpc AI Chatbot",
-    chatWelcome: "Hi, I am the Slahpc assistant. Ask me about repairs, parts, custom PC builds, appointments, or account access.",
-    chatPlaceholder: "Ask a question...",
-    chatSendAria: "Send message",
-    chatThinking: "Thinking...",
-    chatError: "The AI chatbot is not connected yet. Please check the OpenAI API key setup.",
-    footerText: "Slahpc. Professional computer repair, parts, and technical support.",
+    footerText: "Slahpc. Professional computer repair and technical support.",
     backTop: "Back to top",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -122,7 +95,6 @@ const translations = {
     brandSmall: "Service mobile",
     navServices: "Services",
     navProcess: "Méthode",
-    navAppointment: "Boutique",
     navContact: "Contact",
     themeDark: "Passer en mode sombre",
     themeLight: "Passer en mode clair",
@@ -131,8 +103,10 @@ const translations = {
     heroTitle: "Réparation informatique sur place",
     heroCopy: "Je répare les ordinateurs portables, PC fixes, systèmes lents, pièces cassées, problèmes Wi-Fi, virus, mises à niveau, sauvegardes et installations. Prenez rendez-vous et je peux venir chez vous.",
     primaryActions: "Actions principales",
-    bookAppointment: "Voir la boutique",
+    bookAppointment: "Demander réparation",
     callNow: "Appeler maintenant",
+    whatsappNow: "WhatsApp",
+    whatsappAria: "Envoyer un message WhatsApp a Slahpc",
     repairNeeds: "Besoins de réparation courants",
     stripSsd: "Mises à niveau SSD",
     stripVirus: "Suppression de virus",
@@ -160,23 +134,7 @@ const translations = {
     appointmentEyebrow: "Réserver une aide",
     appointmentTitle: "Demander un rendez-vous",
     appointmentCopy: "Ce formulaire collecte les détails du rendez-vous maintenant. Plus tard, les mêmes champs pourront être envoyés en PHP et enregistrés dans SQL.",
-    shopEyebrow: "Boutique de pièces PC",
-    shopTitle: "Acheter des pièces ou demander un PC sur mesure",
-    shopCopy: "Les clients peuvent commander CPU, RAM, cartes mères, SSD, GPU, alimentations ou demander un PC complet depuis leur tableau de bord.",
-    productCpu: "CPU",
-    productCpuCopy: "Processeurs pour gaming, école, travail et mises à niveau.",
-    productRam: "RAM",
-    productRamCopy: "Mémoire pour accélérer le multitâche et rendre le système plus fluide.",
-    productMobo: "Carte mère",
-    productMoboCopy: "Cartes adaptées à votre CPU, boîtier, stockage et futures évolutions.",
-    productSsd: "SSD",
-    productSsdCopy: "Stockage rapide pour Windows, jeux et fichiers importants.",
-    productGpu: "GPU",
-    productGpuCopy: "Cartes graphiques choisies selon le budget et les performances voulues.",
-    productPsu: "Alimentation",
-    productPsuCopy: "Alimentations fiables pour réparations, mises à niveau et nouveaux PC.",
-    createAccount: "Créer un compte",
-    loginDashboard: "Connexion tableau",
+    loginDashboard: "Se connecter",
     estimateLabel: "Visite à partir de",
     estimateNote: "Le prix final dépend des pièces, du déplacement et de la complexité de la réparation.",
     labelName: "Nom complet",
@@ -228,7 +186,6 @@ const translations = {
     brandSmall: "خدمة متنقلة",
     navServices: "الخدمات",
     navProcess: "الطريقة",
-    navAppointment: "المتجر",
     navContact: "اتصل بنا",
     themeDark: "التبديل إلى الوضع الداكن",
     themeLight: "التبديل إلى الوضع الفاتح",
@@ -237,8 +194,10 @@ const translations = {
     heroTitle: "إصلاح الكمبيوتر في موقعك",
     heroCopy: "أصلح الحواسيب المحمولة والمكتبية، الأنظمة البطيئة، القطع التالفة، مشاكل الواي فاي، الفيروسات، الترقيات، النسخ الاحتياطي والإعداد. احجز موعدا ويمكنني الحضور إليك.",
     primaryActions: "الإجراءات الرئيسية",
-    bookAppointment: "تصفح القطع",
+    bookAppointment: "طلب إصلاح",
     callNow: "اتصل الآن",
+    whatsappNow: "WhatsApp",
+    whatsappAria: "راسل Slahpc على واتساب",
     repairNeeds: "أشهر خدمات الإصلاح",
     stripSsd: "ترقية SSD",
     stripVirus: "إزالة الفيروسات",
@@ -266,23 +225,7 @@ const translations = {
     appointmentEyebrow: "احجز الدعم",
     appointmentTitle: "طلب موعد",
     appointmentCopy: "استخدم هذا النموذج لجمع تفاصيل الموعد الآن. لاحقا يمكن إرسال نفس الحقول إلى PHP وحفظها في SQL.",
-    shopEyebrow: "متجر قطع الكمبيوتر",
-    shopTitle: "اشتر قطعا أو اطلب تجميع كمبيوتر",
-    shopCopy: "يمكن للعملاء طلب CPU وRAM ولوحات أم وSSD وGPU ومزودات طاقة أو طلب تجميع كمبيوتر كامل من لوحة التحكم.",
-    productCpu: "المعالج",
-    productCpuCopy: "معالجات للألعاب والدراسة والعمل والترقيات.",
-    productRam: "الذاكرة RAM",
-    productRamCopy: "ترقية ذاكرة لتعدد مهام أسرع ونظام أكثر سلاسة.",
-    productMobo: "اللوحة الأم",
-    productMoboCopy: "لوحات مناسبة للمعالج والصندوق والتخزين والترقيات المستقبلية.",
-    productSsd: "SSD",
-    productSsdCopy: "تخزين سريع لويندوز والألعاب والملفات المهمة.",
-    productGpu: "كرت الشاشة",
-    productGpuCopy: "كروت شاشة حسب الميزانية والأداء المطلوب.",
-    productPsu: "مزود الطاقة",
-    productPsuCopy: "مزودات طاقة موثوقة للإصلاح والترقية والتجميع.",
-    createAccount: "إنشاء حساب",
-    loginDashboard: "دخول لوحة التحكم",
+    loginDashboard: "تسجيل الدخول",
     estimateLabel: "بداية سعر الزيارة",
     estimateNote: "السعر النهائي يعتمد على القطع، المسافة، وصعوبة الإصلاح.",
     labelName: "الاسم الكامل",
@@ -339,15 +282,7 @@ const estimate = document.querySelector("[data-estimate]");
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const languageSelect = document.querySelector("[data-language-select]");
 const metaDescription = document.querySelector('meta[name="description"]');
-const chatToggles = document.querySelectorAll("[data-chat-toggle]");
-const chatPanel = document.querySelector("[data-chat-panel]");
-const chatClose = document.querySelector("[data-chat-close]");
-const chatForm = document.querySelector("[data-chat-form]");
-const chatInput = document.querySelector("[data-chat-input]");
-const chatMessages = document.querySelector("[data-chat-messages]");
-const chatSuggestions = document.querySelectorAll("[data-chat-suggestion]");
 const repairStatus = document.querySelector("[data-repair-status]");
-const chatHistory = [];
 
 const getLanguage = () => document.documentElement.dataset.language || "en";
 const t = (key) => translations[getLanguage()]?.[key] ?? translations.en[key] ?? key;
@@ -509,92 +444,3 @@ if (form && statusText) {
   });
 }
 
-const openChat = () => {
-  if (!chatPanel) {
-    return;
-  }
-
-  chatPanel.classList.add("is-open");
-  chatInput?.focus();
-};
-
-const closeChat = () => {
-  chatPanel?.classList.remove("is-open");
-};
-
-const addChatMessage = (type, text) => {
-  if (!chatMessages) {
-    return null;
-  }
-
-  const message = document.createElement("div");
-  message.className = `chat-message ${type}`;
-  message.textContent = text;
-  chatMessages.appendChild(message);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return message;
-};
-
-const sendChatMessage = async (message) => {
-  const trimmed = message.trim();
-  if (!trimmed) {
-    return;
-  }
-
-  openChat();
-  addChatMessage("user", trimmed);
-  chatHistory.push({ role: "user", content: trimmed });
-
-  const thinkingMessage = addChatMessage("bot", t("chatThinking"));
-
-  try {
-    const response = await fetch("chat.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: trimmed,
-        history: chatHistory.slice(-8, -1),
-      }),
-    });
-
-    const data = await response.json();
-    const reply = data.reply || data.error || t("chatError");
-
-    if (thinkingMessage) {
-      thinkingMessage.textContent = reply;
-    } else {
-      addChatMessage("bot", reply);
-    }
-
-    if (data.reply) {
-      chatHistory.push({ role: "assistant", content: reply });
-    }
-  } catch (error) {
-    const message = t("chatError");
-    if (thinkingMessage) {
-      thinkingMessage.textContent = message;
-    } else {
-      addChatMessage("bot", message);
-    }
-  }
-};
-
-chatToggles.forEach((button) => {
-  button.addEventListener("click", openChat);
-});
-
-chatClose?.addEventListener("click", closeChat);
-
-chatSuggestions.forEach((button) => {
-  button.addEventListener("click", () => sendChatMessage(button.dataset.chatSuggestion || ""));
-});
-
-chatForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  sendChatMessage(chatInput?.value || "");
-  if (chatInput) {
-    chatInput.value = "";
-  }
-});

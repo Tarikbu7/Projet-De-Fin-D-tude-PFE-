@@ -29,8 +29,8 @@ render_header(t('login'));
   <form method="post" class="stack-form">
     <label><?= e(t('email')) ?><input type="email" name="email" required value="admin@slahpc.com"></label>
     <label><?= e(t('password')) ?><input type="password" name="password" required value="admin123"></label>
-    <button class="button primary full" type="submit"><?= e(t('login')) ?></button>
+    <button class="button primary full" type="submit"><?= e(t('sign_in')) ?></button>
   </form>
-  <p class="muted-line"><a href="register.php"><?= e(t('register')) ?></a></p>
+  <p class="muted-line"><?= e(t('no_account')) ?> <a href="register.php"><?= e(t('create_account')) ?></a></p>
 </section>
 <?php render_footer(); ?>
