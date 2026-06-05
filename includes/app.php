@@ -28,13 +28,13 @@ $i18n = [
         'status' => 'Status', 'date' => 'Date', 'time' => 'Time', 'details' => 'Details',
         'request_appointment' => 'Request appointment', 'place_order' => 'Place order',
         'send_message' => 'Send message', 'submit' => 'Submit', 'pending' => 'Pending',
-        'confirmed' => 'Confirmed', 'in_progress' => 'In progress', 'completed' => 'Completed',
+        'accepted' => 'Accepted', 'in_progress' => 'In progress', 'completed' => 'Completed',
         'cancelled' => 'Cancelled', 'welcome' => 'Welcome', 'admin_dashboard' => 'Admin dashboard',
         'user_dashboard' => 'User dashboard', 'home' => 'Home', 'language' => 'Language',
         'no_rows' => 'No records yet.', 'setup_needed' => 'Database setup is needed.',
         'open_site' => 'Open site', 'quantity' => 'Quantity', 'price' => 'Price', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Purpose', 'subject' => 'Subject', 'message' => 'Message',
-        'admin_note' => 'Admin note', 'create_invoice' => 'Create invoice', 'amount' => 'Amount',
+        'create_invoice' => 'Create invoice', 'amount' => 'Amount',
         'repair_requests' => 'Repair requests'
     ],
     'fr' => [
@@ -47,13 +47,13 @@ $i18n = [
         'status' => 'Statut', 'date' => 'Date', 'time' => 'Heure', 'details' => 'Détails',
         'request_appointment' => 'Demander un rendez-vous', 'place_order' => 'Passer commande',
         'send_message' => 'Envoyer un message', 'submit' => 'Envoyer', 'pending' => 'En attente',
-        'confirmed' => 'Confirmé', 'in_progress' => 'En cours', 'completed' => 'Terminé',
+        'accepted' => 'Accepté', 'in_progress' => 'En cours', 'completed' => 'Terminé',
         'cancelled' => 'Annulé', 'welcome' => 'Bienvenue', 'admin_dashboard' => 'Tableau admin',
         'user_dashboard' => 'Tableau utilisateur', 'home' => 'Accueil', 'language' => 'Langue',
         'no_rows' => 'Aucun enregistrement.', 'setup_needed' => 'La base de données doit être installée.',
         'open_site' => 'Ouvrir le site', 'quantity' => 'Quantité', 'price' => 'Prix', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Utilisation', 'subject' => 'Sujet', 'message' => 'Message',
-        'admin_note' => 'Note admin', 'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
+        'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
         'repair_requests' => 'Demandes de réparation'
     ],
     'ar' => [
@@ -66,13 +66,13 @@ $i18n = [
         'status' => 'الحالة', 'date' => 'التاريخ', 'time' => 'الوقت', 'details' => 'التفاصيل',
         'request_appointment' => 'طلب موعد', 'place_order' => 'إرسال طلب شراء',
         'send_message' => 'إرسال رسالة', 'submit' => 'إرسال', 'pending' => 'قيد الانتظار',
-        'confirmed' => 'مؤكد', 'in_progress' => 'قيد العمل', 'completed' => 'مكتمل',
+        'accepted' => 'مقبول', 'in_progress' => 'قيد العمل', 'completed' => 'مكتمل',
         'cancelled' => 'ملغي', 'welcome' => 'مرحبا', 'admin_dashboard' => 'لوحة تحكم المدير',
         'user_dashboard' => 'لوحة تحكم المستخدم', 'home' => 'الرئيسية', 'language' => 'اللغة',
         'no_rows' => 'لا توجد سجلات بعد.', 'setup_needed' => 'يجب إعداد قاعدة البيانات.',
         'open_site' => 'فتح الموقع', 'quantity' => 'الكمية', 'price' => 'السعر', 'total' => 'المجموع',
         'budget' => 'الميزانية', 'purpose' => 'الاستخدام', 'subject' => 'الموضوع', 'message' => 'الرسالة',
-        'admin_note' => 'ملاحظة المدير', 'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
+        'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
         'repair_requests' => 'طلبات الإصلاح'
     ],
 ];
@@ -147,13 +147,13 @@ function require_admin(): array {
 }
 
 function statuses(): array {
-    return ['Pending', 'Confirmed', 'In progress', 'Completed', 'Cancelled'];
+    return ['Pending', 'Accepted', 'In progress', 'Completed', 'Cancelled'];
 }
 
 function status_label(string $status): string {
     return match ($status) {
         'Pending' => t('pending'),
-        'Confirmed' => t('confirmed'),
+        'Confirmed', 'Accepted' => t('accepted'),
         'In progress' => t('in_progress'),
         'Completed' => t('completed'),
         'Cancelled' => t('cancelled'),

@@ -35,8 +35,7 @@ try {
             address VARCHAR(255) NOT NULL,
             problem_details TEXT NOT NULL,
             price DECIMAL(10,2) NULL,
-            status ENUM('Pending','Confirmed','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
-            admin_note TEXT NULL,
+            status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB",
@@ -48,8 +47,7 @@ try {
             email VARCHAR(190) NOT NULL,
             problem TEXT NOT NULL,
             price DECIMAL(10,2) NULL,
-            admin_note TEXT NULL,
-            status ENUM('Pending','Confirmed','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+            status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB",
     ];

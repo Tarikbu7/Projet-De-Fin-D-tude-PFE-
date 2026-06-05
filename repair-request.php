@@ -24,7 +24,7 @@ try {
         phone VARCHAR(60) NOT NULL,
         email VARCHAR(190) NOT NULL,
         problem TEXT NOT NULL,
-        status ENUM('Pending','Confirmed','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+        status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB");
 

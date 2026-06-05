@@ -16,7 +16,6 @@ function ensure_column(PDO $pdo, string $table, string $column, string $definiti
 }
 
 ensure_column($pdo, 'appointments', 'price', 'DECIMAL(10,2) NULL AFTER problem_details');
-ensure_column($pdo, 'appointments', 'admin_note', 'TEXT NULL AFTER price');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -67,8 +66,8 @@ $flash = flash();
 
 <section class="dashboard-card">
   <h2><?= e(t('appointments')) ?></h2>
-  <table><thead><tr><th>#</th><th><?= e(t('services')) ?></th><th><?= e(t('details')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-  <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['service_type']) ?></td><td><?= e($row['problem_details']) ?></td><td><?php if (($row['price'] ?? null) !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><span class="status"><?= e(status_label($row['status'])) ?></span></td></tr><?php endforeach; table_empty(count($appointments), 5); ?>
+  <table><thead><tr><th>#</th><th><?= e(t('services')) ?></th><th><?= e(t('details')) ?></th><th>Price</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
+  <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['service_type']) ?></td><td><?= e($row['problem_details']) ?></td><td><?php if (($row['price'] ?? null) !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><?php endif; ?></td><td><span class="status"><?= e(status_label($row['status'])) ?></span></td></tr><?php endforeach; table_empty(count($appointments), 5); ?>
   </tbody></table>
 </section>
 <?php render_footer(); ?>

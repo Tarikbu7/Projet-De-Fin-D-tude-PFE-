@@ -1350,7 +1350,7 @@ textarea {
 
 .admin-topbar {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(220px, 360px) auto;
+  grid-template-columns: minmax(180px, 1fr) auto;
   gap: 1rem;
   align-items: center;
 }
@@ -1364,11 +1364,6 @@ textarea {
 .admin-topbar small {
   color: var(--muted);
   font-weight: 800;
-}
-
-.admin-search input {
-  min-height: 44px;
-  background: var(--surface);
 }
 
 .admin-user-chip {
@@ -1498,6 +1493,54 @@ textarea {
   min-width: 760px;
 }
 
+.admin-appointments-card {
+  padding: 1rem;
+}
+
+.admin-appointments-card h2 {
+  font-size: 1.35rem;
+  margin-bottom: 0.7rem;
+}
+
+.table-scroll .admin-appointments-table {
+  min-width: 820px;
+}
+
+.admin-appointments-table th,
+.admin-appointments-table td {
+  padding: 0.6rem 0.7rem;
+}
+
+.admin-appointments-table td {
+  font-size: 0.9rem;
+}
+
+.admin-appointments-table small {
+  display: block;
+  line-height: 1.35;
+  margin-top: 0.18rem;
+}
+
+.admin-appointments-table .problem-text {
+  max-width: 260px;
+  max-height: 3.8em;
+  overflow: hidden;
+}
+
+.admin-appointments-table .status-update-form {
+  grid-template-columns: minmax(110px, 1fr) 86px 64px;
+  align-items: end;
+  min-width: 280px;
+}
+
+.admin-appointments-table .status-update-form label span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
 .stat-card span {
   display: block;
   color: var(--muted);
@@ -1541,8 +1584,8 @@ textarea {
 
 .status-update-form {
   display: grid;
-  gap: 0.65rem;
-  min-width: 220px;
+  gap: 0.45rem;
+  min-width: 170px;
 }
 
 .status-update-form label {
@@ -1551,12 +1594,19 @@ textarea {
 
 .status-update-form label span {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
 }
 
-.status-update-form textarea {
-  min-height: 76px;
+.status-update-form select,
+.status-update-form input {
+  min-height: 38px;
+  padding: 0.55rem 0.65rem;
+}
+
+.status-update-form .button {
+  min-height: 38px;
+  padding: 0.55rem 0.8rem;
 }
 
 .mini-check {

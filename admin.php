@@ -10,8 +10,7 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS repair_requests (
     email VARCHAR(190) NOT NULL,
     problem TEXT NOT NULL,
     price DECIMAL(10,2) NULL,
-    admin_note TEXT NULL,
-    status ENUM('Pending','Confirmed','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+    status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB");
 
@@ -24,9 +23,16 @@ function ensure_column(PDO $pdo, string $table, string $column, string $definiti
 }
 
 ensure_column($pdo, 'repair_requests', 'price', 'DECIMAL(10,2) NULL AFTER problem');
-ensure_column($pdo, 'repair_requests', 'admin_note', 'TEXT NULL AFTER price');
 ensure_column($pdo, 'appointments', 'price', 'DECIMAL(10,2) NULL AFTER problem_details');
-ensure_column($pdo, 'appointments', 'admin_note', 'TEXT NULL AFTER price');
+
+function sync_status_values(PDO $pdo, string $table): void {
+    $pdo->exec("ALTER TABLE {$table} MODIFY status ENUM('Pending','Confirmed','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending'");
+    $pdo->exec("UPDATE {$table} SET status = 'Accepted' WHERE status = 'Confirmed'");
+    $pdo->exec("ALTER TABLE {$table} MODIFY status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending'");
+}
+
+sync_status_values($pdo, 'repair_requests');
+sync_status_values($pdo, 'appointments');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -35,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (in_array($table, ['appointments', 'repair_requests'], true)) {
             $price = trim($_POST['price'] ?? '');
             $priceValue = $price === '' ? null : (float)$price;
-            $stmt = $pdo->prepare("UPDATE {$table} SET status = ?, price = ?, admin_note = ? WHERE id = ?");
-            $stmt->execute([$_POST['status'], $priceValue, trim($_POST['admin_note'] ?? ''), (int)$_POST['id']]);
+            $stmt = $pdo->prepare("UPDATE {$table} SET status = ?, price = ? WHERE id = ?");
+            $stmt->execute([$_POST['status'], $priceValue, (int)$_POST['id']]);
         }
     }
     flash('Saved.');
@@ -59,7 +65,7 @@ function status_form(string $table, array $row): void {
         $selected = $status === $row['status'] ? ' selected' : '';
         echo '<option' . $selected . '>' . e($status) . '</option>';
     }
-    echo '</select></label><label><span>Price</span><input type="number" step="0.01" min="0" name="price" value="' . e($row['price'] ?? '') . '" placeholder="150"></label><label><span>Admin note</span><textarea name="admin_note" placeholder="Client accepted on WhatsApp">' . e($row['admin_note'] ?? '') . '</textarea></label><button class="button light full" type="submit">' . e(t('save')) . '</button></form>';
+    echo '</select></label><label><span>Price</span><input type="number" step="0.01" min="0" name="price" value="' . e($row['price'] ?? '') . '" placeholder="150"></label><button class="button light full" type="submit">' . e(t('save')) . '</button></form>';
 }
 
 render_header(t('admin_dashboard'), $user);
@@ -92,10 +98,6 @@ $flash = flash();
         <small><?= e(date('M d, Y')) ?></small>
         <h1><?= e(t('welcome')) ?>, Admin</h1>
       </div>
-      <label class="admin-search">
-        <span class="sr-only">Search</span>
-        <input type="search" placeholder="Search requests">
-      </label>
       <div class="admin-user-chip">
         <span>A</span>
         <strong>Admin</strong>
@@ -113,17 +115,17 @@ $flash = flash();
     <section class="dashboard-card admin-section" id="repair-requests">
       <h2><?= e(t('repair_requests')) ?></h2>
       <div class="table-scroll">
-        <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('details')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-        <?php foreach ($repairRequests as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['first_name'] . ' ' . $row['family_name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['created_at']) ?></small></td><td><?= e($row['phone']) ?></td><td><?= e($row['problem']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><?php status_form('repair_requests', $row); ?></td></tr><?php endforeach; table_empty(count($repairRequests), 6); ?>
+        <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('details')) ?></th><th>Price</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
+        <?php foreach ($repairRequests as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['first_name'] . ' ' . $row['family_name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['created_at']) ?></small></td><td><?= e($row['phone']) ?></td><td><?= e($row['problem']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><?php endif; ?></td><td><?php status_form('repair_requests', $row); ?></td></tr><?php endforeach; table_empty(count($repairRequests), 6); ?>
         </tbody></table>
       </div>
     </section>
 
-    <section class="dashboard-card admin-section" id="appointments">
+    <section class="dashboard-card admin-section admin-appointments-card" id="appointments">
       <h2><?= e(t('appointments')) ?></h2>
       <div class="table-scroll">
-        <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('services')) ?></th><th><?= e(t('address')) ?></th><th>Price / note</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-        <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['phone']) ?></small></td><td><?= e($row['service_type']) ?><br><small><?= e($row['problem_details']) ?></small></td><td><?= e($row['address']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><br><?php endif; ?><?= e($row['admin_note'] ?? '') ?></td><td><?php status_form('appointments', $row); ?></td></tr><?php endforeach; table_empty(count($appointments), 6); ?>
+        <table class="admin-appointments-table"><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('services')) ?></th><th><?= e(t('address')) ?></th><th>Price</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
+        <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><small><?= e($row['email']) ?></small><small><?= e($row['phone']) ?></small></td><td><?= e($row['service_type']) ?><small class="problem-text"><?= e($row['problem_details']) ?></small></td><td><?= e($row['address']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><?php endif; ?></td><td><?php status_form('appointments', $row); ?></td></tr><?php endforeach; table_empty(count($appointments), 6); ?>
         </tbody></table>
       </div>
     </section>
