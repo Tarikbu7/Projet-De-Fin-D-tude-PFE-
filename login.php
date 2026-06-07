@@ -2,18 +2,21 @@
 require_once __DIR__ . '/includes/app.php';
 
 if (current_user()) {
-    redirect(current_user()['role'] === 'admin' ? 'admin.php' : 'dashboard.php');
+    redirect('index.php');
 }
 
 $error = null;
+$email = '';
+$message = flash();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
     try {
         $stmt = db()->prepare('SELECT * FROM users WHERE email = ? LIMIT 1');
-        $stmt->execute([trim($_POST['email'] ?? '')]);
+        $stmt->execute([$email]);
         $user = $stmt->fetch();
         if ($user && password_verify((string)($_POST['password'] ?? ''), $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
-            redirect($user['role'] === 'admin' ? 'admin.php' : 'dashboard.php');
+            redirect('index.php');
         }
         $error = 'Invalid email or password.';
     } catch (Throwable $exception) {
@@ -23,14 +26,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render_header(t('login'));
 ?>
-<section class="auth-panel dashboard-card">
-  <h1><?= e(t('login')) ?></h1>
+<section class="auth-panel">
+  <div class="auth-heading">
+    <h1>Sign in to your account</h1>
+    <p>Enter your email and password to continue.</p>
+  </div>
+  <?php if ($message): ?><p class="auth-notice success"><?= e($message) ?></p><?php endif; ?>
   <?php if ($error): ?><p class="notice error"><?= e($error) ?></p><?php endif; ?>
   <form method="post" class="stack-form">
-    <label><?= e(t('email')) ?><input type="email" name="email" required value="admin@slahpc.com"></label>
-    <label><?= e(t('password')) ?><input type="password" name="password" required value="admin123"></label>
+    <label>
+      <span><?= e(t('email')) ?></span>
+      <input type="email" name="email" autocomplete="email" required value="<?= e($email) ?>">
+    </label>
+    <label>
+      <span><?= e(t('password')) ?></span>
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
     <button class="button primary full" type="submit"><?= e(t('sign_in')) ?></button>
   </form>
-  <p class="muted-line"><?= e(t('no_account')) ?> <a href="register.php"><?= e(t('create_account')) ?></a></p>
+  <p class="muted-line">New here? <a href="register.php"><?= e(t('create_account')) ?></a></p>
 </section>
 <?php render_footer(); ?>

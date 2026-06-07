@@ -21,7 +21,7 @@ $i18n = [
         'dashboard' => 'Dashboard', 'admin' => 'Admin', 'user' => 'User', 'logout' => 'Logout',
         'login' => 'Login', 'register' => 'Register', 'email' => 'Email', 'password' => 'Password',
         'sign_in' => 'Sign in', 'no_account' => 'Do not have an account?', 'create_account' => 'Create account',
-        'name' => 'Name', 'phone' => 'Phone', 'address' => 'Address', 'save' => 'Save',
+        'name' => 'Name', 'phone' => 'Phone', 'address' => 'Address', 'city' => 'City', 'save' => 'Save',
         'appointments' => 'Appointments', 'products' => 'Products', 'orders' => 'Orders',
         'messages' => 'Messages', 'services' => 'Service prices', 'invoices' => 'Invoices',
         'customers' => 'Customers', 'customer' => 'Customer', 'stats' => 'Stats', 'pc_build' => 'PC build request',
@@ -35,12 +35,12 @@ $i18n = [
         'open_site' => 'Open site', 'quantity' => 'Quantity', 'price' => 'Price', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Purpose', 'subject' => 'Subject', 'message' => 'Message',
         'create_invoice' => 'Create invoice', 'amount' => 'Amount',
-        'repair_requests' => 'Repair requests'
+        'repair_requests' => 'Repair requests', 'awaiting_quote' => 'Awaiting quote'
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord', 'admin' => 'Admin', 'user' => 'Utilisateur', 'logout' => 'Déconnexion',
         'login' => 'Connexion', 'register' => 'Inscription', 'email' => 'E-mail', 'password' => 'Mot de passe',
-        'name' => 'Nom', 'phone' => 'Téléphone', 'address' => 'Adresse', 'save' => 'Enregistrer',
+        'name' => 'Nom', 'phone' => 'Téléphone', 'address' => 'Adresse', 'city' => 'Ville', 'save' => 'Enregistrer',
         'appointments' => 'Rendez-vous', 'products' => 'Produits', 'orders' => 'Commandes',
         'messages' => 'Messages', 'services' => 'Prix des services', 'invoices' => 'Factures',
         'customers' => 'Clients', 'customer' => 'Client', 'stats' => 'Statistiques', 'pc_build' => 'Demande de PC sur mesure',
@@ -54,12 +54,12 @@ $i18n = [
         'open_site' => 'Ouvrir le site', 'quantity' => 'Quantité', 'price' => 'Prix', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Utilisation', 'subject' => 'Sujet', 'message' => 'Message',
         'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
-        'repair_requests' => 'Demandes de réparation'
+        'repair_requests' => 'Demandes de réparation', 'awaiting_quote' => 'Devis en attente'
     ],
     'ar' => [
         'dashboard' => 'لوحة التحكم', 'admin' => 'المدير', 'user' => 'المستخدم', 'logout' => 'تسجيل الخروج',
         'login' => 'تسجيل الدخول', 'register' => 'إنشاء حساب', 'email' => 'البريد الإلكتروني', 'password' => 'كلمة المرور',
-        'name' => 'الاسم', 'phone' => 'الهاتف', 'address' => 'العنوان', 'save' => 'حفظ',
+        'name' => 'الاسم', 'phone' => 'الهاتف', 'address' => 'العنوان', 'city' => 'المدينة', 'save' => 'حفظ',
         'appointments' => 'المواعيد', 'products' => 'المنتجات', 'orders' => 'الطلبات',
         'messages' => 'الرسائل', 'services' => 'أسعار الخدمات', 'invoices' => 'الفواتير',
         'customers' => 'العملاء', 'customer' => 'العميل', 'stats' => 'الإحصائيات', 'pc_build' => 'طلب تجميع كمبيوتر',
@@ -73,7 +73,7 @@ $i18n = [
         'open_site' => 'فتح الموقع', 'quantity' => 'الكمية', 'price' => 'السعر', 'total' => 'المجموع',
         'budget' => 'الميزانية', 'purpose' => 'الاستخدام', 'subject' => 'الموضوع', 'message' => 'الرسالة',
         'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
-        'repair_requests' => 'طلبات الإصلاح'
+        'repair_requests' => 'طلبات الإصلاح', 'awaiting_quote' => 'في انتظار عرض السعر'
     ],
 ];
 
@@ -164,9 +164,9 @@ function status_label(string $status): string {
 function render_header(string $title, ?array $user = null): void {
     $dir = is_rtl() ? 'rtl' : 'ltr';
     $lang = lang();
-    $dashboardHref = $user && $user['role'] === 'admin' ? 'admin.php' : 'dashboard.php';
-    $dashboardText = t('dashboard');
-    $dashboardLink = $user ? '<a class="nav-button primary" href="' . e($dashboardHref) . '">' . e($dashboardText) . '</a>' : '';
+    $dashboardLink = $user && $user['role'] === 'admin'
+        ? '<a class="nav-button primary" href="admin.php">' . e(t('dashboard')) . '</a>'
+        : '';
     $authLink = $user ? '<a class="nav-button light" href="logout.php">' . e(t('logout')) . '</a>' : '<a class="nav-button primary" href="login.php">' . e(t('sign_in')) . '</a>';
     echo <<<HTML
 <!DOCTYPE html>

@@ -39,7 +39,7 @@
       <nav class="site-nav" id="site-nav" data-nav>
         <a href="#services" data-i18n="navServices">Services</a>
         <a href="#process" data-i18n="navProcess">Process</a>
-        <a href="#contact" data-i18n="navContact">Contact</a>
+        <a href="#reviews" data-i18n="navReviews">Reviews</a>
         <!-- AUTH_ACTIONS_START -->
         <span class="nav-auth" data-auth-actions>
           <a class="nav-button primary" href="login.php"><i data-lucide="log-in" aria-hidden="true"></i><span data-i18n="loginDashboard">Sign in</span></a>
@@ -76,7 +76,7 @@
         </p>
 
         <div class="hero-actions" aria-label="Primary actions" data-i18n-aria="primaryActions">
-          <a class="button primary" href="#contact">
+          <a class="button primary" href="#appointment">
             <i data-lucide="calendar-check" aria-hidden="true"></i>
             <span data-i18n="bookAppointment">Request Repair</span>
           </a>
@@ -109,29 +109,29 @@
 
     <section class="section services" id="services" aria-labelledby="services-title">
       <div class="section-heading">
-        <h2 id="services-title" data-i18n="servicesTitle">Professional repairs for hardware, software, and setup issues</h2>
-        <p data-i18n="servicesCopy">Choose the service that matches your problem. If the cause is unclear, start with a diagnostic visit and receive a clear repair recommendation.</p>
+        <h2 id="services-title" data-i18n="servicesTitle">What can I help you fix?</h2>
+        <p data-i18n="servicesCopy">From a slow laptop to a broken screen or unreliable Wi-Fi, tell me what is happening and I will help you find the right fix.</p>
       </div>
 
       <div class="service-grid">
         <article class="service-card">
           <i data-lucide="cpu" aria-hidden="true"></i>
-          <h3 data-i18n="hardwareTitle">Hardware Repair</h3>
+          <h3 data-i18n="hardwareTitle">Hardware problems</h3>
           <p data-i18n="hardwareCopy">Screen replacement, batteries, storage drives, RAM, overheating, fan noise, power faults, and component replacement.</p>
         </article>
         <article class="service-card">
           <i data-lucide="monitor-cog" aria-hidden="true"></i>
-          <h3 data-i18n="softwareTitle">Software Repair</h3>
+          <h3 data-i18n="softwareTitle">Windows &amp; software help</h3>
           <p data-i18n="softwareCopy">Slow startup, system errors, application issues, Windows installation, driver problems, updates, and performance optimization.</p>
         </article>
         <article class="service-card">
           <i data-lucide="bug-off" aria-hidden="true"></i>
-          <h3 data-i18n="virusTitle">Virus Removal</h3>
+          <h3 data-i18n="virusTitle">Virus &amp; security cleanup</h3>
           <p data-i18n="virusCopy">Malware scans, browser cleanup, pop-up removal, account security checks, and antivirus configuration.</p>
         </article>
         <article class="service-card">
           <i data-lucide="router" aria-hidden="true"></i>
-          <h3 data-i18n="setupTitle">Home Tech Setup</h3>
+          <h3 data-i18n="setupTitle">Wi-Fi, printers &amp; new setups</h3>
           <p data-i18n="setupCopy">Wi-Fi troubleshooting, printer setup, new computer configuration, email setup, backup planning, and file transfer.</p>
         </article>
       </div>
@@ -139,72 +139,78 @@
 
     <section class="section process-band" id="process" aria-labelledby="process-title">
       <div class="section-heading compact">
-        <p class="eyebrow" data-i18n="processEyebrow">How it works</p>
-        <h2 id="process-title" data-i18n="processTitle">A clear process from diagnosis to repair</h2>
+        <h2 id="process-title" data-i18n="processTitle">Here is how it works</h2>
       </div>
 
       <ol class="process-list">
         <li>
           <span>1</span>
           <div>
-            <h3 data-i18n="stepOneTitle">Describe the issue</h3>
-            <p data-i18n="stepOneCopy">Share the symptoms, device type, and location so the service can be prepared before the visit.</p>
+            <h3 data-i18n="stepOneTitle">Tell me what is happening</h3>
+            <p data-i18n="stepOneCopy">Let me know what the computer is doing, what type of device it is, and where you need help.</p>
           </div>
         </li>
         <li>
           <span>2</span>
           <div>
-            <h3 data-i18n="stepTwoTitle">Choose an appointment</h3>
-            <p data-i18n="stepTwoCopy">Select a convenient time for home, office, or remote support.</p>
+            <h3 data-i18n="stepTwoTitle">We find a time that works</h3>
+            <p data-i18n="stepTwoCopy">I will contact you to arrange a convenient time for the repair.</p>
           </div>
         </li>
         <li>
           <span>3</span>
           <div>
-            <h3 data-i18n="stepThreeTitle">Receive service or a quote</h3>
-            <p data-i18n="stepThreeCopy">The device is diagnosed, the options are explained, and repair begins when the solution is approved.</p>
+            <h3 data-i18n="stepThreeTitle">I check it and explain your options</h3>
+            <p data-i18n="stepThreeCopy">I will diagnose the problem, explain the cost clearly, and only start the repair after you agree.</p>
           </div>
         </li>
       </ol>
     </section>
 
-    <section class="section contact-band" id="contact" aria-labelledby="contact-title">
-      <div>
-        <p class="eyebrow" data-i18n="contactEyebrow">Need support?</p>
-        <h2 id="contact-title" data-i18n="contactTitle">Contact Slahpc for repair advice or appointment requests.</h2>
+    <section class="section appointment" id="appointment" aria-labelledby="appointment-title">
+      <div class="appointment-copy">
+        <h2 id="appointment-title" data-i18n="appointmentTitle">Repair request</h2>
+        <p data-i18n="appointmentCopy">Choose the closest service, add your address, and describe the problem in your own words. I will get back to you to arrange the repair.</p>
       </div>
-      <div class="contact-actions">
-        <form class="repair-request-form" action="repair-request.php" method="post">
-          <div class="form-grid">
-            <label>
-              <span data-i18n="repairFirstName">First name</span>
-              <input type="text" name="first_name" autocomplete="given-name" required>
-            </label>
-            <label>
-              <span data-i18n="repairFamilyName">Last name</span>
-              <input type="text" name="family_name" autocomplete="family-name" required>
-            </label>
+      <div>
+        <!-- HOME_APPOINTMENT_START -->
+        <div class="booking-form appointment-signin">
+          <i data-lucide="log-in" aria-hidden="true"></i>
+          <h3 data-i18n="appointmentSignIn">Sign in to send your repair request</h3>
+          <p data-i18n="appointmentSignInCopy">Once it is sent, you can follow the repair status from your dashboard.</p>
+          <a class="button primary full" href="login.php"><span data-i18n="loginDashboard">Sign in</span></a>
+        </div>
+        <!-- HOME_APPOINTMENT_END -->
+      </div>
+    </section>
+
+    <section class="section reviews-section" id="reviews" aria-labelledby="reviews-title">
+      <div class="reviews-heading">
+        <h2 id="reviews-title" data-i18n="reviewsTitle">A few words from customers</h2>
+        <p data-i18n="reviewsCopy">What people have said after getting help with their computers.</p>
+      </div>
+      <div class="review-grid">
+        <article class="review-card">
+          <div class="review-stars" aria-label="5 out of 5 stars" data-i18n-aria="reviewStars">
+            <i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i>
           </div>
-          <div class="form-grid">
-            <label>
-              <span data-i18n="repairPhone">Phone number</span>
-              <input type="tel" name="phone" autocomplete="tel" required>
-            </label>
-            <label>
-              <span data-i18n="repairEmail">Email address</span>
-              <input type="email" name="email" autocomplete="email" required>
-            </label>
+          <blockquote data-i18n="reviewOne">My laptop was overheating and very slow. The problem was explained clearly, and it works smoothly again.</blockquote>
+          <footer><strong>Youssef A.</strong><span data-i18n="reviewOneService">Laptop repair</span></footer>
+        </article>
+        <article class="review-card">
+          <div class="review-stars" aria-label="5 out of 5 stars" data-i18n-aria="reviewStars">
+            <i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i>
           </div>
-          <label>
-            <span data-i18n="repairProblem">Describe the computer issue</span>
-            <textarea name="problem" required></textarea>
-          </label>
-          <button class="button primary full" type="submit">
-            <i data-lucide="send" aria-hidden="true"></i>
-            <span data-i18n="repairSubmit">Send repair request</span>
-          </button>
-          <p class="form-status" data-repair-status></p>
-        </form>
+          <blockquote data-i18n="reviewTwo">The SSD upgrade made my computer much faster. The price and the work were explained before the repair started.</blockquote>
+          <footer><strong>Salma B.</strong><span data-i18n="reviewTwoService">SSD upgrade</span></footer>
+        </article>
+        <article class="review-card">
+          <div class="review-stars" aria-label="5 out of 5 stars" data-i18n-aria="reviewStars">
+            <i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i><i data-lucide="star" aria-hidden="true"></i>
+          </div>
+          <blockquote data-i18n="reviewThree">My Wi-Fi and printer were set up quickly, and everything was tested before the job was finished.</blockquote>
+          <footer><strong>Omar K.</strong><span data-i18n="reviewThreeService">Home setup</span></footer>
+        </article>
       </div>
     </section>
   </main>
@@ -214,7 +220,13 @@
   </a>
 
   <footer class="site-footer">
-    <p>&copy; <span data-year></span> <span data-i18n="footerText">Slahpc. Professional computer repair and technical support.</span></p>
+    <div class="footer-details">
+      <p>&copy; <span data-year></span> <span data-i18n="footerText">Slahpc. Professional computer repair and technical support.</span></p>
+      <p class="footer-location">
+        <i data-lucide="map-pin" aria-hidden="true"></i>
+        <span data-i18n="shopLocation">Shop: Bendiban, Hawma Lwarda Street</span>
+      </p>
+    </div>
     <a href="#home" data-i18n="backTop">Back to top</a>
   </footer>
 </body>

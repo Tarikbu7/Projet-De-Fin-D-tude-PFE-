@@ -272,6 +272,22 @@ textarea {
   transition: transform 0.22s ease;
 }
 
+.site-nav .account-button {
+  width: 38px;
+  min-width: 38px;
+  padding: 0;
+}
+
+.site-nav .account-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+.site-nav .account-button:hover svg,
+.site-nav .account-button:focus-visible svg {
+  transform: none;
+}
+
 .site-nav .nav-button.primary {
   border-color: transparent;
   background: var(--accent);
@@ -660,8 +676,7 @@ h3 {
   font-weight: 400;
 }
 
-.hero-actions,
-.contact-actions {
+.hero-actions {
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
@@ -995,6 +1010,28 @@ h3 {
   box-shadow: var(--shadow);
 }
 
+.appointment-signin {
+  display: grid;
+  gap: 1rem;
+  text-align: center;
+}
+
+.appointment-signin > svg {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto;
+  color: var(--accent);
+}
+
+.appointment-signin p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.appointment .notice {
+  margin-bottom: 1rem;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1090,36 +1127,76 @@ textarea {
   color: var(--danger);
 }
 
-/* Contact and footer */
-.contact-band {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+/* Reviews and footer */
+.reviews-section {
   background: var(--surface);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
 
-.contact-band h2 {
-  max-width: 760px;
+.reviews-heading {
+  max-width: 680px;
+  margin: 0 auto 2.25rem;
+  text-align: center;
 }
 
-.repair-request-form {
-  width: min(620px, 100%);
+.reviews-heading p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.review-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
   padding: 1.4rem;
-  border: 1px solid var(--border-strong);
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface2);
 }
 
-.repair-request-form label {
-  margin-bottom: 1rem;
+.review-stars {
+  display: flex;
+  gap: 0.2rem;
+  color: #e5a819;
 }
 
-.repair-request-form textarea {
-  min-height: 130px;
+.review-stars svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.review-card blockquote {
+  flex: 1;
+  margin: 1.15rem 0 1.4rem;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.review-card footer {
+  display: grid;
+  gap: 0.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.review-card footer strong {
+  font-size: 0.94rem;
+}
+
+.review-card footer span {
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
 .whatsapp-float {
@@ -1163,6 +1240,24 @@ textarea {
 .site-footer p {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.footer-details {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.footer-location {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.footer-location svg {
+  width: 17px;
+  height: 17px;
+  color: var(--accent);
+  flex: 0 0 auto;
 }
 
 .site-footer a {
@@ -1455,6 +1550,44 @@ textarea {
   font-size: clamp(2.2rem, 5vw, 4rem);
 }
 
+.customer-dashboard-hero {
+  position: relative;
+  margin-bottom: 1.25rem;
+  padding: 2.4rem;
+  border: 1px solid rgba(21, 157, 255, 0.18);
+  border-radius: 18px;
+  background:
+    linear-gradient(120deg, rgba(21, 157, 255, 0.12), transparent 58%),
+    var(--surface);
+  box-shadow: 0 14px 36px rgba(16, 32, 51, 0.08);
+  overflow: hidden;
+}
+
+.customer-dashboard-hero::after {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -55px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: rgba(21, 157, 255, 0.08);
+  pointer-events: none;
+}
+
+.customer-dashboard-hero h1 {
+  position: relative;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.customer-dashboard-hero .hero-copy {
+  position: relative;
+  max-width: 620px;
+  margin-top: 0.6rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1482,6 +1615,83 @@ textarea {
 .dashboard-card h2 {
   font-size: clamp(1.35rem, 3vw, 2rem);
   margin-bottom: 1rem;
+}
+
+.customer-appointments-card {
+  padding: 0;
+}
+
+.customer-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.customer-card-heading h2 {
+  margin: 0;
+}
+
+.appointment-count {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 0.65rem;
+  border-radius: 999px;
+  background: rgba(21, 157, 255, 0.1);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.customer-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.customer-appointments-table {
+  min-width: 720px;
+}
+
+.customer-appointments-table th {
+  background: color-mix(in srgb, var(--surface2) 70%, transparent);
+}
+
+.customer-appointments-table th,
+.customer-appointments-table td {
+  padding: 1rem 1.25rem;
+}
+
+.customer-appointments-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.customer-appointments-table tbody tr:hover {
+  background: rgba(21, 157, 255, 0.035);
+}
+
+.customer-appointments-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.customer-appointments-table td:nth-child(2) {
+  max-width: 430px;
+  line-height: 1.55;
+}
+
+.muted-value {
+  color: var(--muted);
+}
+
+.service-price-note {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .table-scroll {
@@ -1604,6 +1814,24 @@ textarea {
   padding: 0.55rem 0.65rem;
 }
 
+.status-update-form .fixed-price-input {
+  border-color: color-mix(in srgb, var(--border) 80%, #8b97a6);
+  background: color-mix(in srgb, var(--surface2) 78%, #aeb7c2);
+  color: var(--muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.status-update-form .fixed-price-input:focus {
+  border-color: color-mix(in srgb, var(--border) 80%, #8b97a6);
+  box-shadow: none;
+}
+
+.status-update-form .quote-price-input {
+  border-color: rgba(21, 157, 255, 0.42);
+  background: rgba(21, 157, 255, 0.055);
+}
+
 .status-update-form .button {
   min-height: 38px;
   padding: 0.55rem 0.8rem;
@@ -1629,17 +1857,117 @@ textarea {
 
 .auth-panel {
   width: min(520px, 100%);
-  margin: 4rem auto;
+  margin: 3.5rem auto;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(16, 32, 51, 0.07);
+}
+
+.auth-panel-wide {
+  width: min(680px, 100%);
+}
+
+.auth-heading {
+  margin-bottom: 1.5rem;
+}
+
+.auth-heading h1 {
+  margin-bottom: 0.45rem;
+  font-size: clamp(1.65rem, 4vw, 2.15rem);
+  line-height: 1.2;
+}
+
+.auth-heading p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.auth-panel .stack-form {
+  gap: 1rem;
+}
+
+.auth-panel .stack-form label {
+  gap: 0.45rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.auth-panel .stack-form label span small,
+.auth-panel .stack-form label > small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.auth-panel input {
+  min-height: 46px;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.auth-panel .button {
+  min-height: 46px;
+  border-radius: 5px;
+  box-shadow: none;
+}
+
+.auth-panel .button:hover {
+  transform: none;
+}
+
+.auth-panel .notice,
+.auth-notice {
+  width: 100%;
+  margin: 0 0 1.2rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.auth-notice {
+  border: 1px solid color-mix(in srgb, var(--success) 35%, var(--border));
+  background: color-mix(in srgb, var(--success) 7%, var(--surface));
+  color: var(--success);
+}
+
+.auth-register-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.auth-password-field,
+.auth-submit {
+  grid-column: 1 / -1;
 }
 
 .muted-line {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .muted-line a {
   color: var(--accent);
-  font-weight: 800;
+  font-weight: 700;
+}
+
+@media (max-width: 620px) {
+  .auth-panel {
+    margin: 1.5rem auto;
+    padding: 1.4rem;
+  }
+
+  .auth-register-form {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-password-field,
+  .auth-submit {
+    grid-column: auto;
+  }
 }
 
 .notice {
@@ -1708,7 +2036,6 @@ html[dir="rtl"] body {
 
 html[dir="rtl"] .site-nav,
 html[dir="rtl"] .hero-actions,
-html[dir="rtl"] .contact-actions,
 html[dir="rtl"] .strip-item,
 html[dir="rtl"] .time-options label,
 html[dir="rtl"] .check-row {
@@ -1744,7 +2071,8 @@ html[dir="rtl"] input[type="tel"] {
 }
 
 @media (max-width: 1040px) {
-  .service-grid {
+  .service-grid,
+  .review-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1838,15 +2166,49 @@ html[dir="rtl"] input[type="tel"] {
     padding: 0.62rem 0.85rem;
   }
 
+  .site-nav .account-button {
+    justify-content: center;
+    padding: 0;
+  }
+
   .dashboard-header .site-nav {
     position: static;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex: 1 1 auto;
     gap: 0.65rem;
     padding: 0;
     background: transparent;
     border-bottom: 0;
+  }
+
+  .dashboard-header {
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .dashboard-header .brand-mark {
+    width: 100px;
+  }
+
+  .dashboard-header .dashboard-nav > a,
+  .dashboard-header .dashboard-nav .nav-button {
+    width: auto;
+    min-height: 36px;
+    padding: 0 0.55rem;
+    border-radius: 4px;
+  }
+
+  .dashboard-header .dashboard-nav .language-form {
+    flex: 0 0 auto;
+  }
+
+  .dashboard-header .dashboard-nav select {
+    min-width: 56px;
+    padding: 0.45rem 0.5rem;
   }
 
   .language-control {
@@ -1865,8 +2227,6 @@ html[dir="rtl"] input[type="tel"] {
   }
 
   .hero-actions,
-  .contact-actions,
-  .contact-band,
   .site-footer {
     align-items: stretch;
     flex-direction: column;
@@ -1874,6 +2234,7 @@ html[dir="rtl"] input[type="tel"] {
 
   .trust-strip,
   .service-grid,
+  .review-grid,
   .form-grid,
   .time-options,
   .admin-side-nav,
@@ -1886,6 +2247,14 @@ html[dir="rtl"] input[type="tel"] {
   .dashboard-shell {
     width: min(100% - 2rem, 1220px);
     padding-top: 2rem;
+  }
+
+  .customer-dashboard-hero {
+    padding: 1.6rem;
+  }
+
+  .customer-card-heading {
+    padding: 1.1rem 1.2rem;
   }
 
   .admin-content {

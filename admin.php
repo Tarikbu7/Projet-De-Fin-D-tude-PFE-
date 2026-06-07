@@ -37,10 +37,22 @@ sync_status_values($pdo, 'appointments');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     if ($action === 'status') {
-        $table = $_POST['table'];
+        $table = $_POST['table'] ?? '';
         if (in_array($table, ['appointments', 'repair_requests'], true)) {
             $price = trim($_POST['price'] ?? '');
             $priceValue = $price === '' ? null : (float)$price;
+            if ($table === 'appointments') {
+                $appointment = $pdo->prepare('SELECT service_type, price FROM appointments WHERE id = ? LIMIT 1');
+                $appointment->execute([(int)$_POST['id']]);
+                $appointment = $appointment->fetch();
+
+                if ($appointment && $appointment['service_type'] !== 'Hardware repair') {
+                    $service = $pdo->prepare('SELECT base_price FROM services WHERE active = 1 AND name = ? LIMIT 1');
+                    $service->execute([$appointment['service_type']]);
+                    $fixedPrice = $service->fetchColumn();
+                    $priceValue = $fixedPrice !== false ? (float)$fixedPrice : $appointment['price'];
+                }
+            }
             $stmt = $pdo->prepare("UPDATE {$table} SET status = ?, price = ? WHERE id = ?");
             $stmt->execute([$_POST['status'], $priceValue, (int)$_POST['id']]);
         }
@@ -60,12 +72,17 @@ $appointments = $pdo->query('SELECT a.*, u.name, u.email, u.phone FROM appointme
 $customers = $pdo->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_at DESC")->fetchAll();
 
 function status_form(string $table, array $row): void {
+    $priceIsEditable = $table === 'repair_requests' || ($row['service_type'] ?? '') === 'Hardware repair';
+    $priceClass = $priceIsEditable ? 'quote-price-input' : 'fixed-price-input';
+    $priceLabel = $priceIsEditable ? 'Price quote' : 'Fixed price';
+    $readonly = $priceIsEditable ? '' : ' readonly aria-readonly="true" title="This service has a fixed price"';
+    $placeholder = $priceIsEditable ? 'Enter quote' : '';
     echo '<form method="post" class="status-update-form"><input type="hidden" name="action" value="status"><input type="hidden" name="table" value="' . e($table) . '"><input type="hidden" name="id" value="' . (int)$row['id'] . '"><label><span>' . e(t('status')) . '</span><select name="status">';
     foreach (statuses() as $status) {
         $selected = $status === $row['status'] ? ' selected' : '';
         echo '<option' . $selected . '>' . e($status) . '</option>';
     }
-    echo '</select></label><label><span>Price</span><input type="number" step="0.01" min="0" name="price" value="' . e($row['price'] ?? '') . '" placeholder="150"></label><button class="button light full" type="submit">' . e(t('save')) . '</button></form>';
+    echo '</select></label><label><span>' . $priceLabel . '</span><input class="' . $priceClass . '" type="number" step="0.01" min="0" name="price" value="' . e($row['price'] ?? '') . '" placeholder="' . $placeholder . '"' . $readonly . '></label><button class="button light full" type="submit">' . e(t('save')) . '</button></form>';
 }
 
 render_header(t('admin_dashboard'), $user);
@@ -133,7 +150,7 @@ $flash = flash();
     <section class="dashboard-card admin-section" id="customers">
       <h2><?= e(t('customers')) ?></h2>
       <div class="table-scroll">
-        <table><thead><tr><th><?= e(t('name')) ?></th><th><?= e(t('email')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('address')) ?></th></tr></thead><tbody>
+        <table><thead><tr><th><?= e(t('name')) ?></th><th><?= e(t('email')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('city')) ?></th></tr></thead><tbody>
         <?php foreach ($customers as $row): ?><tr><td><?= e($row['name']) ?></td><td><?= e($row['email']) ?></td><td><?= e($row['phone']) ?></td><td><?= e($row['address']) ?></td></tr><?php endforeach; table_empty(count($customers), 4); ?>
         </tbody></table>
       </div>

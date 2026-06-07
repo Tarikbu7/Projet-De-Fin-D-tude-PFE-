@@ -61,12 +61,12 @@ try {
     $stmt->execute([$adminHash]);
 
     $services = [
-        ['Diagnostic visit', 55], ['Software repair', 75], ['Hardware repair', 95],
-        ['Wi-Fi / printer / setup', 80], ['Backup or data transfer', 90],
+        [2, 'Software repair', 100], [3, 'Hardware repair', 0],
+        [4, 'Wi-Fi / printer / setup', 60], [5, 'Backup or data transfer', 700],
     ];
-    $stmt = $pdo->prepare('INSERT IGNORE INTO services (id, name, base_price) VALUES (?, ?, ?)');
-    foreach ($services as $index => $service) {
-        $stmt->execute([$index + 1, $service[0], $service[1]]);
+    $stmt = $pdo->prepare('INSERT INTO services (id, name, base_price) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name), base_price = VALUES(base_price)');
+    foreach ($services as $service) {
+        $stmt->execute($service);
     }
 
     $done = true;
