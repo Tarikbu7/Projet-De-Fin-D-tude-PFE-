@@ -2,6 +2,11 @@
 declare(strict_types=1);
 
 session_name('slahpc_session');
+session_set_cookie_params([
+    'httponly' => true,
+    'samesite' => 'Lax',
+    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+]);
 session_start();
 
 const DB_HOST = '127.0.0.1';
@@ -35,7 +40,7 @@ $i18n = [
         'open_site' => 'Open site', 'quantity' => 'Quantity', 'price' => 'Price', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Purpose', 'subject' => 'Subject', 'message' => 'Message',
         'create_invoice' => 'Create invoice', 'amount' => 'Amount',
-        'repair_requests' => 'Repair requests', 'awaiting_quote' => 'Awaiting quote'
+        'awaiting_quote' => 'Awaiting quote'
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord', 'admin' => 'Admin', 'user' => 'Utilisateur', 'logout' => 'Déconnexion',
@@ -54,7 +59,7 @@ $i18n = [
         'open_site' => 'Ouvrir le site', 'quantity' => 'Quantité', 'price' => 'Prix', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Utilisation', 'subject' => 'Sujet', 'message' => 'Message',
         'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
-        'repair_requests' => 'Demandes de réparation', 'awaiting_quote' => 'Devis en attente'
+        'awaiting_quote' => 'Devis en attente'
     ],
     'ar' => [
         'dashboard' => 'لوحة التحكم', 'admin' => 'المدير', 'user' => 'المستخدم', 'logout' => 'تسجيل الخروج',
@@ -73,7 +78,7 @@ $i18n = [
         'open_site' => 'فتح الموقع', 'quantity' => 'الكمية', 'price' => 'السعر', 'total' => 'المجموع',
         'budget' => 'الميزانية', 'purpose' => 'الاستخدام', 'subject' => 'الموضوع', 'message' => 'الرسالة',
         'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
-        'repair_requests' => 'طلبات الإصلاح', 'awaiting_quote' => 'في انتظار عرض السعر'
+        'awaiting_quote' => 'في انتظار عرض السعر'
     ],
 ];
 
@@ -114,6 +119,30 @@ function db(bool $withDatabase = true): PDO {
 function redirect(string $path): never {
     header('Location: ' . $path);
     exit;
+}
+
+function csrf_token(): string {
+    return $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
+}
+
+function csrf_input(): string {
+    return '<input type="hidden" name="csrf_token" value="' . e(csrf_token()) . '">';
+}
+
+function verify_csrf(): void {
+    $submittedToken = (string)($_POST['csrf_token'] ?? '');
+    if ($submittedToken === '' || !hash_equals(csrf_token(), $submittedToken)) {
+        http_response_code(403);
+        exit('Invalid or expired form token.');
+    }
+}
+
+function logout_form(string $class = ''): string {
+    $classAttribute = $class === '' ? '' : ' class="' . e($class) . '"';
+    return '<form method="post" action="logout.php"' . $classAttribute . '>'
+        . csrf_input()
+        . '<button class="nav-button light" type="submit">' . e(t('logout')) . '</button>'
+        . '</form>';
 }
 
 function current_user(): ?array {
@@ -167,7 +196,7 @@ function render_header(string $title, ?array $user = null): void {
     $dashboardLink = $user && $user['role'] === 'admin'
         ? '<a class="nav-button primary" href="admin.php">' . e(t('dashboard')) . '</a>'
         : '';
-    $authLink = $user ? '<a class="nav-button light" href="logout.php">' . e(t('logout')) . '</a>' : '<a class="nav-button primary" href="login.php">' . e(t('sign_in')) . '</a>';
+    $authLink = $user ? logout_form('nav-logout-form') : '<a class="nav-button primary" href="login.php">' . e(t('sign_in')) . '</a>';
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="$lang" dir="$dir">

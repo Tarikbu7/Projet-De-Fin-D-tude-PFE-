@@ -11,6 +11,7 @@ $email = '';
 $phone = '';
 $city = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verify_csrf();
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
@@ -18,8 +19,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = (string)($_POST['password'] ?? '');
 
     try {
-        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
-            $error = 'Enter your name, a valid email, and a password of at least 6 characters.';
+        $errors = [];
+        if ($name === '') {
+            $errors[] = 'Name is required.';
+        }
+        if ($email === '') {
+            $errors[] = 'Email is required.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Enter a valid email address.';
+        }
+        if ($phone === '') {
+            $errors[] = 'Phone number is required.';
+        }
+        if ($city === '') {
+            $errors[] = 'City is required.';
+        }
+        if ($password === '') {
+            $errors[] = 'Password is required.';
+        } elseif (strlen($password) < 6) {
+            $errors[] = 'Password must contain at least 6 characters.';
+        }
+
+        if ($errors) {
+            $error = implode(' ', $errors);
         } else {
             $stmt = db()->prepare('INSERT INTO users (name, email, phone, address, password_hash, role) VALUES (?, ?, ?, ?, ?, "user")');
             $stmt->execute([$name, $email, $phone, $city, password_hash($password, PASSWORD_DEFAULT)]);
@@ -39,7 +61,8 @@ render_header(t('register'));
     <p>You will use it to request appointments and follow their progress.</p>
   </div>
   <?php if ($error): ?><p class="notice error"><?= e($error) ?></p><?php endif; ?>
-  <form method="post" class="stack-form auth-register-form">
+  <form method="post" class="stack-form auth-register-form" novalidate>
+    <?= csrf_input() ?>
     <label>
       <span><?= e(t('name')) ?></span>
       <input type="text" name="name" autocomplete="name" required value="<?= e($name) ?>">
@@ -49,12 +72,12 @@ render_header(t('register'));
       <input type="email" name="email" autocomplete="email" required value="<?= e($email) ?>">
     </label>
     <label>
-      <span><?= e(t('phone')) ?> <small>(optional)</small></span>
-      <input type="tel" name="phone" autocomplete="tel" value="<?= e($phone) ?>">
+      <span><?= e(t('phone')) ?></span>
+      <input type="tel" name="phone" autocomplete="tel" required value="<?= e($phone) ?>">
     </label>
     <label>
-      <span><?= e(t('city')) ?> <small>(optional)</small></span>
-      <input type="text" name="city" autocomplete="address-level2" value="<?= e($city) ?>">
+      <span><?= e(t('city')) ?></span>
+      <input type="text" name="city" autocomplete="address-level2" required value="<?= e($city) ?>">
     </label>
     <label class="auth-password-field">
       <span><?= e(t('password')) ?></span>

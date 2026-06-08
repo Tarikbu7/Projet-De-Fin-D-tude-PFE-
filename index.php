@@ -2,7 +2,7 @@
 require __DIR__ . '/includes/app.php';
 
 $user = current_user();
-$csrfToken = $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
+$csrfToken = csrf_token();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appointment') {
     if (!$user) {
@@ -15,15 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appoi
     $serviceType = trim((string)($_POST['service_type'] ?? ''));
     $address = trim((string)($_POST['address'] ?? ''));
     $problemDetails = trim((string)($_POST['problem_details'] ?? ''));
-    $submittedToken = (string)($_POST['csrf_token'] ?? '');
+    verify_csrf();
     $pdo = db();
     $service = $pdo->prepare('SELECT name, base_price FROM services WHERE active = 1 AND name = ? LIMIT 1');
     $service->execute([$serviceType]);
     $selectedService = $service->fetch();
 
     if (
-        !hash_equals($csrfToken, $submittedToken)
-        || !$selectedService
+        !$selectedService
         || $address === ''
         || mb_strlen($address) > 255
         || $problemDetails === ''
@@ -32,12 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appoi
         redirect('index.php#appointment');
     }
 
-    $stmt = $pdo->prepare('INSERT INTO appointments (user_id, service_type, preferred_date, preferred_time, address, problem_details, price) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $stmt = $pdo->prepare('INSERT INTO appointments (user_id, service_type, address, problem_details, price) VALUES (?, ?, ?, ?, ?)');
     $stmt->execute([
         $user['id'],
         $serviceType,
-        date('Y-m-d'),
-        'Repairer will confirm',
         $address,
         $problemDetails,
         $serviceType === 'Hardware repair' ? null : $selectedService['base_price'],
@@ -94,13 +91,43 @@ if ($user && $user['role'] !== 'admin') {
         '<div class="booking-form appointment-signin">'
         . '<i data-lucide="log-in" aria-hidden="true"></i>'
         . '<h3 data-i18n="appointmentSignIn">Sign in to request an appointment</h3>'
-        . '<p data-i18n="appointmentSignInCopy">Your account lets you submit a repair request and track its status.</p>'
+        . '<p data-i18n="appointmentSignInCopy">Your account lets you request an appointment and track its status.</p>'
         . '<a class="button primary full" href="login.php"><span data-i18n="loginDashboard">Sign in</span></a>'
         . '</div>';
 }
 
 $appointmentBlock = '<!-- HOME_APPOINTMENT_START -->' . $appointmentContent . '<!-- HOME_APPOINTMENT_END -->';
 $html = preg_replace('/<!-- HOME_APPOINTMENT_START -->.*?<!-- HOME_APPOINTMENT_END -->/s', $appointmentBlock, $html) ?? $html;
+
+$approvedReviews = db()->query(
+    "SELECT r.rating, r.comment, u.name, a.service_type
+     FROM reviews r
+     JOIN users u ON u.id = r.user_id
+     JOIN appointments a ON a.id = r.appointment_id
+     WHERE r.status = 'Approved'
+     ORDER BY r.reviewed_at DESC, r.created_at DESC
+     LIMIT 6"
+)->fetchAll();
+
+$reviewCards = '';
+foreach ($approvedReviews as $review) {
+    $nameParts = preg_split('/\s+/', trim($review['name'])) ?: [];
+    $displayName = $nameParts[0] ?? 'Customer';
+    if (isset($nameParts[1]) && $nameParts[1] !== '') {
+        $displayName .= ' ' . mb_substr($nameParts[1], 0, 1) . '.';
+    }
+    $stars = str_repeat('<i data-lucide="star" aria-hidden="true"></i>', (int)$review['rating']);
+    $reviewCards .= '<article class="review-card">'
+        . '<div class="review-stars" aria-label="' . (int)$review['rating'] . ' out of 5 stars">' . $stars . '</div>'
+        . '<blockquote>' . e($review['comment']) . '</blockquote>'
+        . '<footer><strong>' . e($displayName) . '</strong><span>' . e($review['service_type']) . '</span></footer>'
+        . '</article>';
+}
+if ($reviewCards === '') {
+    $reviewCards = '<p class="empty-review-message">Customer reviews will appear here after approval.</p>';
+}
+$reviewsBlock = '<!-- APPROVED_REVIEWS_START --><div class="review-grid">' . $reviewCards . '</div><!-- APPROVED_REVIEWS_END -->';
+$html = preg_replace('/<!-- APPROVED_REVIEWS_START -->.*?<!-- APPROVED_REVIEWS_END -->/s', $reviewsBlock, $html) ?? $html;
 
 if ($user) {
     $accountLink = $user['role'] === 'admin'
@@ -109,7 +136,7 @@ if ($user) {
     $authActions = '<!-- AUTH_ACTIONS_START -->'
         . '<span class="nav-auth" data-auth-actions>'
         . $accountLink
-        . '<a class="nav-button light" href="logout.php"><i data-lucide="log-out" aria-hidden="true"></i><span>' . e(t('logout')) . '</span></a>'
+        . logout_form('nav-logout-form')
         . '</span>'
         . '<!-- AUTH_ACTIONS_END -->';
     $html = preg_replace('/<!-- AUTH_ACTIONS_START -->.*?<!-- AUTH_ACTIONS_END -->/s', $authActions, $html) ?? $html;

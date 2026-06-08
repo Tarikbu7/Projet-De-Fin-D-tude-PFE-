@@ -9,13 +9,16 @@ $error = null;
 $email = '';
 $message = flash();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verify_csrf();
     $email = trim($_POST['email'] ?? '');
     try {
         $stmt = db()->prepare('SELECT * FROM users WHERE email = ? LIMIT 1');
         $stmt->execute([$email]);
         $user = $stmt->fetch();
         if ($user && password_verify((string)($_POST['password'] ?? ''), $user['password_hash'])) {
+            session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
+            unset($_SESSION['csrf_token']);
             redirect('index.php');
         }
         $error = 'Invalid email or password.';
@@ -34,6 +37,7 @@ render_header(t('login'));
   <?php if ($message): ?><p class="auth-notice success"><?= e($message) ?></p><?php endif; ?>
   <?php if ($error): ?><p class="notice error"><?= e($error) ?></p><?php endif; ?>
   <form method="post" class="stack-form">
+    <?= csrf_input() ?>
     <label>
       <span><?= e(t('email')) ?></span>
       <input type="email" name="email" autocomplete="email" required value="<?= e($email) ?>">

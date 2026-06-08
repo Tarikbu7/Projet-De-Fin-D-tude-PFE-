@@ -43,18 +43,12 @@ const translations = {
     stepThreeTitle: "I check it and explain your options",
     stepThreeCopy: "I will diagnose the problem, explain the cost clearly, and only start the repair after you agree.",
     appointmentEyebrow: "Book support",
-    appointmentTitle: "Repair request",
+    appointmentTitle: "Appointment request",
     appointmentCopy: "Choose the closest service, add your address, and describe the problem in your own words. I will get back to you to arrange the repair.",
-    appointmentSignIn: "Sign in to send your repair request",
+    appointmentSignIn: "Sign in to request an appointment",
     appointmentSignInCopy: "Once it is sent, you can follow the repair status from your dashboard.",
     accountAppointments: "My account and appointments",
     loginDashboard: "Sign in",
-    estimateLabel: "Estimated starting visit",
-    estimateNote: "Final price depends on travel and repair complexity.",
-    labelName: "Full name",
-    placeholderName: "Your name",
-    labelPhone: "Phone number",
-    placeholderPhone: "(555) 555-5555",
     labelService: "Service type",
     hardwarePriceNote: "Hardware repair depends on the problem and replacement parts. You will receive a quote before work begins.",
     optionChoose: "Choose one",
@@ -62,19 +56,11 @@ const translations = {
     optionHardware: "Hardware repair",
     optionNetwork: "Wi-Fi / printer / setup",
     optionData: "Backup or data transfer",
-    labelDate: "Preferred day",
-    preferredTime: "Preferred time",
-    timeMorning: "Morning",
-    timeAfternoon: "Afternoon",
-    timeEvening: "Evening",
     labelAddress: "Address or service area",
     placeholderAddress: "City, area, or full address",
     labelProblem: "Tell me what is wrong",
     placeholderProblem: "Example: laptop is slow, fan is loud, screen is cracked, or Wi-Fi will not connect",
-    confirmText: "I understand this is an appointment request and the visit time will be confirmed.",
     sendRequest: "Send request",
-    formRequired: "Please fill out the required appointment details.",
-    formReady: ({ name, service, date, time }) => `Thanks, ${name}. Your ${service} appointment request for ${date} in the ${time} is ready to send.`,
     reviewsTitle: "A few words from customers",
     reviewsCopy: "What people have said after getting help with their computers.",
     reviewStars: "5 out of 5 stars",
@@ -84,14 +70,6 @@ const translations = {
     reviewTwoService: "SSD upgrade",
     reviewThree: "My Wi-Fi and printer were set up quickly, and everything was tested before the job was finished.",
     reviewThreeService: "Home setup",
-    repairFirstName: "First name",
-    repairFamilyName: "Last name",
-    repairPhone: "Phone number",
-    repairEmail: "Email address",
-    repairProblem: "Describe the computer issue",
-    repairSubmit: "Send repair request",
-    repairSent: "Your repair request has been sent. We will respond by email or phone.",
-    repairError: "Please check the form and try again.",
     footerText: "Slahpc. Professional computer repair and technical support.",
     shopLocation: "Shop: Bendiban, Hawma Lwarda Street",
     backTop: "Back to top",
@@ -143,18 +121,12 @@ const translations = {
     stepThreeTitle: "Je vérifie et j'explique les solutions",
     stepThreeCopy: "Je diagnostique le problème, j'explique clairement le prix et je commence seulement avec votre accord.",
     appointmentEyebrow: "Réserver une aide",
-    appointmentTitle: "Demande de réparation",
+    appointmentTitle: "Demande de rendez-vous",
     appointmentCopy: "Choisissez le service le plus proche, ajoutez votre adresse et décrivez le problème avec vos propres mots. Je vous contacterai pour organiser la réparation.",
     appointmentSignIn: "Connectez-vous pour envoyer votre demande",
     appointmentSignInCopy: "Après l'envoi, vous pourrez suivre l'état de la réparation depuis votre tableau de bord.",
     accountAppointments: "Mon compte et mes rendez-vous",
     loginDashboard: "Se connecter",
-    estimateLabel: "Visite à partir de",
-    estimateNote: "Le prix final dépend des pièces, du déplacement et de la complexité de la réparation.",
-    labelName: "Nom complet",
-    placeholderName: "Votre nom",
-    labelPhone: "Numéro de téléphone",
-    placeholderPhone: "(555) 555-5555",
     labelService: "Type de service",
     hardwarePriceNote: "Le prix d'une réparation matérielle dépend du problème et des pièces. Vous recevrez un devis avant le début des travaux.",
     optionChoose: "Choisir",
@@ -162,19 +134,11 @@ const translations = {
     optionHardware: "Réparation matérielle",
     optionNetwork: "Wi-Fi / imprimante / installation",
     optionData: "Sauvegarde ou transfert de données",
-    labelDate: "Jour préféré",
-    preferredTime: "Heure préférée",
-    timeMorning: "Matin",
-    timeAfternoon: "Après-midi",
-    timeEvening: "Soir",
     labelAddress: "Adresse ou zone de service",
     placeholderAddress: "Ville, secteur ou adresse complète",
     labelProblem: "Expliquez le problème",
     placeholderProblem: "Exemple : ordinateur lent, ventilateur bruyant, écran cassé ou Wi-Fi impossible",
-    confirmText: "Je comprends qu'il s'agit d'une demande de rendez-vous et que l'heure sera confirmée.",
     sendRequest: "Envoyer la demande",
-    formRequired: "Veuillez remplir les informations obligatoires du rendez-vous.",
-    formReady: ({ name, service, date, time }) => `Merci, ${name}. Votre demande de rendez-vous pour ${service} le ${date} (${time}) est prête à être envoyée.`,
     reviewsTitle: "Quelques mots de mes clients",
     reviewsCopy: "Ce que les clients disent après avoir reçu de l'aide pour leur ordinateur.",
     reviewStars: "5 étoiles sur 5",
@@ -184,14 +148,6 @@ const translations = {
     reviewTwoService: "Mise à niveau SSD",
     reviewThree: "Mon Wi-Fi et mon imprimante ont été configurés rapidement, puis tout a été testé avant la fin du travail.",
     reviewThreeService: "Installation à domicile",
-    repairFirstName: "Prénom",
-    repairFamilyName: "Nom",
-    repairPhone: "Numéro de téléphone",
-    repairEmail: "Adresse e-mail",
-    repairProblem: "Décrivez le problème de l'ordinateur",
-    repairSubmit: "Envoyer la demande",
-    repairSent: "Votre demande de réparation a été envoyée. Nous répondrons par e-mail ou téléphone.",
-    repairError: "Veuillez vérifier le formulaire et réessayer.",
     callService: "Appeler",
     email: "E-mail",
     footerText: "Réparation informatique. Support matériel et logiciel sur place.",
@@ -216,7 +172,7 @@ const translations = {
     heroTitle: "إصلاح الكمبيوتر في موقعك",
     heroCopy: "أصلح الحواسيب المحمولة والمكتبية، الأنظمة البطيئة، القطع التالفة، مشاكل الواي فاي، الفيروسات، الترقيات، النسخ الاحتياطي والإعداد. احجز موعدا ويمكنني الحضور إليك.",
     primaryActions: "الإجراءات الرئيسية",
-    bookAppointment: "طلب إصلاح",
+    bookAppointment: "طلب موعد",
     callNow: "اتصل الآن",
     whatsappNow: "WhatsApp",
     whatsappAria: "راسل Slahpc على واتساب",
@@ -245,18 +201,12 @@ const translations = {
     stepThreeTitle: "أفحص الجهاز وأشرح لك الحلول",
     stepThreeCopy: "سأحدد المشكلة وأشرح السعر بوضوح، ولن أبدأ الإصلاح إلا بعد موافقتك.",
     appointmentEyebrow: "احجز الدعم",
-    appointmentTitle: "طلب إصلاح",
+    appointmentTitle: "طلب موعد",
     appointmentCopy: "اختر أقرب خدمة لمشكلتك، وأدخل عنوانك، واشرح ما يحدث بكلماتك. سأتواصل معك لترتيب الإصلاح.",
     appointmentSignIn: "سجل الدخول لإرسال طلب الإصلاح",
     appointmentSignInCopy: "بعد الإرسال يمكنك متابعة حالة الإصلاح من لوحة التحكم.",
     accountAppointments: "حسابي ومواعيدي",
     loginDashboard: "تسجيل الدخول",
-    estimateLabel: "بداية سعر الزيارة",
-    estimateNote: "السعر النهائي يعتمد على القطع، المسافة، وصعوبة الإصلاح.",
-    labelName: "الاسم الكامل",
-    placeholderName: "اسمك",
-    labelPhone: "رقم الهاتف",
-    placeholderPhone: "(555) 555-5555",
     labelService: "نوع الخدمة",
     hardwarePriceNote: "يعتمد سعر إصلاح الجهاز على المشكلة والقطع المطلوبة. ستحصل على عرض سعر قبل بدء العمل.",
     optionChoose: "اختر خدمة",
@@ -264,19 +214,11 @@ const translations = {
     optionHardware: "إصلاح الأجهزة",
     optionNetwork: "واي فاي / طابعة / إعداد",
     optionData: "نسخ احتياطي أو نقل بيانات",
-    labelDate: "اليوم المفضل",
-    preferredTime: "الوقت المفضل",
-    timeMorning: "الصباح",
-    timeAfternoon: "بعد الظهر",
-    timeEvening: "المساء",
     labelAddress: "العنوان أو منطقة الخدمة",
     placeholderAddress: "المدينة أو المنطقة أو العنوان الكامل",
     labelProblem: "اشرح ما المشكلة",
     placeholderProblem: "مثال: الكمبيوتر بطيء، المروحة مزعجة، الشاشة مكسورة، أو الواي فاي لا يعمل",
-    confirmText: "أفهم أن هذا طلب موعد وأن وقت الزيارة سيتم تأكيده.",
     sendRequest: "إرسال الطلب",
-    formRequired: "يرجى تعبئة تفاصيل الموعد المطلوبة.",
-    formReady: ({ name, service, date, time }) => `شكرا ${name}. طلب موعد ${service} بتاريخ ${date} في فترة ${time} جاهز للإرسال.`,
     reviewsTitle: "بعض كلمات العملاء",
     reviewsCopy: "ما قاله العملاء بعد مساعدتهم في حل مشاكل الكمبيوتر.",
     reviewStars: "5 نجوم من 5",
@@ -286,14 +228,6 @@ const translations = {
     reviewTwoService: "ترقية SSD",
     reviewThree: "تم إعداد الواي فاي والطابعة بسرعة، وتم اختبار كل شيء قبل إنهاء العمل.",
     reviewThreeService: "إعداد منزلي",
-    repairFirstName: "الاسم الشخصي",
-    repairFamilyName: "الاسم العائلي",
-    repairPhone: "رقم الهاتف",
-    repairEmail: "البريد الإلكتروني",
-    repairProblem: "اشرح مشكلة الكمبيوتر",
-    repairSubmit: "إرسال طلب الإصلاح",
-    repairSent: "تم إرسال طلب الإصلاح. سنرد عليك عبر البريد أو الهاتف.",
-    repairError: "يرجى التحقق من النموذج والمحاولة مرة أخرى.",
     callService: "اتصل بالخدمة",
     email: "البريد الإلكتروني",
     footerText: "إصلاح الكمبيوتر. دعم الأجهزة والبرامج في موقعك.",
@@ -308,14 +242,9 @@ const translations = {
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector("[data-nav]");
 const year = document.querySelector("[data-year]");
-const form = document.querySelector("[data-booking-form]");
-const statusText = document.querySelector("[data-form-status]");
-const serviceSelect = document.querySelector("[data-service-select]");
-const estimate = document.querySelector("[data-estimate]");
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const languageSelect = document.querySelector("[data-language-select]");
 const metaDescription = document.querySelector('meta[name="description"]');
-const repairStatus = document.querySelector("[data-repair-status]");
 
 const getLanguage = () => document.documentElement.dataset.language || "en";
 const t = (key) => translations[getLanguage()]?.[key] ?? translations.en[key] ?? key;
@@ -397,16 +326,6 @@ if (year) {
 
 applyLanguage(getLanguage());
 
-if (repairStatus) {
-  const repairResult = new URLSearchParams(window.location.search).get("repair");
-  if (repairResult === "sent") {
-    repairStatus.textContent = t("repairSent");
-  } else if (repairResult === "error") {
-    repairStatus.textContent = t("repairError");
-    repairStatus.classList.add("error");
-  }
-}
-
 if (languageSelect) {
   languageSelect.addEventListener("change", () => {
     localStorage.setItem("repair-language", languageSelect.value);
@@ -449,40 +368,3 @@ if (siteHeader) {
   onScroll();
 }
 
-if (serviceSelect && estimate) {
-  serviceSelect.addEventListener("change", () => {
-    const option = serviceSelect.selectedOptions[0];
-    const price = option?.dataset.price || "55";
-    estimate.textContent = `$${price}`;
-  });
-}
-
-if (form && statusText) {
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    statusText.classList.remove("error");
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      statusText.textContent = t("formRequired");
-      statusText.classList.add("error");
-      return;
-    }
-
-    const data = new FormData(form);
-    const selectedService = serviceSelect?.selectedOptions[0]?.textContent.trim() || data.get("service_type");
-    const checkedTime = form.querySelector('input[name="preferred_time"]:checked');
-    const selectedTime = checkedTime?.closest("label")?.querySelector("span")?.textContent.trim() || data.get("preferred_time");
-
-    statusText.textContent = t("formReady")({
-      name: data.get("full_name"),
-      service: selectedService,
-      date: data.get("preferred_date"),
-      time: selectedTime
-    });
-
-    // Later: replace this front-end confirmation with fetch("appointment.php", { method: "POST", body: data }).
-    form.reset();
-    estimate.textContent = "$55";
-  });
-}

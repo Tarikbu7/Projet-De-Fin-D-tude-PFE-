@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PHP: lint all files",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$php='C:\\\\xampp\\\\php\\\\php.exe'; Get-ChildItem -Recurse -Filter *.php | ForEach-Object { & $php -l $_.FullName }"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "App: serve locally",
+      "type": "shell",
+      "command": "C:\\\\xampp\\\\php\\\\php.exe",
+      "args": [
+        "-S",
+        "127.0.0.1:8025",
+        "-t",
+        "${workspaceFolder}"
+      ],
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "App: open in browser",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Start-Process 'http://127.0.0.1:8025/index.php'"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
