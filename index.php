@@ -32,12 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appoi
         redirect('index.php#appointment');
     }
 
-    $stmt = $pdo->prepare('INSERT INTO appointments (user_id, service_type, preferred_date, preferred_time, address, problem_details, price) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $stmt = $pdo->prepare('INSERT INTO appointments (user_id, service_type, address, problem_details, price) VALUES (?, ?, ?, ?, ?)');
     $stmt->execute([
         $user['id'],
         $serviceType,
-        date('Y-m-d'),
-        'Repairer will confirm',
         $address,
         $problemDetails,
         $serviceType === 'Hardware repair' ? null : $selectedService['base_price'],
@@ -84,11 +82,7 @@ if ($user && $user['role'] !== 'admin') {
         . '<span data-i18n="sendRequest">Send request</span></button>'
         . '</form>';
 } elseif ($user) {
-    $appointmentContent .=
-        '<div class="booking-form appointment-signin">'
-        . '<p>Administrator accounts cannot create customer appointments.</p>'
-        . '<a class="button primary full" href="admin.php">Open dashboard</a>'
-        . '</div>';
+    $appointmentContent = '';
 } else {
     $appointmentContent .=
         '<div class="booking-form appointment-signin">'
@@ -101,6 +95,47 @@ if ($user && $user['role'] !== 'admin') {
 
 $appointmentBlock = '<!-- HOME_APPOINTMENT_START -->' . $appointmentContent . '<!-- HOME_APPOINTMENT_END -->';
 $html = preg_replace('/<!-- HOME_APPOINTMENT_START -->.*?<!-- HOME_APPOINTMENT_END -->/s', $appointmentBlock, $html) ?? $html;
+
+$reviewsContent = '<p class="reviews-empty">Customer reviews will appear here after approval.</p>';
+
+try {
+    $pdo = db();
+    ensure_reviews_table($pdo);
+    $approvedReviews = $pdo->query(
+        "SELECT r.rating, r.comment, u.name, a.service_type
+         FROM reviews r
+         JOIN users u ON u.id = r.user_id
+         JOIN appointments a ON a.id = r.appointment_id
+         WHERE r.status = 'Approved'
+         ORDER BY COALESCE(r.reviewed_at, r.created_at) DESC
+         LIMIT 6"
+    )->fetchAll();
+
+    if ($approvedReviews) {
+        $reviewCards = '';
+        foreach ($approvedReviews as $review) {
+            $nameParts = preg_split('/\s+/', trim($review['name'])) ?: [];
+            $displayName = $nameParts[0] ?? 'Customer';
+            if (isset($nameParts[1]) && $nameParts[1] !== '') {
+                $displayName .= ' ' . mb_substr($nameParts[1], 0, 1) . '.';
+            }
+
+            $stars = str_repeat('<i data-lucide="star" aria-hidden="true"></i>', (int)$review['rating']);
+            $reviewCards .=
+                '<article class="review-card">'
+                . '<div class="review-stars" aria-label="' . (int)$review['rating'] . ' out of 5 stars">' . $stars . '</div>'
+                . '<blockquote>' . e($review['comment']) . '</blockquote>'
+                . '<footer><strong>' . e($displayName) . '</strong><span>' . e($review['service_type']) . '</span></footer>'
+                . '</article>';
+        }
+        $reviewsContent = '<div class="review-grid">' . $reviewCards . '</div>';
+    }
+} catch (Throwable) {
+    // Keep the homepage available before database setup.
+}
+
+$reviewsBlock = '<!-- HOME_REVIEWS_START -->' . $reviewsContent . '<!-- HOME_REVIEWS_END -->';
+$html = preg_replace('/<!-- HOME_REVIEWS_START -->.*?<!-- HOME_REVIEWS_END -->/s', $reviewsBlock, $html) ?? $html;
 
 if ($user) {
     $accountLink = $user['role'] === 'admin'

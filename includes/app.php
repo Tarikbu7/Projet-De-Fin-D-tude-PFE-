@@ -34,8 +34,7 @@ $i18n = [
         'no_rows' => 'No records yet.', 'setup_needed' => 'Database setup is needed.',
         'open_site' => 'Open site', 'quantity' => 'Quantity', 'price' => 'Price', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Purpose', 'subject' => 'Subject', 'message' => 'Message',
-        'create_invoice' => 'Create invoice', 'amount' => 'Amount',
-        'repair_requests' => 'Repair requests', 'awaiting_quote' => 'Awaiting quote'
+        'create_invoice' => 'Create invoice', 'amount' => 'Amount', 'awaiting_quote' => 'Awaiting quote'
     ],
     'fr' => [
         'dashboard' => 'Tableau de bord', 'admin' => 'Admin', 'user' => 'Utilisateur', 'logout' => 'Déconnexion',
@@ -53,8 +52,7 @@ $i18n = [
         'no_rows' => 'Aucun enregistrement.', 'setup_needed' => 'La base de données doit être installée.',
         'open_site' => 'Ouvrir le site', 'quantity' => 'Quantité', 'price' => 'Prix', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Utilisation', 'subject' => 'Sujet', 'message' => 'Message',
-        'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
-        'repair_requests' => 'Demandes de réparation', 'awaiting_quote' => 'Devis en attente'
+        'create_invoice' => 'Créer une facture', 'amount' => 'Montant', 'awaiting_quote' => 'Devis en attente'
     ],
     'ar' => [
         'dashboard' => 'لوحة التحكم', 'admin' => 'المدير', 'user' => 'المستخدم', 'logout' => 'تسجيل الخروج',
@@ -72,8 +70,7 @@ $i18n = [
         'no_rows' => 'لا توجد سجلات بعد.', 'setup_needed' => 'يجب إعداد قاعدة البيانات.',
         'open_site' => 'فتح الموقع', 'quantity' => 'الكمية', 'price' => 'السعر', 'total' => 'المجموع',
         'budget' => 'الميزانية', 'purpose' => 'الاستخدام', 'subject' => 'الموضوع', 'message' => 'الرسالة',
-        'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
-        'repair_requests' => 'طلبات الإصلاح', 'awaiting_quote' => 'في انتظار عرض السعر'
+        'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ', 'awaiting_quote' => 'في انتظار عرض السعر'
     ],
 ];
 
@@ -109,6 +106,23 @@ function db(bool $withDatabase = true): PDO {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
+}
+
+function ensure_reviews_table(PDO $pdo): void {
+    $pdo->exec("CREATE TABLE IF NOT EXISTS reviews (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        appointment_id INT NOT NULL,
+        rating TINYINT UNSIGNED NOT NULL,
+        comment TEXT NOT NULL,
+        status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        reviewed_at TIMESTAMP NULL DEFAULT NULL,
+        UNIQUE KEY unique_appointment_review (appointment_id),
+        KEY reviews_user_id (user_id),
+        CONSTRAINT reviews_user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        CONSTRAINT reviews_appointment_fk FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB");
 }
 
 function redirect(string $path): never {

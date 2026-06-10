@@ -30,8 +30,6 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             service_type VARCHAR(120) NOT NULL,
-            preferred_date DATE NOT NULL,
-            preferred_time VARCHAR(80) NOT NULL,
             address VARCHAR(255) NOT NULL,
             problem_details TEXT NOT NULL,
             price DECIMAL(10,2) NULL,
@@ -39,16 +37,19 @@ try {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB",
-        "CREATE TABLE IF NOT EXISTS repair_requests (
+        "CREATE TABLE IF NOT EXISTS reviews (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            first_name VARCHAR(120) NOT NULL,
-            family_name VARCHAR(120) NOT NULL,
-            phone VARCHAR(60) NOT NULL,
-            email VARCHAR(190) NOT NULL,
-            problem TEXT NOT NULL,
-            price DECIMAL(10,2) NULL,
-            status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            user_id INT NOT NULL,
+            appointment_id INT NOT NULL,
+            rating TINYINT UNSIGNED NOT NULL,
+            comment TEXT NOT NULL,
+            status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            reviewed_at TIMESTAMP NULL DEFAULT NULL,
+            UNIQUE KEY unique_appointment_review (appointment_id),
+            KEY reviews_user_id (user_id),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE CASCADE
         ) ENGINE=InnoDB",
     ];
 

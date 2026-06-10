@@ -41,6 +41,7 @@ render_header(t('login'));
     <label>
       <span><?= e(t('password')) ?></span>
       <input type="password" name="password" autocomplete="current-password" required>
+      <a class="forgot-password-link" href="forgot-password.php">Forgot password?</a>
     </label>
     <button class="button primary full" type="submit"><?= e(t('sign_in')) ?></button>
   </form>
