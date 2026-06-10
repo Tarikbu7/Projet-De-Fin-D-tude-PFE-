@@ -12,47 +12,17 @@ $phone = '';
 $city = '';
 $fieldErrors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verify_csrf();
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
     $city = trim($_POST['city'] ?? '');
     $password = (string)($_POST['password'] ?? '');
 
-    if ($name === '') {
-        $fieldErrors['name'] = 'Please enter your name.';
-    }
-    if ($email === '') {
-        $fieldErrors['email'] = 'Please enter your email address.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $fieldErrors['email'] = 'Please enter a valid email address.';
-    }
-    if ($phone === '') {
-        $fieldErrors['phone'] = 'Please enter your phone number.';
-    }
-    if ($city === '') {
-        $fieldErrors['city'] = 'Please enter your city.';
-    }
-    if ($password === '') {
-        $fieldErrors['password'] = 'Please enter a password.';
-    } elseif (strlen($password) < 6) {
-        $fieldErrors['password'] = 'Your password must contain at least 6 characters.';
-    }
-
-    if ($fieldErrors) {
-        $fieldLabels = [
-            'name' => 'Name',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'city' => 'City',
-            'password' => 'Password',
-        ];
-        $invalidLabels = array_map(
-            static fn(string $field): string => $fieldLabels[$field],
-            array_keys($fieldErrors)
-        );
-        $error = implode(', ', $invalidLabels) . (count($invalidLabels) === 1 ? ' needs your attention.' : ' need your attention.');
-    } else {
-        try {
+    try {
+        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
+            $error = 'Enter your name, a valid email, and a password of at least 6 characters.';
+        } else {
             $stmt = db()->prepare('INSERT INTO users (name, email, phone, address, password_hash, role) VALUES (?, ?, ?, ?, ?, "user")');
             $stmt->execute([$name, $email, $phone, $city, password_hash($password, PASSWORD_DEFAULT)]);
             flash('Your account was created. You can sign in now.');
@@ -71,8 +41,7 @@ render_header(t('register'));
     <p>You will use it to request appointments and follow their progress.</p>
   </div>
   <?php if ($error): ?><p class="notice error"><?= e($error) ?></p><?php endif; ?>
-  <p class="auth-form-message" role="alert" hidden></p>
-  <form method="post" class="stack-form auth-register-form" novalidate>
+  <form method="post" class="stack-form auth-register-form">
     <label>
       <span><?= e(t('name')) ?></span>
       <input type="text" name="name" autocomplete="name" required value="<?= e($name) ?>" aria-describedby="name-error"<?= isset($fieldErrors['name']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
@@ -84,14 +53,12 @@ render_header(t('register'));
       <small class="field-error" id="email-error"><?= e($fieldErrors['email'] ?? '') ?></small>
     </label>
     <label>
-      <span><?= e(t('phone')) ?></span>
-      <input type="tel" name="phone" autocomplete="tel" required value="<?= e($phone) ?>" aria-describedby="phone-error"<?= isset($fieldErrors['phone']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
-      <small class="field-error" id="phone-error"><?= e($fieldErrors['phone'] ?? '') ?></small>
+      <span><?= e(t('phone')) ?> <small>(optional)</small></span>
+      <input type="tel" name="phone" autocomplete="tel" value="<?= e($phone) ?>">
     </label>
     <label>
-      <span><?= e(t('city')) ?></span>
-      <input type="text" name="city" autocomplete="address-level2" required value="<?= e($city) ?>" aria-describedby="city-error"<?= isset($fieldErrors['city']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
-      <small class="field-error" id="city-error"><?= e($fieldErrors['city'] ?? '') ?></small>
+      <span><?= e(t('city')) ?> <small>(optional)</small></span>
+      <input type="text" name="city" autocomplete="address-level2" value="<?= e($city) ?>">
     </label>
     <label class="auth-password-field">
       <span><?= e(t('password')) ?></span>
