@@ -81,11 +81,7 @@ if ($user && $user['role'] !== 'admin') {
         . '<span data-i18n="sendRequest">Send request</span></button>'
         . '</form>';
 } elseif ($user) {
-    $appointmentContent .=
-        '<div class="booking-form appointment-signin">'
-        . '<p>Administrator accounts cannot create customer appointments.</p>'
-        . '<a class="button primary full" href="admin.php">Open dashboard</a>'
-        . '</div>';
+    $appointmentContent = '';
 } else {
     $appointmentContent .=
         '<div class="booking-form appointment-signin">'
@@ -98,36 +94,6 @@ if ($user && $user['role'] !== 'admin') {
 
 $appointmentBlock = '<!-- HOME_APPOINTMENT_START -->' . $appointmentContent . '<!-- HOME_APPOINTMENT_END -->';
 $html = preg_replace('/<!-- HOME_APPOINTMENT_START -->.*?<!-- HOME_APPOINTMENT_END -->/s', $appointmentBlock, $html) ?? $html;
-
-$approvedReviews = db()->query(
-    "SELECT r.rating, r.comment, u.name, a.service_type
-     FROM reviews r
-     JOIN users u ON u.id = r.user_id
-     JOIN appointments a ON a.id = r.appointment_id
-     WHERE r.status = 'Approved'
-     ORDER BY r.reviewed_at DESC, r.created_at DESC
-     LIMIT 6"
-)->fetchAll();
-
-$reviewCards = '';
-foreach ($approvedReviews as $review) {
-    $nameParts = preg_split('/\s+/', trim($review['name'])) ?: [];
-    $displayName = $nameParts[0] ?? 'Customer';
-    if (isset($nameParts[1]) && $nameParts[1] !== '') {
-        $displayName .= ' ' . mb_substr($nameParts[1], 0, 1) . '.';
-    }
-    $stars = str_repeat('<i data-lucide="star" aria-hidden="true"></i>', (int)$review['rating']);
-    $reviewCards .= '<article class="review-card">'
-        . '<div class="review-stars" aria-label="' . (int)$review['rating'] . ' out of 5 stars">' . $stars . '</div>'
-        . '<blockquote>' . e($review['comment']) . '</blockquote>'
-        . '<footer><strong>' . e($displayName) . '</strong><span>' . e($review['service_type']) . '</span></footer>'
-        . '</article>';
-}
-if ($reviewCards === '') {
-    $reviewCards = '<p class="empty-review-message">Customer reviews will appear here after approval.</p>';
-}
-$reviewsBlock = '<!-- APPROVED_REVIEWS_START --><div class="review-grid">' . $reviewCards . '</div><!-- APPROVED_REVIEWS_END -->';
-$html = preg_replace('/<!-- APPROVED_REVIEWS_START -->.*?<!-- APPROVED_REVIEWS_END -->/s', $reviewsBlock, $html) ?? $html;
 
 if ($user) {
     $accountLink = $user['role'] === 'admin'

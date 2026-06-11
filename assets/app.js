@@ -71,7 +71,7 @@ const translations = {
     reviewThree: "My Wi-Fi and printer were set up quickly, and everything was tested before the job was finished.",
     reviewThreeService: "Home setup",
     footerText: "Slahpc. Professional computer repair and technical support.",
-    shopLocation: "Shop: Bendiban, Hawma Lwarda Street",
+    shopLocation: "Shop: Tangier, Bendiban, Hawma Lwarda Street",
     backTop: "Back to top",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -151,7 +151,7 @@ const translations = {
     callService: "Appeler",
     email: "E-mail",
     footerText: "Réparation informatique. Support matériel et logiciel sur place.",
-    shopLocation: "Boutique : Bendiban, rue Hawma Lwarda",
+    shopLocation: "Boutique : Tanger, Bendiban, rue Hawma Lwarda",
     backTop: "Retour en haut",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
@@ -231,7 +231,7 @@ const translations = {
     callService: "اتصل بالخدمة",
     email: "البريد الإلكتروني",
     footerText: "إصلاح الكمبيوتر. دعم الأجهزة والبرامج في موقعك.",
-    shopLocation: "المحل: بنديبان، شارع حومة الوردة",
+    shopLocation: "المحل: طنجة، بنديبان، شارع حومة الوردة",
     backTop: "العودة للأعلى",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
@@ -368,3 +368,40 @@ if (siteHeader) {
   onScroll();
 }
 
+if (serviceSelect && estimate) {
+  serviceSelect.addEventListener("change", () => {
+    const option = serviceSelect.selectedOptions[0];
+    const price = option?.dataset.price || "55";
+    estimate.textContent = `$${price}`;
+  });
+}
+
+if (form && statusText) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    statusText.classList.remove("error");
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      statusText.textContent = t("formRequired");
+      statusText.classList.add("error");
+      return;
+    }
+
+    const data = new FormData(form);
+    const selectedService = serviceSelect?.selectedOptions[0]?.textContent.trim() || data.get("service_type");
+    const checkedTime = form.querySelector('input[name="preferred_time"]:checked');
+    const selectedTime = checkedTime?.closest("label")?.querySelector("span")?.textContent.trim() || data.get("preferred_time");
+
+    statusText.textContent = t("formReady")({
+      name: data.get("full_name"),
+      service: selectedService,
+      date: data.get("preferred_date"),
+      time: selectedTime
+    });
+
+    // Later: replace this front-end confirmation with fetch("appointment.php", { method: "POST", body: data }).
+    form.reset();
+    estimate.textContent = "$55";
+  });
+}

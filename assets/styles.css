@@ -2044,6 +2044,135 @@ textarea {
   line-height: 1.5;
 }
 
+.customer-reviews-card {
+  margin-top: 1.25rem;
+  padding: 0;
+}
+
+.customer-reviews-card .customer-card-heading p {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.reviews-dashboard-empty,
+.reviews-empty {
+  color: var(--muted);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.reviews-dashboard-empty {
+  padding: 1.5rem;
+}
+
+.customer-review-list {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.customer-review-item {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.35fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface2);
+}
+
+.customer-review-service {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+}
+
+.customer-review-service span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.customer-review-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.customer-review-form label {
+  margin: 0;
+}
+
+.customer-review-form textarea {
+  min-height: 100px;
+}
+
+.customer-review-form .button {
+  justify-self: start;
+}
+
+.submitted-review {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.submitted-review > strong,
+.admin-review-stars {
+  color: #e5a819;
+  letter-spacing: 0.08em;
+}
+
+.submitted-review p {
+  line-height: 1.6;
+}
+
+.review-moderation-status {
+  width: max-content;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.12);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.review-moderation-status.approved {
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+}
+
+.review-moderation-status.rejected {
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+}
+
+.admin-reviews-table {
+  min-width: 980px;
+}
+
+.admin-reviews-table small {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+}
+
+.admin-review-comment {
+  max-width: 340px;
+  line-height: 1.55;
+  white-space: normal;
+}
+
+.review-status-form {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 130px;
+}
+
+.review-status-form select,
+.review-status-form .button {
+  min-height: 38px;
+  padding: 0.5rem 0.65rem;
+}
+
 .table-scroll {
   width: 100%;
   overflow-x: auto;
@@ -2252,6 +2381,18 @@ textarea {
   font-weight: 500;
 }
 
+.forgot-password-link {
+  align-self: flex-end;
+  margin-top: -0.1rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
 .auth-panel input {
   min-height: 46px;
   border-radius: 5px;
@@ -2317,6 +2458,36 @@ textarea {
   border: 1px solid color-mix(in srgb, var(--success) 35%, var(--border));
   background: color-mix(in srgb, var(--success) 7%, var(--surface));
   color: var(--success);
+}
+
+.auth-form-message {
+  margin: 0 0 1.1rem;
+  padding: 0.75rem 0.85rem;
+  border-left: 3px solid var(--danger);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--danger) 7%, var(--surface));
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+.auth-form-message[hidden] {
+  display: none;
+}
+
+.auth-panel .stack-form label > .field-error {
+  min-height: 1em;
+  color: var(--danger);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.auth-panel input.is-invalid {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 3%, #fff);
+}
+
+.auth-panel input.is-invalid:focus {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 10%, transparent);
 }
 
 .auth-register-form {
@@ -2494,6 +2665,10 @@ html[dir="rtl"] input[type="tel"] {
   }
 
   .appointment {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-review-item {
     grid-template-columns: 1fr;
   }
 }
