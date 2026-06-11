@@ -61,24 +61,25 @@ if ($user && $user['role'] !== 'admin') {
     foreach ($services as $service) {
         $priceLabel = number_format((float)$service['base_price'], 0) . ' MAD';
         if ($service['name'] === 'Hardware repair') {
-            $priceLabel = 'Price after diagnosis';
+            $priceLabel = t('price_after_diagnosis');
         }
-        $serviceOptions .= '<option value="' . e($service['name']) . '">' . e($service['name'] . ' - ' . $priceLabel) . '</option>';
+        $translatedName = translate_service($service['name']);
+        $serviceOptions .= '<option value="' . e($service['name']) . '">' . e($translatedName . ' - ' . $priceLabel) . '</option>';
     }
 
     $appointmentContent .=
         '<form action="index.php#appointment" method="post" class="booking-form home-appointment-form">'
         . '<input type="hidden" name="action" value="appointment">'
         . '<input type="hidden" name="csrf_token" value="' . e($csrfToken) . '">'
-        . '<label><span data-i18n="labelService">Service type</span>'
-        . '<select name="service_type" required><option value="" data-i18n="optionChoose">Choose one</option>' . $serviceOptions . '</select>'
-        . '<small class="service-price-note" data-i18n="hardwarePriceNote">Hardware repair depends on the problem and replacement parts. You will receive a quote before work begins.</small></label>'
-        . '<label><span data-i18n="labelAddress">Address or service area</span>'
+        . '<label><span>' . e(t('service_type_label')) . '</span>'
+        . '<select name="service_type" required><option value="">' . e(t('choose_one')) . '</option>' . $serviceOptions . '</select>'
+        . '<small class="service-price-note">' . e(t('hardware_price_note')) . '</small></label>'
+        . '<label><span>' . e(t('address_label')) . '</span>'
         . '<input type="text" name="address" value="' . e($user['address'] ?? '') . '" autocomplete="street-address" required></label>'
-        . '<label><span data-i18n="labelProblem">Tell me what is wrong</span>'
-        . '<textarea name="problem_details" required data-i18n-placeholder="placeholderProblem" placeholder="Describe the computer problem"></textarea></label>'
+        . '<label><span>' . e(t('problem_label')) . '</span>'
+        . '<textarea name="problem_details" required placeholder="' . e(t('problem_placeholder')) . '"></textarea></label>'
         . '<button class="button primary full" type="submit"><i data-lucide="send" aria-hidden="true"></i>'
-        . '<span data-i18n="sendRequest">Send request</span></button>'
+        . '<span>' . e(t('send_request')) . '</span></button>'
         . '</form>';
 } elseif ($user) {
     $appointmentContent = '';

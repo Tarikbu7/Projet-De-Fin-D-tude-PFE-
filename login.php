@@ -44,17 +44,13 @@ render_header(t('login'));
     </label>
     <label>
       <span><?= e(t('password')) ?></span>
-<<<<<<< HEAD
       <span class="password-input">
         <input type="password" name="password" autocomplete="current-password" required data-password-input>
         <button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false" data-password-toggle>
           Show
         </button>
       </span>
-=======
-      <input type="password" name="password" autocomplete="current-password" required>
       <a class="forgot-password-link" href="forgot-password.php">Forgot password?</a>
->>>>>>> 408a6979f1afb304c959198d4a3786544dfa382a
     </label>
     <button class="button primary full" type="submit"><?= e(t('sign_in')) ?></button>
   </form>

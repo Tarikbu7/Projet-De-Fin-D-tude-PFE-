@@ -77,6 +77,15 @@ $stats = [
 ];
 $appointments = $pdo->query('SELECT a.*, u.name, u.email, u.phone FROM appointments a JOIN users u ON u.id = a.user_id ORDER BY a.created_at DESC')->fetchAll();
 $customers = $pdo->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_at DESC")->fetchAll();
+$repairRequests = $pdo->query('SELECT * FROM repair_requests ORDER BY created_at DESC')->fetchAll();
+$reviews = $pdo->query('
+    SELECT r.*, u.name, u.email, a.service_type
+    FROM reviews r
+    JOIN users u ON u.id = r.user_id
+    JOIN appointments a ON a.id = r.appointment_id
+    ORDER BY r.created_at DESC
+')->fetchAll();
+$csrfToken = csrf_token();
 
 function status_form(string $table, array $row): void {
     $priceIsEditable = $table === 'repair_requests' || ($row['service_type'] ?? '') === 'Hardware repair';

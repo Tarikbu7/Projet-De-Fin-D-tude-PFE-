@@ -19,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $city = trim($_POST['city'] ?? '');
     $password = (string)($_POST['password'] ?? '');
 
-    try {
-        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
-            $error = 'Enter your name, a valid email, and a password of at least 6 characters.';
-        } else {
+    if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
+        $error = 'Enter your name, a valid email, and a password of at least 6 characters.';
+    } else {
+        try {
             $stmt = db()->prepare('INSERT INTO users (name, email, phone, address, password_hash, role) VALUES (?, ?, ?, ?, ?, "user")');
             $stmt->execute([$name, $email, $phone, $city, password_hash($password, PASSWORD_DEFAULT)]);
             flash('Your account was created. You can sign in now.');
@@ -62,19 +62,14 @@ render_header(t('register'));
     </label>
     <label class="auth-password-field">
       <span><?= e(t('password')) ?></span>
-<<<<<<< HEAD
       <span class="password-input">
-        <input type="password" name="password" autocomplete="new-password" required minlength="6" data-password-input>
+        <input type="password" name="password" autocomplete="new-password" required minlength="6" data-password-input aria-describedby="password-help password-error"<?= isset($fieldErrors['password']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
         <button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false" data-password-toggle>
           Show
         </button>
       </span>
-      <small>Use at least 6 characters.</small>
-=======
-      <input type="password" name="password" autocomplete="new-password" required minlength="6" aria-describedby="password-help password-error"<?= isset($fieldErrors['password']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
       <small id="password-help">Use at least 6 characters.</small>
       <small class="field-error" id="password-error"><?= e($fieldErrors['password'] ?? '') ?></small>
->>>>>>> 408a6979f1afb304c959198d4a3786544dfa382a
     </label>
     <button class="button primary full auth-submit" type="submit"><?= e(t('create_account')) ?></button>
   </form>
