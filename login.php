@@ -44,7 +44,12 @@ render_header(t('login'));
     </label>
     <label>
       <span><?= e(t('password')) ?></span>
-      <input type="password" name="password" autocomplete="current-password" required>
+      <span class="password-input">
+        <input type="password" name="password" autocomplete="current-password" required data-password-input>
+        <button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false" data-password-toggle>
+          Show
+        </button>
+      </span>
     </label>
     <button class="button primary full" type="submit"><?= e(t('sign_in')) ?></button>
   </form>

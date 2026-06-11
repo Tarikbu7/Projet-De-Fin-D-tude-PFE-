@@ -2258,6 +2258,42 @@ textarea {
   background: #fff;
 }
 
+.password-input {
+  position: relative;
+  display: block;
+}
+
+.password-input input {
+  width: 100%;
+  padding-inline-end: 4.5rem;
+}
+
+.password-toggle {
+  position: absolute;
+  inset-inline-end: 0.45rem;
+  top: 50%;
+  min-width: 3.5rem;
+  padding: 0.4rem 0.55rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.password-toggle:hover {
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 .auth-panel .button {
   min-height: 46px;
   border-radius: 5px;

@@ -236,7 +236,7 @@ HTML;
 }
 
 function render_footer(): void {
-    echo '</main></body></html>';
+    echo '</main><script src="assets/password-toggle.js"></script></body></html>';
 }
 
 function flash(?string $message = null): ?string {
