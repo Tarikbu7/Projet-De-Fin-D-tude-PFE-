@@ -1,3 +1,5 @@
+/* Basic page styles */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -90,9 +92,7 @@ textarea {
   border: 0;
 }
 
-/* ═══════════════════════════════════════
-   NAV — redesigned
-═══════════════════════════════════════ */
+/* Top menu */
 .site-header {
   position: fixed;
   top: 0;
@@ -196,7 +196,7 @@ textarea {
   min-width: 0;
 }
 
-/* ── Nav links ── */
+/* Menu links */
 .site-nav a {
   position: relative;
   display: inline-flex;
@@ -241,7 +241,7 @@ textarea {
   transform: scaleX(1);
 }
 
-/* ── Auth slot ── */
+/* Account buttons */
 .nav-auth {
   display: inline-flex;
   align-items: center;
@@ -264,7 +264,7 @@ textarea {
   background: transparent;
 }
 
-/* ── Sign-in button ── */
+/* Login button */
 .site-nav .nav-button {
   display: inline-flex;
   align-items: center;
@@ -330,7 +330,7 @@ textarea {
   transform: translateX(2px);
 }
 
-/* ── Mobile toggle ── */
+/* Mobile menu button */
 .nav-toggle,
 .theme-toggle {
   display: none;
@@ -351,7 +351,7 @@ textarea {
   display: grid;
 }
 
-/* ── Language selector ── */
+/* Language list */
 .language-control {
   display: inline-flex;
   align-items: center;
@@ -394,7 +394,7 @@ textarea {
   box-shadow: none;
 }
 
-/* ── Shared hover states ── */
+/* Mouse hover styles */
 .nav-toggle:hover,
 .nav-toggle:focus-visible,
 .theme-toggle:hover,
@@ -407,7 +407,7 @@ textarea {
   box-shadow: 0 6px 14px rgba(21, 157, 255, 0.12);
 }
 
-/* ── Desktop layout: centre the nav links ── */
+/* Computer menu layout */
 @media (min-width: 761px) {
   .site-header:not(.dashboard-header) .site-nav {
     display: grid;
@@ -439,7 +439,7 @@ textarea {
   }
 }
 
-/* ── Mobile ── */
+/* Phone menu layout */
 @media (max-width: 760px) {
   .nav-toggle {
     display: grid;
@@ -507,11 +507,7 @@ textarea {
   }
 }
 
-/* ═══════════════════════════════════════
-   HERO — split layout (Roofen-inspired)
-   Left: dark content panel
-   Right: image placeholder (.hero-bg)
-═══════════════════════════════════════ */
+/* Main welcome area */
 .hero {
   position: relative;
   min-height: calc(100vh - 70px);
@@ -523,7 +519,7 @@ textarea {
   isolation: isolate;
 }
 
-/* ── Subtle dot-grid texture on the dark left panel ── */
+/* Background pattern */
 .hero::before {
   content: "";
   position: absolute;
@@ -533,7 +529,7 @@ textarea {
   pointer-events: none;
 }
 
-/* ── Right-side image placeholder ── */
+/* Main image */
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -544,7 +540,7 @@ textarea {
   transform: none;
 }
 
-/* Diagonal clip on the left edge of the image area */
+/* Dark layer over the image */
 .hero-bg::before {
   content: "";
   position: absolute;
@@ -554,7 +550,7 @@ textarea {
   pointer-events: none;
 }
 
-/* ── Left dark panel (main background) ── */
+/* Dark background */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -564,12 +560,12 @@ textarea {
     linear-gradient(180deg, rgba(5, 13, 24, 0.18), rgba(5, 13, 24, 0.34));
 }
 
-/* Accent glow in top-left of dark panel */
+/* Extra background light */
 .hero-overlay::after {
   content: none;
 }
 
-/* ── Content block (left side) ── */
+/* Welcome text */
 .hero-content {
   position: relative;
   z-index: 2;
@@ -581,7 +577,7 @@ textarea {
   padding: clamp(4rem, 9vh, 6rem) clamp(1.75rem, 8vw, 6.5rem);
 }
 
-/* ── Eyebrow badge ── */
+/* Small top label */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -634,7 +630,7 @@ textarea {
   50% { opacity: 0.3; }
 }
 
-/* ── Hero typography overrides (white on dark bg) ── */
+/* White welcome text */
 .hero h1 {
   color: #ffffff;
   max-width: 18ch;
@@ -704,6 +700,8 @@ h3 {
 .hero-actions {
   gap: 0.65rem;
 }
+
+/* Buttons */
 
 .button {
   display: inline-flex;
@@ -786,7 +784,7 @@ h3 {
   width: 100%;
 }
 
-/* ── Ghost / light buttons look white on dark hero background ── */
+/* Light buttons on the dark area */
 .hero .button.ghost,
 .hero .button.light {
   color: #fff;
@@ -805,7 +803,7 @@ h3 {
   box-shadow: 0 8px 18px rgba(21, 157, 255, 0.28);
 }
 
-/* ── Hero mobile: stack vertically ── */
+/* Welcome area on phones */
 @media (max-width: 900px) {
   .hero {
     flex-direction: row;
@@ -838,7 +836,8 @@ h3 {
   }
 }
 
-/* Service strip */
+/* Common repairs */
+
 .trust-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -867,7 +866,8 @@ h3 {
   color: var(--accent);
 }
 
-/* Sections */
+/* Page sections and service boxes */
+
 .section {
   padding: 6rem clamp(1.5rem, 5vw, 4rem);
 }
@@ -948,7 +948,8 @@ h3 {
   margin-top: 0.65rem;
 }
 
-/* Process */
+/* How repairs work */
+
 .process-band {
   background: var(--bg);
 }
@@ -987,7 +988,8 @@ h3 {
   color: rgba(21, 157, 255, 0.42);
 }
 
-/* Appointment */
+/* Repair request form */
+
 .appointment {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1.15fr);
@@ -1146,7 +1148,8 @@ textarea {
   color: var(--danger);
 }
 
-/* Reviews and footer */
+/* Reviews and page bottom */
+
 .reviews-section {
   background: var(--surface);
   border-top: 1px solid var(--border);
@@ -1284,7 +1287,8 @@ textarea {
   font-weight: 700;
 }
 
-/* PHP dashboards */
+/* Dashboard page */
+
 .app-body {
   min-height: 100vh;
 }
@@ -1323,6 +1327,8 @@ textarea {
   min-height: 100vh;
   padding: 0;
 }
+
+/* Admin page and side menu */
 
 .admin-layout {
   display: grid;
@@ -1471,6 +1477,8 @@ textarea {
   padding: 1.4rem;
 }
 
+/* Admin top area and totals */
+
 .admin-section {
   scroll-margin-top: 96px;
 }
@@ -1587,6 +1595,8 @@ textarea {
   font-size: clamp(2.2rem, 5vw, 4rem);
 }
 
+/* Customer welcome area */
+
 .customer-dashboard-hero {
   position: relative;
   margin-bottom: 1.25rem;
@@ -1625,6 +1635,8 @@ textarea {
   line-height: 1.7;
 }
 
+/* Dashboard boxes */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1653,6 +1665,8 @@ textarea {
   font-size: clamp(1.35rem, 3vw, 2rem);
   margin-bottom: 1rem;
 }
+
+/* Customer repair list */
 
 .customer-appointments-card {
   padding: 0;
@@ -1755,6 +1769,8 @@ textarea {
 .muted-value {
   color: var(--muted);
 }
+
+/* Customer reviews */
 
 .customer-reviews-card {
   margin-top: 1.25rem;
@@ -1874,6 +1890,8 @@ textarea {
 .review-form .button {
   justify-self: start;
 }
+
+/* Review form and stars */
 
 .simple-review-form {
   max-width: 720px;
@@ -1999,6 +2017,8 @@ textarea {
   background: rgba(229, 168, 25, 0.14);
   color: #a66f00;
 }
+
+/* Review status buttons */
 
 .review-moderation-form {
   display: grid;
@@ -2149,6 +2169,8 @@ textarea {
   color: var(--danger);
 }
 
+/* Admin repair and review tables */
+
 .admin-reviews-table {
   min-width: 980px;
 }
@@ -2233,6 +2255,8 @@ textarea {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
 }
+
+/* Totals and forms */
 
 .stat-card span {
   display: block;
@@ -2337,6 +2361,8 @@ textarea {
   flex-wrap: wrap;
   gap: 0.8rem;
 }
+
+/* Login and register forms */
 
 .auth-panel {
   width: min(520px, 100%);
@@ -2515,6 +2541,8 @@ textarea {
   font-weight: 700;
 }
 
+/* Login forms on small screens */
+
 @media (max-width: 620px) {
   .auth-panel {
     margin: 1.5rem auto;
@@ -2530,6 +2558,8 @@ textarea {
     grid-column: auto;
   }
 }
+
+/* Messages and tables */
 
 .notice {
   width: min(1220px, calc(100% - 3rem));
@@ -2591,6 +2621,8 @@ code {
   color: var(--accent);
 }
 
+/* Arabic page layout */
+
 html[dir="rtl"] body {
   font-family: Tahoma, Arial, sans-serif;
 }
@@ -2630,6 +2662,8 @@ html[dir="rtl"] input[type="tel"] {
   direction: ltr;
   text-align: right;
 }
+
+/* Tablet layout */
 
 @media (max-width: 1040px) {
   .service-grid,
@@ -2676,6 +2710,8 @@ html[dir="rtl"] input[type="tel"] {
     grid-template-columns: 1fr;
   }
 }
+
+/* Phone layout */
 
 @media (max-width: 760px) {
   .site-header {
@@ -2853,6 +2889,8 @@ html[dir="rtl"] input[type="tel"] {
 
 }
 
+/* Small phone layout */
+
 @media (max-width: 500px) {
   .site-header {
     gap: 0.6rem;
@@ -2909,6 +2947,8 @@ html[dir="rtl"] input[type="tel"] {
   }
 
 }
+
+/* Reviews on phones */
 
 @media (max-width: 700px) {
   .customer-review-item summary {

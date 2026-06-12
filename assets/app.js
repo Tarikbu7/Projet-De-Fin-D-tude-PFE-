@@ -1,3 +1,4 @@
+// Text for each language.
 const translations = {
   en: {
     pageTitle: "Slahpc Computer Repair",
@@ -239,6 +240,7 @@ const translations = {
   }
 };
 
+// Get page buttons and fields.
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector("[data-nav]");
 const year = document.querySelector("[data-year]");
@@ -246,9 +248,11 @@ const themeToggle = document.querySelector("[data-theme-toggle]");
 const languageSelect = document.querySelector("[data-language-select]");
 const metaDescription = document.querySelector('meta[name="description"]');
 
+// Get translated text.
 const getLanguage = () => document.documentElement.dataset.language || "en";
 const t = (key) => translations[getLanguage()]?.[key] ?? translations.en[key] ?? key;
 
+// Update the theme button.
 const setThemeButton = () => {
   if (!themeToggle) {
     return;
@@ -266,6 +270,7 @@ const setThemeButton = () => {
   }
 };
 
+// Update the menu button text.
 const setMenuButtonLabel = () => {
   if (!navToggle || !nav) {
     return;
@@ -277,6 +282,7 @@ const setMenuButtonLabel = () => {
   navToggle.querySelector(".sr-only").textContent = label;
 };
 
+// Change the page language.
 const applyLanguage = (language) => {
   const nextLanguage = translations[language] ? language : "en";
 
@@ -310,6 +316,7 @@ const applyLanguage = (language) => {
   setMenuButtonLabel();
 };
 
+// Show the page icons.
 if (window.lucide) {
   window.lucide.createIcons();
 } else {
@@ -320,12 +327,15 @@ if (window.lucide) {
   });
 }
 
+// Show the current year.
 if (year) {
   year.textContent = new Date().getFullYear();
 }
 
+// Load the selected language.
 applyLanguage(getLanguage());
 
+// Save a new language.
 if (languageSelect) {
   languageSelect.addEventListener("change", () => {
     localStorage.setItem("repair-language", languageSelect.value);
@@ -333,6 +343,7 @@ if (languageSelect) {
   });
 }
 
+// Save the light or dark theme.
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
     const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
@@ -342,6 +353,7 @@ if (themeToggle) {
   });
 }
 
+// Open and close the mobile menu.
 if (navToggle && nav) {
   navToggle.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("open");
@@ -358,7 +370,7 @@ if (navToggle && nav) {
   });
 }
 
-// Scroll shadow enhancement for navbar
+// Add a menu shadow after scrolling.
 const siteHeader = document.querySelector("[data-header]");
 if (siteHeader) {
   const onScroll = () => {
@@ -368,6 +380,7 @@ if (siteHeader) {
   onScroll();
 }
 
+// Update the old price box.
 if (serviceSelect && estimate) {
   serviceSelect.addEventListener("change", () => {
     const option = serviceSelect.selectedOptions[0];
@@ -376,6 +389,7 @@ if (serviceSelect && estimate) {
   });
 }
 
+// Check the old repair form.
 if (form && statusText) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -400,7 +414,7 @@ if (form && statusText) {
       time: selectedTime
     });
 
-    // Later: replace this front-end confirmation with fetch("appointment.php", { method: "POST", body: data }).
+    // Clear the old form.
     form.reset();
     estimate.textContent = "$55";
   });

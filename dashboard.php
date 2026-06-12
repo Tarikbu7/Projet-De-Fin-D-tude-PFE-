@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/app.php';
 
+// Get the logged-in customer.
 $user = require_login();
 if ($user['role'] === 'admin') {
     redirect('admin.php');
@@ -8,16 +9,66 @@ if ($user['role'] === 'admin') {
 
 $pdo = db();
 
-function ensure_column(PDO $pdo, string $table, string $column, string $definition): void {
-    $stmt = $pdo->prepare('SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?');
-    $stmt->execute([$table, $column]);
-    if ((int)$stmt->fetchColumn() === 0) {
-        $pdo->exec("ALTER TABLE {$table} ADD COLUMN {$column} {$definition}");
+// Add missing database parts.
+ensure_database_column($pdo, 'appointments', 'price', 'DECIMAL(10,2) NULL AFTER problem_details');
+ensure_reviews_table($pdo);
+
+// Check and save a customer review.
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verify_csrf();
+
+    if (($_POST['action'] ?? '') !== 'review') {
+        http_response_code(400);
+        exit('Unsupported action.');
     }
+
+    $appointmentId = filter_input(INPUT_POST, 'appointment_id', FILTER_VALIDATE_INT);
+    $rating = filter_input(INPUT_POST, 'rating', FILTER_VALIDATE_INT);
+    $comment = trim((string)($_POST['comment'] ?? ''));
+
+    if (
+        !$appointmentId
+        || !$rating
+        || $rating < 1
+        || $rating > 5
+        || mb_strlen($comment) < 10
+        || mb_strlen($comment) > 1000
+    ) {
+        flash('Please choose a completed service, select a rating, and write at least 10 characters.');
+        redirect('dashboard.php#leave-review');
+    }
+
+    $appointment = $pdo->prepare(
+        'SELECT id
+         FROM appointments
+         WHERE id = ? AND user_id = ? AND status = "Completed"
+         LIMIT 1'
+    );
+    $appointment->execute([$appointmentId, $user['id']]);
+
+    if (!$appointment->fetch()) {
+        flash('This appointment is not available for review.');
+        redirect('dashboard.php#leave-review');
+    }
+
+    try {
+        $stmt = $pdo->prepare(
+            'INSERT INTO reviews (user_id, appointment_id, rating, comment)
+             VALUES (?, ?, ?, ?)'
+        );
+        $stmt->execute([$user['id'], $appointmentId, $rating, $comment]);
+        flash('Thank you. Your review was submitted for approval.');
+    } catch (PDOException $exception) {
+        $duplicateEntry = (string)$exception->getCode() === '23000';
+        flash($duplicateEntry
+            ? 'A review has already been submitted for this appointment.'
+            : 'Your review could not be saved. Please try again.');
+    }
+
+    redirect('dashboard.php#reviews');
 }
 
-ensure_column($pdo, 'appointments', 'price', 'DECIMAL(10,2) NULL AFTER problem_details');
-
+// Get repairs and their reviews.
 $stmt = $pdo->prepare('
     SELECT a.*, r.id AS review_id, r.rating AS review_rating, r.comment AS review_comment, r.status AS review_status
     FROM appointments a
@@ -28,20 +79,24 @@ $stmt = $pdo->prepare('
 $stmt->execute([$user['id']]);
 $appointments = $stmt->fetchAll();
 
-// Appointments available to review (completed, no review yet)
-$reviewableAppointments = array_filter($appointments, fn($a) => $a['status'] === 'Completed' && $a['review_id'] === null);
+// Group repairs for the review area.
+$reviewableAppointments = array_filter(
+    $appointments,
+    static fn(array $appointment): bool =>
+        $appointment['status'] === 'Completed' && $appointment['review_id'] === null
+);
+$submittedReviews = array_filter(
+    $appointments,
+    static fn(array $appointment): bool => $appointment['review_id'] !== null
+);
 
-// All completed appointments (for the reviews section)
-$completedAppointments = array_filter($appointments, fn($a) => $a['status'] === 'Completed');
-
-// Already submitted reviews
-$submittedReviews = array_filter($appointments, fn($a) => $a['review_id'] !== null);
-
+// Get the form code and page message.
 $csrfToken = csrf_token();
 
 render_header(t('user_dashboard'), $user);
 $notice = flash();
 ?>
+<!-- Customer welcome area -->
 <section class="dashboard-hero customer-dashboard-hero">
   <div>
     <h1><?= e(t('welcome')) ?>, <?= e($user['name']) ?></h1>
@@ -53,6 +108,7 @@ $notice = flash();
   <p class="notice <?= str_starts_with($notice, 'Thank you') ? 'success' : 'error' ?>"><?= e($notice) ?></p>
 <?php endif; ?>
 
+<!-- Customer repair list -->
 <section class="dashboard-card customer-appointments-card">
   <div class="customer-card-heading">
     <h2><?= e(t('appointments')) ?></h2>
@@ -101,6 +157,7 @@ $notice = flash();
   </div>
 </section>
 
+<!-- New and old reviews -->
 <section class="dashboard-card customer-reviews-card" id="reviews">
   <div class="customer-card-heading">
     <div>
@@ -157,59 +214,5 @@ $notice = flash();
       </div>
     <?php endif; ?>
   </div>
-</section>
-
-<section class="dashboard-card customer-reviews-card" id="reviews">
-  <div class="customer-card-heading">
-    <div>
-      <h2><?= e(t('my_reviews')) ?></h2>
-      <p><?= e(t('my_reviews_desc')) ?></p>
-    </div>
-  </div>
-
-  <?php if (!$completedAppointments): ?>
-    <p class="reviews-dashboard-empty"><?= e(t('review_after_completed')) ?></p>
-  <?php else: ?>
-    <div class="customer-review-list">
-      <?php foreach ($completedAppointments as $appointment): ?>
-        <article class="customer-review-item">
-          <div class="customer-review-service">
-            <strong><?= e(translate_service($appointment['service_type'])) ?></strong>
-            <span><?= e(date('M d, Y', strtotime($appointment['created_at']))) ?></span>
-          </div>
-
-          <?php if ($appointment['review_id']): ?>
-            <div class="submitted-review">
-              <span class="review-moderation-status <?= e(strtolower($appointment['review_status'])) ?>"><?= e($appointment['review_status']) ?></span>
-              <strong><?= str_repeat('★', (int)$appointment['review_rating']) ?></strong>
-              <p><?= e($appointment['review_comment']) ?></p>
-            </div>
-          <?php else: ?>
-            <form method="post" class="customer-review-form">
-              <input type="hidden" name="action" value="review">
-              <input type="hidden" name="appointment_id" value="<?= (int)$appointment['id'] ?>">
-              <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
-              <label>
-                <span><?= e(t('rating')) ?></span>
-                <select name="rating" required>
-                  <option value=""><?= e(t('choose_rating')) ?></option>
-                  <option value="5">5 - <?= e(t('excellent')) ?></option>
-                  <option value="4">4 - <?= e(t('very_good')) ?></option>
-                  <option value="3">3 - <?= e(t('good')) ?></option>
-                  <option value="2">2 - <?= e(t('fair')) ?></option>
-                  <option value="1">1 - <?= e(t('poor')) ?></option>
-                </select>
-              </label>
-              <label>
-                <span><?= e(t('your_review')) ?></span>
-                <textarea name="comment" minlength="10" maxlength="1000" required placeholder="<?= e(t('review_placeholder')) ?>"></textarea>
-              </label>
-              <button class="button primary" type="submit"><?= e(t('send_review')) ?></button>
-            </form>
-          <?php endif; ?>
-        </article>
-      <?php endforeach; ?>
-    </div>
-  <?php endif; ?>
 </section>
 <?php render_footer(); ?>

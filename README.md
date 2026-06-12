@@ -1,186 +1,97 @@
-# SlahPC
+# Slahpc
 
-## Description du projet
+Slahpc est une application web de réparation informatique réalisée en PHP et MySQL. Elle permet aux clients de créer un compte, demander une intervention, suivre son statut et laisser un avis après une réparation terminée.
 
-**SlahPC** est un site web de réparation informatique au Maroc. Le projet permet aux utilisateurs de demander des services de réparation pour leurs ordinateurs, que ce soit pour des problèmes matériels, logiciels, sauvegarde de données ou suppression de virus et malwares.
+L'administrateur peut consulter les clients et les demandes, définir les prix, modifier les statuts et modérer les avis.
 
-Le site contient une partie utilisateur pour consulter les services et envoyer des demandes, ainsi qu’une partie administrateur pour gérer les utilisateurs, les services, les demandes de réparation et les messages reçus.
+## Technologies
 
-## Objectif du projet
+- PHP 8.2
+- MySQL / MariaDB
+- HTML5
+- CSS3
+- JavaScript
+- PDO avec requêtes préparées
 
-L’objectif principal de SlahPC est de faciliter la communication entre les clients et le réparateur informatique. Le client peut envoyer une demande en ligne, expliquer son problème et suivre l’état de sa demande.
-
-Ce projet a été réalisé dans le cadre du Projet de Fin d’Études afin de mettre en pratique les compétences acquises en développement web, base de données, conception UML et gestion de projet.
-
-## Fonctionnalités principales
-
-### Côté utilisateur
-
-- Création d’un compte utilisateur
-- Connexion et déconnexion
-- Consultation des services proposés
-- Envoi d’une demande de réparation
-- Contact via un formulaire
-- Consultation des informations du site
-
-### Côté administrateur
-
-- Connexion à un espace administrateur
-- Gestion des utilisateurs
-- Gestion des services
-- Consultation des demandes de réparation
-- Modification de l’état des demandes
-- Consultation des messages envoyés par les clients
-
-## Technologies utilisées
-
-- **HTML5** : structure des pages web
-- **CSS3** : design et mise en page
-- **JavaScript** : interactions côté client
-- **PHP** : traitement côté serveur
-- **MySQL** : gestion de la base de données
-- **XAMPP** : serveur local Apache et MySQL
-- **VS Code** : éditeur de code
-
-## Structure du projet
+## Structure
 
 ```text
-SlahPC/
-│
+Projet-De-Fin-D-tude-PFE-/
 ├── assets/
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
+│   ├── app.js
+│   ├── password-toggle.js
+│   ├── register-validation.js
+│   ├── styles.css
+│   └── images
 ├── includes/
-│   ├── config.php
-│   ├── db.php
-│   └── functions.php
-│
+│   └── app.php
 ├── admin.php
 ├── dashboard.php
+├── forgot-password.php
 ├── index.html
+├── index.php
 ├── login.php
+├── logout.php
 ├── register.php
-├── contact.php
-├── services.php
-├── setup.php
-└── README.md
+└── setup.php
 ```
 
-## Base de données
+`index.html` contient le modèle statique de la page d'accueil. `index.php` charge ce modèle et injecte les éléments dynamiques liés à la session et aux rendez-vous.
 
-La base de données du projet contient plusieurs tables principales :
+`includes/app.php` centralise la session, la connexion PDO, les traductions, la protection CSRF et les fonctions partagées.
 
-- **users** : stocke les informations des utilisateurs et administrateurs
-- **services** : stocke les services proposés par le site
-- **requests** : stocke les demandes de réparation envoyées par les clients
-- **messages** : stocke les messages du formulaire de contact
-- **appointments** : stocke les rendez-vous ou interventions planifiées
+## Installation locale
 
-## Installation du projet
+1. Installer XAMPP avec Apache, MySQL et PHP 8.2 ou une version compatible.
+2. Copier le projet dans `C:\xampp\htdocs\Slahpc`.
+3. Démarrer Apache et MySQL.
+4. Vérifier les paramètres de connexion dans `includes/app.php`.
+5. Ouvrir `http://localhost/Slahpc/setup.php`.
+6. Créer le premier compte administrateur avec le formulaire sécurisé.
+7. Ouvrir `http://localhost/Slahpc/`.
 
-### 1. Installer XAMPP
+Le script `setup.php` crée la base `slah_pc`, met à niveau les anciennes colonnes et ajoute les services par défaut. Il est volontairement limité aux requêtes provenant de la machine locale.
 
-Télécharger et installer XAMPP sur l’ordinateur.
+## Fonctionnalités
 
-### 2. Copier le projet
+### Client
 
-Copier le dossier du projet dans le dossier suivant :
+- inscription et connexion sécurisées ;
+- demande de rendez-vous selon un service actif ;
+- suivi du prix et du statut de chaque réparation ;
+- avis disponible uniquement après une réparation terminée ;
+- interface en anglais, français et arabe.
 
-```text
-C:/xampp/htdocs/
-```
+### Administration
 
-Exemple :
-
-```text
-C:/xampp/htdocs/SlahPC/
-```
-
-### 3. Démarrer le serveur
-
-Ouvrir XAMPP Control Panel puis démarrer :
-
-- Apache
-- MySQL
-
-### 4. Créer la base de données
-
-Ouvrir phpMyAdmin dans le navigateur :
-
-```text
-http://localhost/phpmyadmin
-```
-
-Créer une base de données, par exemple :
-
-```text
-slahpc_db
-```
-
-### 5. Importer le script SQL
-
-Importer le fichier SQL du projet dans la base de données créée.
-
-### 6. Configurer la connexion
-
-Modifier le fichier de connexion à la base de données si nécessaire :
-
-```php
-$host = "localhost";
-$dbname = "slahpc_db";
-$username = "root";
-$password = "";
-```
-
-### 7. Lancer le site
-
-Ouvrir le navigateur et accéder au projet :
-
-```text
-http://localhost/SlahPC/
-```
-
-## Utilisation
-
-L’utilisateur peut créer un compte, se connecter, consulter les services disponibles et envoyer une demande de réparation. L’administrateur peut gérer les demandes reçues et modifier leur statut selon l’avancement du traitement.
-
-## Statuts des demandes
-
-Les demandes de réparation peuvent avoir plusieurs statuts :
-
-- En attente
-- Acceptée
-- En cours
-- Terminée
-- Annulée
+- tableau de bord avec statistiques ;
+- consultation des rendez-vous et des clients ;
+- modification contrôlée des statuts ;
+- devis manuel pour les réparations matérielles ;
+- prix fixe pour les autres services ;
+- approbation ou rejet des avis.
 
 ## Sécurité
 
-Le projet prend en compte plusieurs aspects de sécurité :
+- mots de passe stockés avec `password_hash()` ;
+- requêtes PDO préparées ;
+- échappement HTML centralisé avec `e()` ;
+- protection CSRF sur tous les formulaires POST ;
+- régénération de l'identifiant de session après connexion ;
+- cookies de session `HttpOnly` et `SameSite=Lax` ;
+- contrôle des rôles utilisateur et administrateur ;
+- validation serveur des identifiants, statuts, prix et avis.
 
-- Validation des champs de formulaire
-- Protection contre les champs vides
-- Utilisation de mots de passe sécurisés
-- Séparation entre utilisateur simple et administrateur
-- Contrôle d’accès à l’espace administrateur
+## Vérification
 
-## Améliorations possibles
+Vérifier la syntaxe PHP depuis le dossier du projet :
 
-- Ajouter un système de notification par email
-- Ajouter le suivi détaillé des réparations
-- Ajouter le paiement en ligne
-- Ajouter un système d’avis clients
-- Améliorer le tableau de bord administrateur
-- Ajouter une version mobile plus avancée
+```powershell
+Get-ChildItem -Recurse -Filter *.php | ForEach-Object {
+    php -l $_.FullName
+}
+```
 
 ## Auteur
 
-Projet réalisé par **Tarik Bu** dans le cadre du Projet de Fin d’Études.
-
-## Licence
-
-Ce projet est réalisé à des fins éducatives.
-
-
+Projet de Fin d'Études réalisé par Tarik Bufardi.

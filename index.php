@@ -1,10 +1,17 @@
 <?php
 require __DIR__ . '/includes/app.php';
 
+// Get the user and form security code.
 $user = current_user();
 $csrfToken = csrf_token();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appointment') {
+// Save a repair request.
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (($_POST['action'] ?? '') !== 'appointment') {
+        http_response_code(400);
+        exit('Unsupported action.');
+    }
+
     if (!$user) {
         redirect('login.php');
     }
@@ -26,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appoi
         || $address === ''
         || mb_strlen($address) > 255
         || $problemDetails === ''
+        || mb_strlen($problemDetails) > 3000
     ) {
         flash('Please fill out all appointment fields.');
         redirect('index.php#appointment');
@@ -43,10 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'appoi
     redirect('index.php#appointment');
 }
 
+// Load the home page HTML.
 ob_start();
 require __DIR__ . '/index.html';
 $html = ob_get_clean();
 
+// Build the repair request area.
 $appointmentContent = '';
 $notice = flash();
 
@@ -93,9 +103,11 @@ if ($user && $user['role'] !== 'admin') {
         . '</div>';
 }
 
+// Add the repair form to the page.
 $appointmentBlock = '<!-- HOME_APPOINTMENT_START -->' . $appointmentContent . '<!-- HOME_APPOINTMENT_END -->';
 $html = preg_replace('/<!-- HOME_APPOINTMENT_START -->.*?<!-- HOME_APPOINTMENT_END -->/s', $appointmentBlock, $html) ?? $html;
 
+// Add the correct account buttons.
 if ($user) {
     $accountLink = $user['role'] === 'admin'
         ? '<a class="nav-button primary" href="admin.php"><i data-lucide="layout-dashboard" aria-hidden="true"></i><span>' . e(t('dashboard')) . '</span></a>'
@@ -109,4 +121,5 @@ if ($user) {
     $html = preg_replace('/<!-- AUTH_ACTIONS_START -->.*?<!-- AUTH_ACTIONS_END -->/s', $authActions, $html) ?? $html;
 }
 
+// Show the finished home page.
 echo $html;

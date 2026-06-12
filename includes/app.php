@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+// Start the user session.
 session_name('slahpc_session');
 session_set_cookie_params([
     'httponly' => true,
@@ -9,18 +10,21 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// Database settings.
 const DB_HOST = '127.0.0.1';
 const DB_PORT = '3306';
 const DB_NAME = 'slah_pc';
 const DB_USER = 'root';
 const DB_PASS = '';
 
+// Save the selected language.
 $languages = ['en', 'fr', 'ar'];
 if (isset($_GET['lang']) && in_array($_GET['lang'], $languages, true)) {
     $_SESSION['lang'] = $_GET['lang'];
 }
 $lang = $_SESSION['lang'] ?? 'en';
 
+// Text for each language.
 $i18n = [
     'en' => [
         'dashboard' => 'Dashboard', 'admin' => 'Admin', 'user' => 'User', 'logout' => 'Logout',
@@ -160,6 +164,7 @@ $i18n = [
     ],
 ];
 
+// Language and safe text tools.
 function lang(): string {
     return $_SESSION['lang'] ?? 'en';
 }
@@ -177,6 +182,7 @@ function e(?string $value): string {
     return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 }
 
+// Connect to the database.
 function db(bool $withDatabase = true): PDO {
     if (!extension_loaded('pdo_mysql')) {
         throw new RuntimeException('The pdo_mysql extension is not enabled. Start PHP with this project php.ini.');
@@ -192,6 +198,32 @@ function db(bool $withDatabase = true): PDO {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
+}
+
+// Check and update database columns.
+function database_column_exists(PDO $pdo, string $table, string $column): bool {
+    $stmt = $pdo->prepare(
+        'SELECT COUNT(*)
+         FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_SCHEMA = DATABASE()
+           AND TABLE_NAME = ?
+           AND COLUMN_NAME = ?'
+    );
+    $stmt->execute([$table, $column]);
+
+    return (int)$stmt->fetchColumn() > 0;
+}
+
+function ensure_database_column(PDO $pdo, string $table, string $column, string $definition): void {
+    foreach ([$table, $column] as $identifier) {
+        if (!preg_match('/^[a-z_][a-z0-9_]*$/i', $identifier)) {
+            throw new InvalidArgumentException('Invalid database identifier.');
+        }
+    }
+
+    if (!database_column_exists($pdo, $table, $column)) {
+        $pdo->exec("ALTER TABLE `{$table}` ADD COLUMN `{$column}` {$definition}");
+    }
 }
 
 function ensure_reviews_table(PDO $pdo): void {
@@ -211,6 +243,7 @@ function ensure_reviews_table(PDO $pdo): void {
     ) ENGINE=InnoDB");
 }
 
+// Page links and form security.
 function redirect(string $path): never {
     header('Location: ' . $path);
     exit;
@@ -232,6 +265,7 @@ function verify_csrf(): void {
     }
 }
 
+// Show the logout form.
 function logout_form(string $class = ''): string {
     $classAttribute = $class === '' ? '' : ' class="' . e($class) . '"';
     return '<form method="post" action="logout.php"' . $classAttribute . '>'
@@ -240,13 +274,19 @@ function logout_form(string $class = ''): string {
         . '</form>';
 }
 
+// Get the user and check access.
 function current_user(): ?array {
     if (empty($_SESSION['user_id'])) {
         return null;
     }
 
     try {
-        $stmt = db()->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+        $stmt = db()->prepare(
+            'SELECT id, name, email, phone, address, role, created_at
+             FROM users
+             WHERE id = ?
+             LIMIT 1'
+        );
         $stmt->execute([$_SESSION['user_id']]);
         return $stmt->fetch() ?: null;
     } catch (Throwable) {
@@ -270,13 +310,29 @@ function require_admin(): array {
     return $user;
 }
 
+// Status lists and price checks.
 function statuses(): array {
     return ['Pending', 'Accepted', 'In progress', 'Completed', 'Cancelled'];
 }
 
-/**
- * Translate a service name (stored in English in DB) to the current UI language.
- */
+function review_statuses(): array {
+    return ['Pending', 'Approved', 'Rejected'];
+}
+
+function normalize_price(string $price): ?float {
+    $price = trim($price);
+    if ($price === '') {
+        return null;
+    }
+
+    if (!is_numeric($price) || (float)$price < 0) {
+        throw new InvalidArgumentException('Price must be a non-negative number.');
+    }
+
+    return round((float)$price, 2);
+}
+
+// Translate service names.
 function translate_service(string $name): string {
     $map = [
         'en' => [
@@ -305,6 +361,7 @@ function translate_service(string $name): string {
     return $map[$lang][$name] ?? $map['en'][$name] ?? $name;
 }
 
+// Translate status names.
 function status_label(string $status): string {
     return match ($status) {
         'Pending' => t('pending'),
@@ -316,9 +373,12 @@ function status_label(string $status): string {
     };
 }
 
+// Show the page header and menu.
 function render_header(string $title, ?array $user = null): void {
     $dir = is_rtl() ? 'rtl' : 'ltr';
     $lang = lang();
+    $safeTitle = e($title);
+    $homeLabel = e(t('home'));
     $dashboardLink = $user && $user['role'] === 'admin'
         ? '<a class="nav-button primary" href="admin.php">' . e(t('dashboard')) . '</a>'
         : '';
@@ -329,7 +389,7 @@ function render_header(string $title, ?array $user = null): void {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{$title} - Slahpc</title>
+  <title>{$safeTitle} - Slahpc</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -339,10 +399,10 @@ function render_header(string $title, ?array $user = null): void {
   <header class="site-header dashboard-header">
     <a class="brand" href="index.php">
       <span class="brand-mark">CR</span>
-      <span><strong>Slahpc</strong><small>{$title}</small></span>
+      <span><strong>Slahpc</strong><small>{$safeTitle}</small></span>
     </a>
     <nav class="site-nav dashboard-nav">
-      <a href="index.php">{$GLOBALS['i18n'][$lang]['home']}</a>
+      <a href="index.php">{$homeLabel}</a>
       $dashboardLink
       $authLink
       <form class="language-form" method="get">
@@ -361,10 +421,12 @@ HTML;
 HTML;
 }
 
+// Show the page footer.
 function render_footer(): void {
     echo '</main><script src="assets/password-toggle.js"></script></body></html>';
 }
 
+// Save or show one message.
 function flash(?string $message = null): ?string {
     if ($message !== null) {
         $_SESSION['flash'] = $message;
@@ -375,6 +437,7 @@ function flash(?string $message = null): ?string {
     return $value;
 }
 
+// Show a message when a table is empty.
 function table_empty(int $count, int $cols): void {
     if ($count === 0) {
         echo '<tr><td colspan="' . $cols . '">' . e(t('no_rows')) . '</td></tr>';

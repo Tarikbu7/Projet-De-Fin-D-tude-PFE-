@@ -1,16 +1,20 @@
 <?php
 require_once __DIR__ . '/includes/app.php';
 
+// Send logged-in users to the home page.
 if (current_user()) {
     redirect('index.php');
 }
 
+// Set the starting form values and errors.
 $error = null;
 $name = '';
 $email = '';
 $phone = '';
 $city = '';
 $fieldErrors = [];
+
+// Check the form and create the account.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $name = trim($_POST['name'] ?? '');
@@ -19,9 +23,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $city = trim($_POST['city'] ?? '');
     $password = (string)($_POST['password'] ?? '');
 
-    if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
-        $error = 'Enter your name, a valid email, and a password of at least 6 characters.';
-    } else {
+    if ($name === '' || mb_strlen($name) > 120) {
+        $fieldErrors['name'] = 'Please enter your name.';
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $fieldErrors['email'] = 'Please enter a valid email address.';
+    }
+    if (mb_strlen($phone) > 30) {
+        $fieldErrors['phone'] = 'Phone number is too long.';
+    }
+    if (mb_strlen($city) > 255) {
+        $fieldErrors['city'] = 'City is too long.';
+    }
+    if (mb_strlen($password) < 8) {
+        $fieldErrors['password'] = 'Use at least 8 characters.';
+    }
+
+    if ($fieldErrors === []) {
         try {
             $stmt = db()->prepare('INSERT INTO users (name, email, phone, address, password_hash, role) VALUES (?, ?, ?, ?, ?, "user")');
             $stmt->execute([$name, $email, $phone, $city, password_hash($password, PASSWORD_DEFAULT)]);
@@ -30,122 +48,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Throwable $exception) {
             $error = 'We could not create the account. That email may already be registered.';
         }
+    } else {
+        $error = 'Please correct the highlighted fields.';
     }
 }
 
+// Show the register form.
 render_header(t('register'));
 ?>
+<!-- Register form -->
 <section class="auth-panel auth-panel-wide">
   <div class="auth-heading">
     <h1>Create your account</h1>
     <p>You will use it to request appointments and follow their progress.</p>
   </div>
   <?php if ($error): ?><p class="notice error"><?= e($error) ?></p><?php endif; ?>
+  <p class="auth-form-message" role="alert" hidden></p>
   <form method="post" class="stack-form auth-register-form">
+    <?= csrf_input() ?>
     <label>
       <span><?= e(t('name')) ?></span>
-      <input type="text" name="name" autocomplete="name" required value="<?= e($name) ?>" aria-describedby="name-error"<?= isset($fieldErrors['name']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
+      <input type="text" name="name" autocomplete="name" maxlength="120" required value="<?= e($name) ?>" aria-describedby="name-error"<?= isset($fieldErrors['name']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
       <small class="field-error" id="name-error"><?= e($fieldErrors['name'] ?? '') ?></small>
     </label>
     <label>
       <span><?= e(t('email')) ?></span>
-      <input type="email" name="email" autocomplete="email" required value="<?= e($email) ?>" aria-describedby="email-error"<?= isset($fieldErrors['email']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
+      <input type="email" name="email" autocomplete="email" maxlength="180" required value="<?= e($email) ?>" aria-describedby="email-error"<?= isset($fieldErrors['email']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
       <small class="field-error" id="email-error"><?= e($fieldErrors['email'] ?? '') ?></small>
     </label>
     <label>
       <span><?= e(t('phone')) ?> <small>(optional)</small></span>
-      <input type="tel" name="phone" autocomplete="tel" value="<?= e($phone) ?>">
+      <input type="tel" name="phone" autocomplete="tel" maxlength="30" value="<?= e($phone) ?>" aria-describedby="phone-error"<?= isset($fieldErrors['phone']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
+      <small class="field-error" id="phone-error"><?= e($fieldErrors['phone'] ?? '') ?></small>
     </label>
     <label>
       <span><?= e(t('city')) ?> <small>(optional)</small></span>
-      <input type="text" name="city" autocomplete="address-level2" value="<?= e($city) ?>">
+      <input type="text" name="city" autocomplete="address-level2" maxlength="255" value="<?= e($city) ?>" aria-describedby="city-error"<?= isset($fieldErrors['city']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
+      <small class="field-error" id="city-error"><?= e($fieldErrors['city'] ?? '') ?></small>
     </label>
     <label class="auth-password-field">
-      <span><?= e(t('password')) ?></span>
-      <span class="password-input">
-        <input type="password" name="password" autocomplete="new-password" required minlength="6" data-password-input aria-describedby="password-help password-error"<?= isset($fieldErrors['password']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
+    <span><?= e(t('password')) ?></span>
+    <span class="password-input">
+        <input type="password" name="password" autocomplete="new-password" required minlength="8" data-password-input aria-describedby="password-help password-error"<?= isset($fieldErrors['password']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
         <button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false" data-password-toggle>
           Show
         </button>
       </span>
-      <small id="password-help">Use at least 6 characters.</small>
+      <small id="password-help">Use at least 8 characters.</small>
       <small class="field-error" id="password-error"><?= e($fieldErrors['password'] ?? '') ?></small>
     </label>
     <button class="button primary full auth-submit" type="submit"><?= e(t('create_account')) ?></button>
   </form>
   <p class="muted-line">Already have an account? <a href="login.php"><?= e(t('sign_in')) ?></a></p>
 </section>
-<script>
-  const registerForm = document.querySelector('.auth-register-form');
-  const formMessage = document.querySelector('.auth-form-message');
-  const messages = {
-    name: 'Please enter your name.',
-    email: 'Please enter your email address.',
-    phone: 'Please enter your phone number.',
-    city: 'Please enter your city.',
-    password: 'Please enter a password.'
-  };
-  const fieldLabels = {
-    name: 'Name',
-    email: 'Email',
-    phone: 'Phone',
-    city: 'City',
-    password: 'Password'
-  };
-
-  function validateRegisterField(field) {
-    const errorElement = document.getElementById(`${field.name}-error`);
-    let message = '';
-
-    if (field.value.trim() === '') {
-      message = messages[field.name];
-    } else if (field.name === 'email' && !field.validity.valid) {
-      message = 'Please enter a valid email address.';
-    } else if (field.name === 'password' && field.value.length < 6) {
-      message = 'Your password must contain at least 6 characters.';
-    }
-
-    field.classList.toggle('is-invalid', message !== '');
-    field.setAttribute('aria-invalid', message !== '' ? 'true' : 'false');
-    errorElement.textContent = message;
-    return message === '';
-  }
-
-  if (registerForm && formMessage) {
-    const fields = [...registerForm.querySelectorAll('input')];
-
-    fields.forEach((field) => {
-      field.addEventListener('blur', () => validateRegisterField(field));
-      field.addEventListener('input', () => {
-        if (field.classList.contains('is-invalid')) {
-          validateRegisterField(field);
-        }
-      });
-    });
-
-    registerForm.addEventListener('submit', (event) => {
-      const invalidFields = fields.filter((field) => !validateRegisterField(field));
-      const firstInvalid = invalidFields[0];
-      formMessage.hidden = !firstInvalid;
-
-      if (firstInvalid) {
-        event.preventDefault();
-        const emptyFields = invalidFields
-          .filter((field) => field.value.trim() === '')
-          .map((field) => fieldLabels[field.name]);
-
-        if (emptyFields.length > 0) {
-          const lastField = emptyFields.pop();
-          const fieldList = emptyFields.length > 0
-            ? `${emptyFields.join(', ')} and ${lastField}`
-            : lastField;
-          formMessage.textContent = `${fieldList} ${emptyFields.length > 0 ? 'are' : 'is'} required.`;
-        } else {
-          formMessage.textContent = 'Please correct the information shown below.';
-        }
-        firstInvalid.focus();
-      }
-    });
-  }
-</script>
+<script src="assets/register-validation.js"></script>
 <?php render_footer(); ?>

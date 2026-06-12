@@ -1,13 +1,17 @@
 <?php
 require_once __DIR__ . '/includes/app.php';
 
+// Send logged-in users to the home page.
 if (current_user()) {
     redirect('index.php');
 }
 
+// Set the starting form values.
 $error = null;
 $email = '';
 $message = flash();
+
+// Check the email and password.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $email = trim($_POST['email'] ?? '');
@@ -22,13 +26,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('index.php');
         }
         $error = 'Invalid email or password.';
-    } catch (Throwable $exception) {
-        $error = t('setup_needed') . ' ' . $exception->getMessage();
+    } catch (Throwable) {
+        $error = t('setup_needed');
     }
 }
 
+// Show the login form.
 render_header(t('login'));
 ?>
+<!-- Login form -->
 <section class="auth-panel">
   <div class="auth-heading">
     <h1>Sign in to your account</h1>
