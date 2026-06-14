@@ -30,11 +30,10 @@ Projet-De-Fin-D-tude-PFE-/
 |   |-- register-validation.js
 |   `-- styles.css
 |-- includes/
-|   |-- auth.php
+|   |-- app.php
 |   |-- config.php
-|   |-- csrf.php
 |   |-- database.php
-|   |-- helpers.php
+|   |-- admin-dashboard.php
 |   `-- translations.php
 |-- admin.php
 |-- user-dashboard.php
@@ -135,35 +134,19 @@ Contains all shared database tools:
 - adds missing columns;
 - creates the reviews table when necessary.
 
-### `includes/auth.php`
+### `includes/app.php`
 
-Contains authentication and access-control functions:
+Contains the small shared application functions in one place:
 
-- gets the currently connected user;
-- requires a user to log in before opening protected pages;
-- checks whether the connected user is an administrator;
-- redirects unauthorized users;
-- creates the secure logout form.
+- authentication and role checks;
+- CSRF form protection;
+- redirects, escaping, validation, and flash messages;
+- common page header and footer rendering.
 
-### `includes/csrf.php`
+### `includes/admin-dashboard.php`
 
-Protects POST forms against Cross-Site Request Forgery:
-
-- generates a random CSRF token;
-- adds the token to forms;
-- verifies the submitted token before accepting an action.
-
-### `includes/helpers.php`
-
-Contains general reusable functions:
-
-- escapes text before displaying it in HTML;
-- redirects the browser;
-- defines valid appointment and review statuses;
-- validates prices;
-- displays the common page header and footer;
-- saves temporary flash messages;
-- displays an empty-table message.
+Contains the shared administrator sidebar, statistics, forms, and CRUD handlers
+used by the separate administration pages.
 
 ### `includes/translations.php`
 

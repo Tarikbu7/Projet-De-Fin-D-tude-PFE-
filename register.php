@@ -77,12 +77,12 @@ render_header(t('register'));
       <small class="field-error" id="email-error"><?= e($fieldErrors['email'] ?? '') ?></small>
     </label>
     <label>
-      <span><?= e(t('phone')) ?> <small>(optional)</small></span>
+      <span><?= e(t('phone')) ?> <small></small></span>
       <input type="tel" name="phone" autocomplete="tel" maxlength="30" value="<?= e($phone) ?>" aria-describedby="phone-error"<?= isset($fieldErrors['phone']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
       <small class="field-error" id="phone-error"><?= e($fieldErrors['phone'] ?? '') ?></small>
     </label>
     <label>
-      <span><?= e(t('city')) ?> <small>(optional)</small></span>
+      <span><?= e(t('city')) ?> <small></small></span>
       <input type="text" name="city" autocomplete="address-level2" maxlength="255" value="<?= e($city) ?>" aria-describedby="city-error"<?= isset($fieldErrors['city']) ? ' class="is-invalid" aria-invalid="true"' : '' ?>>
       <small class="field-error" id="city-error"><?= e($fieldErrors['city'] ?? '') ?></small>
     </label>

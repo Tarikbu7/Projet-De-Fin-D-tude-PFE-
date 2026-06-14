@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $serviceType,
         $address,
         $problemDetails,
-        $serviceType === 'Hardware repair' ? null : $selectedService['base_price'],
+        (float)$selectedService['base_price'] <= 0 ? null : $selectedService['base_price'],
     ]);
     flash('Repair appointment request sent.');
     redirect('index.php#appointment');

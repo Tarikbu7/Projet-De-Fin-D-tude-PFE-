@@ -1410,7 +1410,8 @@ textarea {
 }
 
 .admin-side-nav a:hover,
-.admin-side-nav a:focus-visible {
+.admin-side-nav a:focus-visible,
+.admin-side-nav a.active {
   border-color: var(--accent);
   color: var(--accent);
   background: rgba(21, 157, 255, 0.08);
@@ -1535,11 +1536,20 @@ textarea {
 }
 
 .admin-summary-card {
+  display: block;
   min-height: 122px;
   padding: 1rem;
   border-radius: 12px;
   color: #fff;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+a.admin-summary-card:hover,
+a.admin-summary-card:focus-visible {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
 }
 
 .admin-summary-card span,
@@ -1580,6 +1590,144 @@ textarea {
 
 .admin-summary-card.pink {
   background: linear-gradient(135deg, #0f6fbd, #b9e6ff);
+}
+
+.admin-card-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-card-heading p {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.admin-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.admin-page-grid a {
+  display: grid;
+  gap: 0.45rem;
+  min-height: 120px;
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface2);
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+
+.admin-page-grid a:hover,
+.admin-page-grid a:focus-visible {
+  border-color: var(--accent);
+  background: rgba(21, 157, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.admin-page-grid strong {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.admin-page-grid span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.service-create-form {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.5fr) minmax(160px, 0.7fr) minmax(180px, 0.8fr) auto;
+  gap: 0.8rem;
+  align-items: end;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface2);
+}
+
+.service-create-form label {
+  margin: 0;
+}
+
+.service-create-form .button {
+  min-height: 45px;
+  white-space: nowrap;
+}
+
+.service-active-field {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 45px;
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.service-active-field input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.service-active-field.compact {
+  min-width: 120px;
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+}
+
+.admin-services-table {
+  min-width: 880px;
+}
+
+.admin-services-table td:nth-child(2) {
+  min-width: 250px;
+}
+
+.admin-services-table td:nth-child(3) {
+  min-width: 150px;
+}
+
+.admin-services-table input[type="text"],
+.admin-services-table input[type="number"] {
+  min-width: 0;
+}
+
+.service-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.service-actions form {
+  margin: 0;
+}
+
+.service-actions .button {
+  min-height: 38px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.82rem;
+}
+
+.service-delete-button {
+  border: 1px solid color-mix(in srgb, var(--danger) 55%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  color: var(--danger);
+}
+
+.service-delete-button:hover,
+.service-delete-button:focus-visible {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 18%, var(--surface));
 }
 
 .dashboard-hero {
@@ -2671,6 +2819,10 @@ html[dir="rtl"] input[type="tel"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .service-create-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .admin-layout {
     grid-template-columns: 1fr;
   }
@@ -2838,10 +2990,15 @@ html[dir="rtl"] input[type="tel"] {
   .review-grid,
   .form-grid,
   .time-options,
+  .service-create-form,
   .admin-side-nav,
   .admin-summary-grid,
   .dashboard-grid,
   .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-page-grid {
     grid-template-columns: 1fr;
   }
 

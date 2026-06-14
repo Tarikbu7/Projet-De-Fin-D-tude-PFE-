@@ -16,7 +16,5 @@ const DB_USER = 'root';
 const DB_PASS = '';
 
 require_once __DIR__ . '/translations.php';
-require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/csrf.php';
-require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/app.php';
