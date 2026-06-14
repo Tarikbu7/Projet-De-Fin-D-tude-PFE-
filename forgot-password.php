@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/app.php';
+require_once __DIR__ . '/includes/config.php';
 
 // Send logged-in users to the home page.
 if (current_user()) {

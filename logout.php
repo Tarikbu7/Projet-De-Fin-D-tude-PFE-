@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/app.php';
+require_once __DIR__ . '/includes/config.php';
 
 // Only allow logout from the form.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

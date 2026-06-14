@@ -13,9 +13,8 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "index.php": "index.html",
     "login.php": "register.php, logout.php",
-    "admin.php": "dashboard.php",
+    "admin.php": "user-dashboard.php",
     "README.md": ".gitignore"
   },
   "search.exclude": {

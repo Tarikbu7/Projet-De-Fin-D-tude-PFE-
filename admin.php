@@ -1,22 +1,9 @@
 <?php
-require_once __DIR__ . '/includes/app.php';
+require_once __DIR__ . '/includes/config.php';
 
 // Get the admin and connect to the database.
 $user = require_admin();
 $pdo = db();
-
-// Create the old repair request table if needed.
-$pdo->exec("CREATE TABLE IF NOT EXISTS repair_requests (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(120) NOT NULL,
-    family_name VARCHAR(120) NOT NULL,
-    phone VARCHAR(60) NOT NULL,
-    email VARCHAR(190) NOT NULL,
-    problem TEXT NOT NULL,
-    price DECIMAL(10,2) NULL,
-    status ENUM('Pending','Accepted','In progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB");
 
 // Add missing database parts.
 ensure_database_column($pdo, 'appointments', 'price', 'DECIMAL(10,2) NULL AFTER problem_details');
@@ -28,14 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = (string)($_POST['action'] ?? '');
 
     if ($action === 'status') {
-        $table = (string)($_POST['table'] ?? '');
         $status = (string)($_POST['status'] ?? '');
         $recordId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
-        if (!in_array($table, ['appointments', 'repair_requests'], true)
-            || !in_array($status, statuses(), true)
-            || !$recordId
-        ) {
+        if (!in_array($status, statuses(), true) || !$recordId) {
             http_response_code(400);
             exit('Invalid status update.');
         }
@@ -47,25 +30,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('admin.php');
         }
 
-        if ($table === 'appointments') {
-            $appointment = $pdo->prepare('SELECT service_type, price FROM appointments WHERE id = ? LIMIT 1');
-            $appointment->execute([$recordId]);
-            $appointment = $appointment->fetch();
+        $appointment = $pdo->prepare('SELECT service_type, price FROM appointments WHERE id = ? LIMIT 1');
+        $appointment->execute([$recordId]);
+        $appointment = $appointment->fetch();
 
-            if (!$appointment) {
-                http_response_code(404);
-                exit('Appointment not found.');
-            }
-
-            if ($appointment['service_type'] !== 'Hardware repair') {
-                $service = $pdo->prepare('SELECT base_price FROM services WHERE active = 1 AND name = ? LIMIT 1');
-                $service->execute([$appointment['service_type']]);
-                $fixedPrice = $service->fetchColumn();
-                $priceValue = $fixedPrice !== false ? (float)$fixedPrice : $appointment['price'];
-            }
+        if (!$appointment) {
+            http_response_code(404);
+            exit('Appointment not found.');
         }
 
-        $stmt = $pdo->prepare("UPDATE {$table} SET status = ?, price = ? WHERE id = ?");
+        if ($appointment['service_type'] !== 'Hardware repair') {
+            $service = $pdo->prepare('SELECT base_price FROM services WHERE active = 1 AND name = ? LIMIT 1');
+            $service->execute([$appointment['service_type']]);
+            $fixedPrice = $service->fetchColumn();
+            $priceValue = $fixedPrice !== false ? (float)$fixedPrice : $appointment['price'];
+        }
+
+        $stmt = $pdo->prepare('UPDATE appointments SET status = ?, price = ? WHERE id = ?');
         $stmt->execute([$status, $priceValue, $recordId]);
     } elseif ($action === 'review_status') {
         $reviewId = (int)($_POST['review_id'] ?? 0);
@@ -94,11 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stats = [
     'appointments' => $pdo->query('SELECT COUNT(*) FROM appointments')->fetchColumn(),
     'customers' => $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'user'")->fetchColumn(),
-    'completed' => (int)$pdo->query("SELECT COUNT(*) FROM repair_requests WHERE status = 'Completed'")->fetchColumn() + (int)$pdo->query("SELECT COUNT(*) FROM appointments WHERE status = 'Completed'")->fetchColumn(),
+    'completed' => $pdo->query("SELECT COUNT(*) FROM appointments WHERE status = 'Completed'")->fetchColumn(),
 ];
 $appointments = $pdo->query('SELECT a.*, u.name, u.email, u.phone FROM appointments a JOIN users u ON u.id = a.user_id ORDER BY a.created_at DESC')->fetchAll();
 $customers = $pdo->query("SELECT * FROM users WHERE role = 'user' ORDER BY created_at DESC")->fetchAll();
-$repairRequests = $pdo->query('SELECT * FROM repair_requests ORDER BY created_at DESC')->fetchAll();
 $reviews = $pdo->query('
     SELECT r.*, u.name, u.email, a.service_type
     FROM reviews r
@@ -111,8 +91,8 @@ $reviews = $pdo->query('
 $csrfToken = csrf_token();
 
 // Show the status and price form.
-function status_form(string $table, array $row): void {
-    $priceIsEditable = $table === 'repair_requests' || ($row['service_type'] ?? '') === 'Hardware repair';
+function status_form(array $row): void {
+    $priceIsEditable = ($row['service_type'] ?? '') === 'Hardware repair';
     $priceClass = $priceIsEditable ? 'quote-price-input' : 'fixed-price-input';
     $priceLabel = $priceIsEditable ? 'Price quote' : 'Fixed price';
     $readonly = $priceIsEditable ? '' : ' readonly aria-readonly="true" title="This service has a fixed price"';
@@ -120,7 +100,6 @@ function status_form(string $table, array $row): void {
     echo '<form method="post" class="status-update-form">'
         . csrf_input()
         . '<input type="hidden" name="action" value="status">'
-        . '<input type="hidden" name="table" value="' . e($table) . '">'
         . '<input type="hidden" name="id" value="' . (int)$row['id'] . '">'
         . '<label><span>' . e(t('status')) . '</span><select name="status">';
     foreach (statuses() as $status) {
@@ -178,22 +157,12 @@ $flash = flash();
       <article class="admin-summary-card pink"><span>Completed</span><strong><?= (int)$stats['completed'] ?></strong><small>Finished repair jobs</small></article>
     </section>
 
-    <!-- Old repair requests -->
-    <section class="dashboard-card admin-section" id="repair-requests">
-      <h2><?= e(t('repair_requests')) ?></h2>
-      <div class="table-scroll">
-        <table><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('phone')) ?></th><th><?= e(t('details')) ?></th><th>Price</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-        <?php foreach ($repairRequests as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['first_name'] . ' ' . $row['family_name']) ?><br><small><?= e($row['email']) ?></small><br><small><?= e($row['created_at']) ?></small></td><td><?= e($row['phone']) ?></td><td><?= e($row['problem']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><?php endif; ?></td><td><?php status_form('repair_requests', $row); ?></td></tr><?php endforeach; table_empty(count($repairRequests), 6); ?>
-        </tbody></table>
-      </div>
-    </section>
-
     <!-- Customer repairs -->
     <section class="dashboard-card admin-section admin-appointments-card" id="appointments">
       <h2><?= e(t('appointments')) ?></h2>
       <div class="table-scroll">
         <table class="admin-appointments-table"><thead><tr><th>#</th><th><?= e(t('customer')) ?></th><th><?= e(t('services')) ?></th><th><?= e(t('address')) ?></th><th>Price</th><th><?= e(t('status')) ?></th></tr></thead><tbody>
-        <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><small><?= e($row['email']) ?></small><small><?= e($row['phone']) ?></small></td><td><?= e($row['service_type']) ?><small class="problem-text"><?= e($row['problem_details']) ?></small></td><td><?= e($row['address']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><?php endif; ?></td><td><?php status_form('appointments', $row); ?></td></tr><?php endforeach; table_empty(count($appointments), 6); ?>
+        <?php foreach ($appointments as $row): ?><tr><td><?= (int)$row['id'] ?></td><td><?= e($row['name']) ?><small><?= e($row['email']) ?></small><small><?= e($row['phone']) ?></small></td><td><?= e($row['service_type']) ?><small class="problem-text"><?= e($row['problem_details']) ?></small></td><td><?= e($row['address']) ?></td><td><?php if ($row['price'] !== null && $row['price'] !== ''): ?><strong><?= e($row['price']) ?> MAD</strong><?php endif; ?></td><td><?php status_form($row); ?></td></tr><?php endforeach; table_empty(count($appointments), 6); ?>
         </tbody></table>
       </div>
     </section>

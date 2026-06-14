@@ -1,22 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// Start the user session.
-session_name('slahpc_session');
-session_set_cookie_params([
-    'httponly' => true,
-    'samesite' => 'Lax',
-    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-]);
-session_start();
-
-// Database settings.
-const DB_HOST = '127.0.0.1';
-const DB_PORT = '3306';
-const DB_NAME = 'slah_pc';
-const DB_USER = 'root';
-const DB_PASS = '';
-
 // Save the selected language.
 $languages = ['en', 'fr', 'ar'];
 if (isset($_GET['lang']) && in_array($_GET['lang'], $languages, true)) {
@@ -44,7 +28,7 @@ $i18n = [
         'open_site' => 'Open site', 'quantity' => 'Quantity', 'price' => 'Price', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Purpose', 'subject' => 'Subject', 'message' => 'Message',
         'create_invoice' => 'Create invoice', 'amount' => 'Amount',
-        'repair_requests' => 'Repair requests', 'awaiting_quote' => 'Awaiting quote',
+        'awaiting_quote' => 'Awaiting quote',
         'track_repairs' => 'Track your repair appointment requests and their current status here.',
         'review' => 'Review', 'after_completion' => 'After completion', 'available' => 'Available',
         'leave_review' => 'Leave a review', 'leave_review_desc' => 'Choose a completed service, rate it, then write your comment.',
@@ -89,7 +73,7 @@ $i18n = [
         'open_site' => 'Ouvrir le site', 'quantity' => 'Quantité', 'price' => 'Prix', 'total' => 'Total',
         'budget' => 'Budget', 'purpose' => 'Utilisation', 'subject' => 'Sujet', 'message' => 'Message',
         'create_invoice' => 'Créer une facture', 'amount' => 'Montant',
-        'repair_requests' => 'Demandes de réparation', 'awaiting_quote' => 'Devis en attente',
+        'awaiting_quote' => 'Devis en attente',
         'track_repairs' => 'Suivez ici vos demandes de rendez-vous de réparation et leur statut actuel.',
         'review' => 'Avis', 'after_completion' => 'Après la fin', 'available' => 'Disponible',
         'leave_review' => 'Laisser un avis', 'leave_review_desc' => 'Choisissez un service terminé, notez-le, puis écrivez votre commentaire.',
@@ -134,7 +118,7 @@ $i18n = [
         'open_site' => 'فتح الموقع', 'quantity' => 'الكمية', 'price' => 'السعر', 'total' => 'المجموع',
         'budget' => 'الميزانية', 'purpose' => 'الاستخدام', 'subject' => 'الموضوع', 'message' => 'الرسالة',
         'create_invoice' => 'إنشاء فاتورة', 'amount' => 'المبلغ',
-        'repair_requests' => 'طلبات الإصلاح', 'awaiting_quote' => 'في انتظار عرض السعر',
+        'awaiting_quote' => 'في انتظار عرض السعر',
         'track_repairs' => 'تابع هنا طلبات مواعيد الإصلاح وحالتها الراهنة.',
         'review' => 'تقييم', 'after_completion' => 'بعد الانتهاء', 'available' => 'متاح',
         'leave_review' => 'اترك تقييماً', 'leave_review_desc' => 'اختر خدمة مكتملة، قيّمها، ثم اكتب تعليقك.',
@@ -178,160 +162,6 @@ function t(string $key): string {
     return $i18n[lang()][$key] ?? $i18n['en'][$key] ?? $key;
 }
 
-function e(?string $value): string {
-    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
-}
-
-// Connect to the database.
-function db(bool $withDatabase = true): PDO {
-    if (!extension_loaded('pdo_mysql')) {
-        throw new RuntimeException('The pdo_mysql extension is not enabled. Start PHP with this project php.ini.');
-    }
-
-    $dsn = 'mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';charset=utf8mb4';
-    if ($withDatabase) {
-        $dsn .= ';dbname=' . DB_NAME;
-    }
-
-    return new PDO($dsn, DB_USER, DB_PASS, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-    ]);
-}
-
-// Check and update database columns.
-function database_column_exists(PDO $pdo, string $table, string $column): bool {
-    $stmt = $pdo->prepare(
-        'SELECT COUNT(*)
-         FROM INFORMATION_SCHEMA.COLUMNS
-         WHERE TABLE_SCHEMA = DATABASE()
-           AND TABLE_NAME = ?
-           AND COLUMN_NAME = ?'
-    );
-    $stmt->execute([$table, $column]);
-
-    return (int)$stmt->fetchColumn() > 0;
-}
-
-function ensure_database_column(PDO $pdo, string $table, string $column, string $definition): void {
-    foreach ([$table, $column] as $identifier) {
-        if (!preg_match('/^[a-z_][a-z0-9_]*$/i', $identifier)) {
-            throw new InvalidArgumentException('Invalid database identifier.');
-        }
-    }
-
-    if (!database_column_exists($pdo, $table, $column)) {
-        $pdo->exec("ALTER TABLE `{$table}` ADD COLUMN `{$column}` {$definition}");
-    }
-}
-
-function ensure_reviews_table(PDO $pdo): void {
-    $pdo->exec("CREATE TABLE IF NOT EXISTS reviews (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        appointment_id INT NOT NULL,
-        rating TINYINT UNSIGNED NOT NULL,
-        comment TEXT NOT NULL,
-        status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        reviewed_at TIMESTAMP NULL DEFAULT NULL,
-        UNIQUE KEY unique_appointment_review (appointment_id),
-        KEY reviews_user_id (user_id),
-        CONSTRAINT reviews_user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        CONSTRAINT reviews_appointment_fk FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE CASCADE
-    ) ENGINE=InnoDB");
-}
-
-// Page links and form security.
-function redirect(string $path): never {
-    header('Location: ' . $path);
-    exit;
-}
-
-function csrf_token(): string {
-    return $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-}
-
-function csrf_input(): string {
-    return '<input type="hidden" name="csrf_token" value="' . e(csrf_token()) . '">';
-}
-
-function verify_csrf(): void {
-    $submittedToken = (string)($_POST['csrf_token'] ?? '');
-    if ($submittedToken === '' || !hash_equals(csrf_token(), $submittedToken)) {
-        http_response_code(403);
-        exit('Invalid or expired form token.');
-    }
-}
-
-// Show the logout form.
-function logout_form(string $class = ''): string {
-    $classAttribute = $class === '' ? '' : ' class="' . e($class) . '"';
-    return '<form method="post" action="logout.php"' . $classAttribute . '>'
-        . csrf_input()
-        . '<button class="nav-button light" type="submit">' . e(t('logout')) . '</button>'
-        . '</form>';
-}
-
-// Get the user and check access.
-function current_user(): ?array {
-    if (empty($_SESSION['user_id'])) {
-        return null;
-    }
-
-    try {
-        $stmt = db()->prepare(
-            'SELECT id, name, email, phone, address, role, created_at
-             FROM users
-             WHERE id = ?
-             LIMIT 1'
-        );
-        $stmt->execute([$_SESSION['user_id']]);
-        return $stmt->fetch() ?: null;
-    } catch (Throwable) {
-        return null;
-    }
-}
-
-function require_login(): array {
-    $user = current_user();
-    if (!$user) {
-        redirect('login.php');
-    }
-    return $user;
-}
-
-function require_admin(): array {
-    $user = require_login();
-    if ($user['role'] !== 'admin') {
-        redirect('dashboard.php');
-    }
-    return $user;
-}
-
-// Status lists and price checks.
-function statuses(): array {
-    return ['Pending', 'Accepted', 'In progress', 'Completed', 'Cancelled'];
-}
-
-function review_statuses(): array {
-    return ['Pending', 'Approved', 'Rejected'];
-}
-
-function normalize_price(string $price): ?float {
-    $price = trim($price);
-    if ($price === '') {
-        return null;
-    }
-
-    if (!is_numeric($price) || (float)$price < 0) {
-        throw new InvalidArgumentException('Price must be a non-negative number.');
-    }
-
-    return round((float)$price, 2);
-}
-
 // Translate service names.
 function translate_service(string $name): string {
     $map = [
@@ -371,75 +201,4 @@ function status_label(string $status): string {
         'Cancelled' => t('cancelled'),
         default => $status,
     };
-}
-
-// Show the page header and menu.
-function render_header(string $title, ?array $user = null): void {
-    $dir = is_rtl() ? 'rtl' : 'ltr';
-    $lang = lang();
-    $safeTitle = e($title);
-    $homeLabel = e(t('home'));
-    $dashboardLink = $user && $user['role'] === 'admin'
-        ? '<a class="nav-button primary" href="admin.php">' . e(t('dashboard')) . '</a>'
-        : '';
-    $authLink = $user ? logout_form('nav-logout-form') : '<a class="nav-button primary" href="login.php">' . e(t('sign_in')) . '</a>';
-    echo <<<HTML
-<!DOCTYPE html>
-<html lang="$lang" dir="$dir">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{$safeTitle} - Slahpc</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css">
-</head>
-<body class="app-body">
-  <header class="site-header dashboard-header">
-    <a class="brand" href="index.php">
-      <span class="brand-mark">CR</span>
-      <span><strong>Slahpc</strong><small>{$safeTitle}</small></span>
-    </a>
-    <nav class="site-nav dashboard-nav">
-      <a href="index.php">{$homeLabel}</a>
-      $dashboardLink
-      $authLink
-      <form class="language-form" method="get">
-        <select name="lang" onchange="this.form.submit()">
-HTML;
-    foreach (['en' => 'EN', 'fr' => 'FR', 'ar' => 'AR'] as $code => $label) {
-        $selected = $code === lang() ? ' selected' : '';
-        echo '<option value="' . e($code) . '"' . $selected . '>' . e($label) . '</option>';
-    }
-    echo <<<HTML
-        </select>
-      </form>
-    </nav>
-  </header>
-  <main class="dashboard-shell">
-HTML;
-}
-
-// Show the page footer.
-function render_footer(): void {
-    echo '</main><script src="assets/password-toggle.js"></script></body></html>';
-}
-
-// Save or show one message.
-function flash(?string $message = null): ?string {
-    if ($message !== null) {
-        $_SESSION['flash'] = $message;
-        return null;
-    }
-    $value = $_SESSION['flash'] ?? null;
-    unset($_SESSION['flash']);
-    return $value;
-}
-
-// Show a message when a table is empty.
-function table_empty(int $count, int $cols): void {
-    if ($count === 0) {
-        echo '<tr><td colspan="' . $cols . '">' . e(t('no_rows')) . '</td></tr>';
-    }
 }

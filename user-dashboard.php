@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/app.php';
+require_once __DIR__ . '/includes/config.php';
 
 // Get the logged-in customer.
 $user = require_login();
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         || mb_strlen($comment) > 1000
     ) {
         flash('Please choose a completed service, select a rating, and write at least 10 characters.');
-        redirect('dashboard.php#leave-review');
+        redirect('user-dashboard.php#leave-review');
     }
 
     $appointment = $pdo->prepare(
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$appointment->fetch()) {
         flash('This appointment is not available for review.');
-        redirect('dashboard.php#leave-review');
+        redirect('user-dashboard.php#leave-review');
     }
 
     try {
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             : 'Your review could not be saved. Please try again.');
     }
 
-    redirect('dashboard.php#reviews');
+    redirect('user-dashboard.php#reviews');
 }
 
 // Get repairs and their reviews.

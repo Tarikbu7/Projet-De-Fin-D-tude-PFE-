@@ -1,90 +1,284 @@
 # Slahpc
 
-Slahpc est une application web de réparation informatique réalisée en PHP et MySQL. Elle permet aux clients de créer un compte, demander une intervention, suivre son statut et laisser un avis après une réparation terminée.
+Slahpc is a PHP and MySQL web application for a computer repair service.
+Customers can create an account, request a repair appointment, follow its
+status and price, and leave a review after the repair is completed.
 
-L'administrateur peut consulter les clients et les demandes, définir les prix, modifier les statuts et modérer les avis.
+Administrators can view customers and appointments, update repair statuses and
+prices, and approve or reject customer reviews.
 
 ## Technologies
 
-- PHP 8.2
-- MySQL / MariaDB
+- PHP 8
+- MySQL or MariaDB
+- PDO for the database connection
 - HTML5
 - CSS3
 - JavaScript
-- PDO avec requêtes préparées
+- XAMPP for local development
 
-## Structure
+## Project Structure
 
 ```text
 Projet-De-Fin-D-tude-PFE-/
-├── assets/
-│   ├── app.js
-│   ├── password-toggle.js
-│   ├── register-validation.js
-│   ├── styles.css
-│   └── images
-├── includes/
-│   └── app.php
-├── admin.php
-├── dashboard.php
-├── forgot-password.php
-├── index.html
-├── index.php
-├── login.php
-├── logout.php
-├── register.php
-└── setup.php
+|-- assets/
+|   |-- app.js
+|   |-- hero-bg.png
+|   |-- logo-navbar.png
+|   |-- logo.png
+|   |-- password-toggle.js
+|   |-- register-validation.js
+|   `-- styles.css
+|-- includes/
+|   |-- auth.php
+|   |-- config.php
+|   |-- csrf.php
+|   |-- database.php
+|   |-- helpers.php
+|   `-- translations.php
+|-- admin.php
+|-- user-dashboard.php
+|-- forgot-password.php
+|-- index.php
+|-- login.php
+|-- logout.php
+|-- register.php
+`-- README.md
 ```
 
-`index.html` contient le modèle statique de la page d'accueil. `index.php` charge ce modèle et injecte les éléments dynamiques liés à la session et aux rendez-vous.
+## Main PHP Files
 
-`includes/app.php` centralise la session, la connexion PDO, les traductions, la protection CSRF et les fonctions partagées.
+### `index.php`
 
-## Installation locale
+The public home page of Slahpc. It:
 
-1. Installer XAMPP avec Apache, MySQL et PHP 8.2 ou une version compatible.
-2. Copier le projet dans `C:\xampp\htdocs\Slahpc`.
-3. Démarrer Apache et MySQL.
-4. Vérifier les paramètres de connexion dans `includes/app.php`.
-5. Ouvrir `http://localhost/Slahpc/setup.php`.
-6. Créer le premier compte administrateur avec le formulaire sécurisé.
-7. Ouvrir `http://localhost/Slahpc/`.
+- presents the repair services and business information;
+- shows the appointment form to connected customers;
+- reads active services and prices from the database;
+- validates and saves new appointments;
+- loads the main JavaScript and CSS files.
 
-Le script `setup.php` crée la base `slah_pc`, met à niveau les anciennes colonnes et ajoute les services par défaut. Il est volontairement limité aux requêtes provenant de la machine locale.
+### `register.php`
 
-## Fonctionnalités
+Creates a new customer account. It validates the submitted name, email,
+telephone number, address, and password. Passwords are protected with
+`password_hash()` before they are stored in the database.
 
-### Client
+### `login.php`
 
-- inscription et connexion sécurisées ;
-- demande de rendez-vous selon un service actif ;
-- suivi du prix et du statut de chaque réparation ;
-- avis disponible uniquement après une réparation terminée ;
-- interface en anglais, français et arabe.
+Authenticates a customer or administrator using their email and password. A
+successful login saves the user ID in the PHP session and redirects the user to
+the correct dashboard.
 
-### Administration
+### `logout.php`
 
-- tableau de bord avec statistiques ;
-- consultation des rendez-vous et des clients ;
-- modification contrôlée des statuts ;
-- devis manuel pour les réparations matérielles ;
-- prix fixe pour les autres services ;
-- approbation ou rejet des avis.
+Checks the CSRF token, clears the current session, and safely logs the user out.
 
-## Sécurité
+### `forgot-password.php`
 
-- mots de passe stockés avec `password_hash()` ;
-- requêtes PDO préparées ;
-- échappement HTML centralisé avec `e()` ;
-- protection CSRF sur tous les formulaires POST ;
-- régénération de l'identifiant de session après connexion ;
-- cookies de session `HttpOnly` et `SameSite=Lax` ;
-- contrôle des rôles utilisateur et administrateur ;
-- validation serveur des identifiants, statuts, prix et avis.
+Displays the password recovery form. The current version accepts and validates
+an email address, but it does not yet send a reset email.
 
-## Vérification
+### `user-dashboard.php`
 
-Vérifier la syntaxe PHP depuis le dossier du projet :
+The customer dashboard. It:
+
+- requires the customer to be logged in;
+- displays the customer's repair appointments;
+- shows the price and current status of each appointment;
+- allows a review only after an appointment is completed;
+- displays the customer's previous reviews.
+
+### `admin.php`
+
+The administrator dashboard. It:
+
+- allows access only to users with the `admin` role;
+- displays appointment, customer, and completion statistics;
+- lists customers and repair appointments;
+- updates appointment statuses and prices;
+- allows manual quotes for hardware repairs;
+- approves or rejects customer reviews.
+
+## Includes Files
+
+Every main PHP page loads `includes/config.php`. That file starts the project
+and loads the other shared files.
+
+### `includes/config.php`
+
+Contains the general project configuration:
+
+- starts the PHP session;
+- configures secure session cookie options;
+- defines the database host, port, name, username, and password;
+- loads all other files from the `includes` folder.
+
+Default database settings:
+
+```php
+const DB_HOST = '127.0.0.1';
+const DB_PORT = '3306';
+const DB_NAME = 'slah_pc';
+const DB_USER = 'root';
+const DB_PASS = '';
+```
+
+### `includes/database.php`
+
+Contains all shared database tools:
+
+- creates the PDO connection with the `db()` function;
+- enables PDO exception reporting;
+- uses prepared statements instead of unsafe SQL concatenation;
+- checks whether database columns exist;
+- adds missing columns;
+- creates the reviews table when necessary.
+
+### `includes/auth.php`
+
+Contains authentication and access-control functions:
+
+- gets the currently connected user;
+- requires a user to log in before opening protected pages;
+- checks whether the connected user is an administrator;
+- redirects unauthorized users;
+- creates the secure logout form.
+
+### `includes/csrf.php`
+
+Protects POST forms against Cross-Site Request Forgery:
+
+- generates a random CSRF token;
+- adds the token to forms;
+- verifies the submitted token before accepting an action.
+
+### `includes/helpers.php`
+
+Contains general reusable functions:
+
+- escapes text before displaying it in HTML;
+- redirects the browser;
+- defines valid appointment and review statuses;
+- validates prices;
+- displays the common page header and footer;
+- saves temporary flash messages;
+- displays an empty-table message.
+
+### `includes/translations.php`
+
+Contains the English, French, and Arabic interface text. It:
+
+- saves the selected language in the session;
+- returns translated text with the `t()` function;
+- detects Arabic right-to-left mode;
+- translates repair service names and appointment statuses.
+
+## Assets Files
+
+### `assets/styles.css`
+
+Contains the complete visual design of the website, including layouts, colors,
+forms, navigation, dashboards, responsive behavior, and mobile styles.
+
+### `assets/app.js`
+
+Controls interactive behavior on the home page, including language text,
+navigation, theme controls, and appointment-related interface behavior.
+
+### `assets/password-toggle.js`
+
+Adds the Show/Hide button behavior to password fields.
+
+### `assets/register-validation.js`
+
+Checks the registration form in the browser and displays messages for an empty
+name, invalid email, or password shorter than eight characters. PHP still
+performs the final server-side validation.
+
+### `assets/logo.png`
+
+The main Slahpc logo image.
+
+### `assets/logo-navbar.png`
+
+The logo version displayed in the website navigation bar.
+
+### `assets/hero-bg.png`
+
+The background image used in the home page hero section.
+
+## Database Connection
+
+The connection flow is:
+
+```text
+PHP page
+   |
+   v
+includes/config.php
+   |
+   v
+includes/database.php -> db()
+   |
+   v
+PDO connection
+   |
+   v
+MySQL database: slah_pc
+```
+
+A page can communicate with MySQL like this:
+
+```php
+$pdo = db();
+$statement = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+$statement->execute([$email]);
+$user = $statement->fetch();
+```
+
+The question mark is filled by `execute()`. This prepared-statement approach
+helps protect the application from SQL injection.
+
+## Database Tables
+
+The application currently uses these main tables:
+
+- `users`: customer and administrator accounts;
+- `services`: repair services, prices, and availability;
+- `appointments`: customer repair requests and their statuses;
+- `reviews`: ratings and comments for completed appointments.
+
+The current database may also contain `products`, `orders`, `messages`,
+`invoices`, and `pc_builds`. They are reserved for additional features and are
+not currently part of the main user interface.
+
+## Installation With XAMPP
+
+1. Install XAMPP with Apache, MySQL, and PHP.
+2. Place the project inside `C:\xampp\htdocs\Slahpc`.
+3. Start Apache and MySQL from the XAMPP Control Panel.
+4. Check the connection settings in `includes/config.php`.
+5. Import an SQL export of the `slah_pc` database through phpMyAdmin.
+6. Open `http://localhost/Slahpc/`.
+
+The project does not currently include an automatic database installation
+page. Keep an SQL export with the project when moving it to another computer.
+
+## Security
+
+- Passwords are stored with `password_hash()`.
+- Login passwords are checked with `password_verify()`.
+- SQL values are sent through PDO prepared statements.
+- HTML output is escaped with the `e()` function.
+- POST forms use CSRF protection.
+- Session cookies use `HttpOnly` and `SameSite=Lax`.
+- Protected pages check the user's role.
+- Prices, statuses, IDs, reviews, and account fields are validated.
+
+## PHP Syntax Check
+
+Run this command from the project folder:
 
 ```powershell
 Get-ChildItem -Recurse -Filter *.php | ForEach-Object {
@@ -92,6 +286,6 @@ Get-ChildItem -Recurse -Filter *.php | ForEach-Object {
 }
 ```
 
-## Auteur
+## Author
 
-Projet de Fin d'Études réalisé par Tarik Bufardi.
+Final-year project by Tarik Bufardi.
